@@ -1,0 +1,91 @@
+body {
+  font-family: sans-serif;
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* プレイヤー */
+#player {
+  width: 640px;
+  height: 390px;
+  flex-shrink: 0;
+}
+
+/* 右サイド */
+#sidebar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+#searchInput, #filterSelect {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+/* 横スクロールラッパー */
+#listWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 横スクロール、スクロールバー非表示 */
+#listHeaderWrapper,
+#videoListContainer {
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+}
+#listHeaderWrapper::-webkit-scrollbar,
+#videoListContainer::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* ヘッダー固定 */
+#listHeaderWrapper {
+  flex-shrink: 0;
+}
+#listHeader {
+  display: flex;
+  min-width: 800px;
+  background: #eee;
+  padding: 5px 0;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+#listHeader .col { padding: 0 10px; white-space: nowrap; }
+.thumbHeader { width: 120px; padding-left: 10px; }
+
+/* リスト */
+#videoListContainer {
+  max-height: 500px;
+  overflow-y: auto;
+}
+.videoItem {
+  display: flex;
+  min-width: 800px;
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.videoItem:hover { background: #f0f0f0; }
+
+.thumbWrapper { display: flex; flex-direction: column; align-items: center; width: 120px; }
+.thumb { width: 120px; height: 68px; object-fit: cover; border-radius: 4px; }
+.date { font-size: 12px; color: #444; margin-top: 4px; text-align: center; }
+
+.col { padding: 0 19px; white-space: normal; word-break: break-word; flex: 1; }
+
+.disabled { opacity: 0.45; cursor: default; pointer-events: none; }
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+  body { flex-direction: column; }
+  #player { width: 100%; height: 240px; }
+  #videoListContainer { max-height: 300px; }
+}

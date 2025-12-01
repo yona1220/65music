@@ -1,47 +1,56 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<title>動画検索付きプレイヤー</title>
-<link rel="stylesheet" href="static/css/style.css">
+  <meta charset="UTF-8">
+  <title>動画一覧プレイヤー</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
 
-<!-- ▼ YouTube プレイヤー -->
-<div id="player"></div>
+  <div id="main">
+    <!-- 左：プレイヤー -->
+   <div id="player"></div>
 
-<!-- ▼ 右エリア -->
-<div id="sidebar">
-  <input id="searchInput" type="text" placeholder="検索（曲/歌唱/アーティスト/作曲/引用）">
-  <select id="filterSelect">
-    <option value="">すべて表示</option>
-    <option value="配信">配信</option>
-    <option value="歌ってみた">歌ってみた</option>
-    <option value="なうぷれ">なうぷれ</option>
-    <option value="その他">その他</option>
-  </select>
+    <!-- 右：検索・フィルタ・件数・リスト -->
+    <div id="sidebar">
+      <input id="searchInput" type="text" placeholder="検索（曲/歌唱/アーティスト/作曲/引用）">
+      <select id="filterSelect">
+        <option value="">すべて表示</option>
+        <option value="配信">配信</option>
+        <option value="歌ってみた">歌ってみた</option>
+        <option value="なうぷれ">なうぷれ</option>
+        <option value="Original">Original</option>
+        <option value="その他">その他</option>
+      </select>
 
-  <!-- 横スクロールコンテナ -->
-  <div id="listWrapper">
-    <div id="listHeaderWrapper">
-      <div id="listHeader">
-        <div class="thumbHeader"></div>
-        <div class="col">曲名</div>
-        <div class="col">歌唱</div>
-        <div class="col">アーティスト</div>
-        <div class="col">作曲</div>
-        <div class="col">引用</div>
+      <!-- 表示件数 -->
+      <div id="countArea">表示件数: <span id="countNumber">0</span> 件</div>
+
+      <!-- 横スクロールのヘッダー + リスト -->
+      <div id="listWrapper">
+        <div id="listHeaderWrapper">
+          <div id="listHeader">
+          <div class="thumbHeader">サムネ</div>
+          <div class="col col-song headerCol" data-key="song">曲名</div>
+          <div class="col col-singer headerCol" data-key="singer">歌唱</div>
+          <div class="col col-artist headerCol" data-key="artist">アーティスト</div>
+          <div class="col col-composer headerCol" data-key="composer">作曲</div>
+          <div class="col col-title headerCol" data-key="title">引用</div>
+          </div>
+        </div>
+
+        <div id="videoListContainer">
+          <div id="videoList"></div>
+        </div>
       </div>
     </div>
-
-    <div id="videoListContainer">
-      <div id="videoList"></div>
-    </div>
   </div>
-</div>
 
-<script src="https://www.youtube.com/iframe_api"></script>
-<script src="static/js/videoData.js"></script>
-<script src="static/js/app.js"></script>
+  <!-- tooltip element -->
+  <div id="tooltip" aria-hidden="true"></div>
+
+  <script src="static/js/videoData.js"></script>
+  <script src="static/js/app.js"></script>
 </body>
 </html>

@@ -1,91 +1,207 @@
+/* base */
+* { box-sizing: border-box; }
 body {
-  font-family: sans-serif;
-  display: flex;
-  gap: 20px;
-  padding: 20px;
-  box-sizing: border-box;
+  margin: 0;
+  padding: 16px;
+  color: #222;
 }
 
-/* プレイヤー */
-#player {
+/* layout */
+#main {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+/* 画面幅が狭い時は縦並びにして重ならないようにする */
+@media (max-width: 1100px) {
+  #main { flex-direction: column; }
+}
+
+/* player area */
+#playerArea {
   width: 640px;
-  height: 390px;
-  flex-shrink: 0;
+  max-width: 100%;
+  min-width: 320px;
+}
+#playerPlaceholder {
+  width: 100%;
+  background:#000;
+  color:#fff;
+  height:360px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+#playerWrap {
+  width:100%;
+  height:390px;
+  display:none;
 }
 
-/* 右サイド */
+/* sidebar */
 #sidebar {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  flex:1;
+  min-width: 360px;
 }
 
-#searchInput, #filterSelect {
+#searchInput {
   width: 100%;
   padding: 8px;
   margin-bottom: 8px;
   border-radius: 6px;
-  box-sizing: border-box;
+  border: 1px solid #ccc;
 }
 
-/* 横スクロールラッパー */
-#listWrapper {
-  display: flex;
-  flex-direction: column;
+#filterSelect {
+  width: 120px;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
 }
 
-/* 横スクロール、スクロールバー非表示 */
+/* count */
+#countArea {
+  margin:6px 0 8px;
+  font-size:14px;
+}
+
+/* list wrapper */
+#listWrapper { display:flex; flex-direction:column; gap:6px; }
+
 #listHeaderWrapper,
 #videoListContainer {
-  overflow-x: auto;
-  scrollbar-width: none; /* Firefox */
+  overflow-x:auto;
+  scrollbar-width:none;
 }
 #listHeaderWrapper::-webkit-scrollbar,
 #videoListContainer::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
+  display:none;
 }
 
-/* ヘッダー固定 */
-#listHeaderWrapper {
-  flex-shrink: 0;
-}
+/* header */
 #listHeader {
-  display: flex;
-  min-width: 800px;
-  background: #eee;
-  padding: 5px 0;
-  font-weight: bold;
-  box-sizing: border-box;
+  display:flex;
+  min-width:1200px;
+  background:#f2f2f2;
+  padding:8px;
+  border-radius:6px;
+  align-items:center;
+  gap:10px;
 }
-#listHeader .col { padding: 0 10px; white-space: nowrap; }
-.thumbHeader { width: 120px; padding-left: 10px; }
 
-/* リスト */
-#videoListContainer {
-  max-height: 500px;
-  overflow-y: auto;
+/* column width を拡張（… になりにくくする） */
+.thumbHeader {
+  flex: 0 0 150px;
 }
+
+.col {
+  flex: 0 0 220px;    /* ←広げる */
+  /* white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 8px; */
+
+  white-space: normal;      /* 横は折り返す */
+  overflow: hidden;         /* はみ出しを隠す */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;    /* ← 表示したい行数を指定（例：3行） */
+  line-clamp: 3;
+}
+
+/* ▼ ソートマーク */
+.headerCol {
+  cursor:pointer;
+  position:relative;
+  font-weight:bold;
+}
+
+/* デフォルト（日付順）→ 白い下三角 */
+.headerCol.sort-default::after {
+  content:"";
+  position:absolute;
+  right:4px; top:50%; transform:translateY(-50%);
+  border-left:6px solid transparent;
+  border-right:6px solid transparent;
+  border-top:8px solid #fff;
+  filter: drop-shadow(0 0 1px #333);
+}
+
+/* 昇順 → 黒い上三角 */
+.headerCol.sort-asc::after {
+  content:"";
+  position:absolute;
+  right:4px; top:50%; transform:translateY(-60%);
+  border-left:6px solid transparent;
+  border-right:6px solid transparent;
+  border-bottom:8px solid #000;
+}
+
+/* 降順 → 黒い下三角 */
+.headerCol.sort-desc::after {
+  content:"";
+  position:absolute;
+  right:4px; top:50%; transform:translateY(-40%);
+  border-left:6px solid transparent;
+  border-right:6px solid transparent;
+  border-top:8px solid #000;
+}
+
+/* list rows */
+#videoListContainer { max-height:520px; overflow-y:auto; }
+
 .videoItem {
-  display: flex;
-  min-width: 800px;
-  padding: 8px 0;
-  border-bottom: 1px solid #ddd;
-  cursor: pointer;
-  transition: background 0.1s;
+  display:flex;
+  min-width:1200px;
+  gap:10px;
+  padding:10px 6px;
+  border-bottom:1px solid #eee;
 }
-.videoItem:hover { background: #f0f0f0; }
+.videoItem:hover { background:#fafafa; }
 
-.thumbWrapper { display: flex; flex-direction: column; align-items: center; width: 120px; }
-.thumb { width: 120px; height: 68px; object-fit: cover; border-radius: 4px; }
-.date { font-size: 12px; color: #444; margin-top: 4px; text-align: center; }
+/* サムネ */
+.thumbWrapper {
+  flex:0 0 150px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.thumb {
+  width:120px;
+  height:68px;
+  object-fit:cover;
+  border-radius:6px;
+}
+.date { font-size:12px; color:#555; }
 
-.col { padding: 0 19px; white-space: normal; word-break: break-word; flex: 1; }
+/* 各列ごとに幅調整 */
+.col-song     { flex: 0 0 150px; }  /* 曲名ひろめ */
+.col-singer   { flex: 0 0 150px; }
+.col-artist   { flex: 0 0 150px; }
+.col-composer { flex: 0 0 150px; }  /* 作曲は短いことが多い */
+/* 引用だけ右側いっぱいを取る */
+.col-title    { flex: 1 1 auto; min-width: 320px; }
 
-.disabled { opacity: 0.45; cursor: default; pointer-events: none; }
 
-/* レスポンシブ */
-@media (max-width: 768px) {
-  body { flex-direction: column; }
-  #player { width: 100%; height: 240px; }
-  #videoListContainer { max-height: 300px; }
+/* タイトルリンク */
+.col a {
+  color:#0066cc;
+  text-decoration:underline;
+}
+.col.nolink {
+  text-decoration:none;
+  color:#222;
+}
+
+/* ツールチップ */
+#tooltip {
+  position: fixed;
+  z-index: 9999;
+  background:#111;
+  color:#fff;
+  padding:8px 10px;
+  border-radius:6px;
+  max-width: 60vw;
+  display:none;
 }

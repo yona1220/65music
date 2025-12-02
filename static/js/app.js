@@ -114,6 +114,53 @@ function isTruncated(el) {
 }
 
 
+function showTooltip(el) {
+  const tooltip = document.getElementById("tooltip");
+  if (!isTruncated(el)) return;
+
+  tooltip.textContent = el.textContent;
+  tooltip.style.display = "block";
+
+  const rect = el.getBoundingClientRect();
+  const ttRect = tooltip.getBoundingClientRect();
+
+  let top, left;
+
+  // ------ ① 右に表示
+  left = rect.right + 8;
+  top = rect.top;
+
+  if (left + ttRect.width > window.innerWidth) {
+    // ------ ② 右がダメ → 左に表示
+    left = rect.left - ttRect.width - 8;
+  }
+
+  if (left < 0) {
+    // ------ ③ 左もダメ → 上に表示
+    left = rect.left;
+    top = rect.top - ttRect.height - 6;
+  }
+
+  // 上もダメなら最終的に下
+  if (top < 0) {
+    top = rect.bottom + 6;
+  }
+
+  tooltip.style.left = left + "px";
+  tooltip.style.top = top + "px";
+}
+
+function hideTooltip() {
+  const tooltip = document.getElementById("tooltip");
+  tooltip.style.display = "none";
+}
+
+// 省略されている(…になる)か判定
+function isTruncated(el) {
+  return el.scrollHeight > el.clientHeight || el.scrollWidth > el.clientWidth;
+}
+
+
 
 /* Render Rows */
 function renderList(list){

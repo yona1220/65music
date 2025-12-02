@@ -6,6 +6,28 @@ body {
   color: #222;
   font-size: 16px;
 }
+/* ▼ スマホ幅での横スクロール修正（最強版） */
+@media (max-width: 1000px) {
+
+  /* ページ全体は横スクロール禁止 */
+  body, html {
+    overflow-x: hidden;
+  }
+
+  /* リストのみ横スクロール許可 */
+  #listHeaderWrapper,
+  #videoListContainer {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch; /* スマホで滑らかに */
+  }
+
+  /* 横スクロールが出るように、子の幅を固定 */
+  #listHeader,
+  .videoItem {
+    min-width: 1200px !important;
+  }
+}
+
 
 /* layout */
 #main {

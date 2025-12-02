@@ -4,6 +4,7 @@ body {
   margin: 0;
   padding: 16px;
   color: #222;
+  font-size: 15px;
 }
 
 /* layout */
@@ -14,7 +15,7 @@ body {
 }
 
 /* 画面幅が狭い時は縦並びにして重ならないようにする */
-@media (max-width: 1100px) {
+@media (max-width: 576px) {
   #main { flex-direction: column; }
 }
 
@@ -69,15 +70,28 @@ body {
 /* list wrapper */
 #listWrapper { display:flex; flex-direction:column; gap:6px; }
 
+/* ▼ 横スクロール（リスト＆ヘッダー） */
 #listHeaderWrapper,
 #videoListContainer {
-  overflow-x:auto;
-  scrollbar-width:none;
+  overflow-x: auto;
+  scrollbar-width: thin;             /* Firefox */
+}
+#listHeaderWrapper::-webkit-scrollbar,
+#videoListContainer::-webkit-scrollbar {
+  height: 8px;
+}
+/* ▼ listHeaderWrapper だけスクロールバーを隠して操作可能にする */
+#listHeaderWrapper {
+  overflow-x: auto;
+  -ms-overflow-style: none;  /* IE/Edge */
+  scrollbar-width: none;     /* Firefox */
 }
 #listHeaderWrapper::-webkit-scrollbar,
 #videoListContainer::-webkit-scrollbar {
   display:none;
 }
+
+
 
 /* header */
 #listHeader {
@@ -106,8 +120,8 @@ body {
   overflow: hidden;         /* はみ出しを隠す */
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;    /* ← 表示したい行数を指定（例：3行） */
-  line-clamp: 3;
+  -webkit-line-clamp: 4;    /* ← 表示したい行数を指定（例：3行） */
+  line-clamp: 4;
 }
 
 /* ▼ ソートマーク */
@@ -198,10 +212,31 @@ body {
 #tooltip {
   position: fixed;
   z-index: 9999;
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  max-width: 10vw;
+  line-height: 1.4;
+  display: none;
+  white-space: normal;
+}
+
+/* ▼ スマホ幅（576px以下）だけ max-width を広げる */
+@media (max-width: 576px) {
+  #tooltip {
+    max-width: 50vw;  /* ← スマホだと広めに */
+  }
+}
+/* #tooltip {
+  position: fixed;
+  z-index: 9999;
   background:#111;
   color:#fff;
   padding:8px 10px;
   border-radius:6px;
   max-width: 60vw;
   display:none;
-}
+} */
+

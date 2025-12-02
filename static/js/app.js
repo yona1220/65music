@@ -341,27 +341,27 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-  const colSong = document.createElement("div");
-  colSong.className = "col col-song";
-  colSong.textContent = v.song;
-  row.appendChild(colSong);
+  // const colSong = document.createElement("div");
+  // colSong.className = "col col-song";
+  // colSong.textContent = v.song;
+  // row.appendChild(colSong);
 
-  const colSinger = document.createElement("div");
-  colSinger.className = "col col-singer";
-  colSinger.textContent = v.singer;
-  row.appendChild(colSinger);
+  // const colSinger = document.createElement("div");
+  // colSinger.className = "col col-singer";
+  // colSinger.textContent = v.singer;
+  // row.appendChild(colSinger);
 
-  const colArtist = document.createElement("div");
-  colArtist.className = "col col-artist";
-  colArtist.textContent = v.artist;
-  row.appendChild(colArtist);
+  // const colArtist = document.createElement("div");
+  // colArtist.className = "col col-artist";
+  // colArtist.textContent = v.artist;
+  // row.appendChild(colArtist);
 
-  const colComposer = document.createElement("div");
-  colComposer.className = "col col-composer";
-  colComposer.textContent = v.composer;
-  row.appendChild(colComposer);
+  // const colComposer = document.createElement("div");
+  // colComposer.className = "col col-composer";
+  // colComposer.textContent = v.composer;
+  // row.appendChild(colComposer);
 
-  const colTitle = document.createElement("div");
-  colTitle.className = "col col-title";
-  colTitle.textContent = v.title;
-  row.appendChild(colTitle);
+  // const colTitle = document.createElement("div");
+  // colTitle.className = "col col-title";
+  // colTitle.textContent = v.title;
+  // row.appendChild(colTitle);

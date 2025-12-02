@@ -2,15 +2,38 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>動画一覧プレイヤー</title>
+  <title>ろこみゅーじっく(鏑木ろこ非公式ファンサイト)</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
 
-  <div id="main">
-    <!-- 左：プレイヤー -->
-   <div id="player"></div>
+  <!-- ヘッダー -->
+  <div id="header">
+    <div class="width50 top-center">
+      <a class="header_title">ろこみゅーじっく</a>
+    </div>
+  </div>
+
+<div id="main">
+
+<div id="leftColumn">
+      <!-- YouTubeプレイヤー -->
+      <div id="player"></div>
+
+      <!-- ▼ 折りたたみ説明ボックス -->
+      <details id="siteInfo" open>
+        <summary>当サイトについて</summary>
+        <div class="infoContent">
+          にじさんじ所属バーチャルライバー<br>
+          鏑木ろこ さんが歌った動画等を非公式ファンサイトです。<br><br>
+          当サイトはANYCOLOR株式会社様及びにじさんじプロジェクト・各種関係会社とは一切関係ありません。<br>
+          ご意見、内容の抜け漏れや誤り、改善点などございましたら、下記にお問い合わせいただけると幸いです。<br><br>
+          XXXX
+        </div>
+      </details>
+</div>
+
 
     <!-- 右：検索・フィルタ・件数・リスト -->
     <div id="sidebar">
@@ -31,7 +54,7 @@
       <div id="listWrapper">
         <div id="listHeaderWrapper">
           <div id="listHeader">
-          <div class="thumbHeader">サムネ</div>
+          <div class="thumbHeader"></div>
           <div class="col col-song headerCol" data-key="song">曲名</div>
           <div class="col col-singer headerCol" data-key="singer">歌唱</div>
           <div class="col col-artist headerCol" data-key="artist">アーティスト</div>

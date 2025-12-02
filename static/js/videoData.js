@@ -1472,7 +1472,7 @@ const videos = [
     artist: "神田明神納涼祭り",
     composer: "Shunji Akamine",
     singer: "Idios(五十嵐梨花/石神のぞみ/鏑木ろこ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン)",
-    category: "歌ってみた",
+    category: "その他",
     thumbnail: "static/img/music/神田明神音頭.jpg",
     start: 0
   },

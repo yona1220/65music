@@ -24,149 +24,29 @@ const videos = [
     thumbnail: "https://img.youtube.com/vi/sDDKhcGwkko/hqdefault.jpg",
     start: 0
   },
-  {
-    date: "2025/11/07",
-    id: "",
-    title: 'Idios 1st LIVE "Seize the day"',
-    song: "参戦決定☆メタモリディオス",
-    artist: "Idios",
-    composer: "D.watt(IOSYS)",
-    singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン",
-    category: "その他",
-    thumbnail: "static/img/music/seizetheday.png",
-    start: 0
-  },
-  {
-    date: "2025/11/07",
-    id: "",
-    title: 'Idios 1st LIVE "Seize the day"',
-    song: "あんぶれらシンデレラ",
-    artist: "Idios",
-    composer: "木下龍平",
-    singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン",
-    category: "その他",
-    thumbnail: "static/img/music/seizetheday.png",
-    start: 0
-  },
-  {
-    date: "2025/11/07",
-    id: "",
-    title: 'Idios 1st LIVE "Seize the day"',
-    song: "大声ダイヤモンド",
-    artist: "AKB48",
-    composer: "井上ヨシマサ",
-    singer: "鏑木ろこ/五十嵐梨花/小清水透/獅子堂あかり",
-    category: "その他",
-    thumbnail: "static/img/music/seizetheday.png",
-    start: 0
-  },
-  {
-    date: "2025/11/07",
-    id: "",
-    title: 'Idios 1st LIVE "Seize the day"',
-    song: "嗚呼、素晴らしきニャン生",
-    artist: "Nem",
-    composer: "Nem",
-    singer: "鏑木ろこ/ソフィア・ヴァレンタイン",
-    category: "その他",
-    thumbnail: "static/img/music/seizetheday.png",
-    start: 0
-  },
-  {
-    date: "2025/11/07",
-    id: "",
-    title: 'Idios 1st LIVE "Seize the day"',
-    song: "とくべチュ、して",
-    artist: "Idios",
-    composer: "浦島健太、菊池博人",
-    singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると",
-    category: "その他",
-    thumbnail: "static/img/music/seizetheday.png",
-    start: 0
-  },
-  {
-    date: "2025/11/07",
-    id: "",
-    title: 'Idios 1st LIVE "Seize the day"',
-    song: "Booo!",
-    artist: "TOKOTOKO（西沢さんP）",
-    composer: "TOKOTOKO（西沢さんP）",
-    singer: "鏑木ろこ",
-    category: "その他",
-    thumbnail: "static/img/music/seizetheday.png",
-    start: 0
-  },
-  {
-    date: "2025/11/07",
-    id: "",
-    title: 'Idios 1st LIVE "Seize the day"',
-    song: "こいのね！",
-    artist: "Idios",
-    composer: "谷のばら",
-    singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン",
-    category: "その他",
-    thumbnail: "static/img/music/seizetheday.png",
-    start: 0
-  },
-  {
-    date: "2025/11/07",
-    id: "",
-    title: 'Idios 1st LIVE "Seize the day"',
-    song: "それは僕たちの軌跡！",
-    artist: "μ's",
-    composer: "黒須克彦",
-    singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン",
-    category: "その他",
-    thumbnail: "static/img/music/seizetheday.png",
-    start: 0
-  },
-  {
-    date: "2025/11/07",
-    id: "",
-    title: 'Idios 1st LIVE "Seize the day"',
-    song: "なないろのうた",
-    artist: "Idios",
-    composer: "",
-    singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン",
-    category: "その他",
-    thumbnail: "static/img/music/seizetheday.png",
-    start: 0
-  },
-  {
-    date: "2025/11/07",
-    id: "",
-    title: 'Idios 1st LIVE "Seize the day"',
-    song: "相性×優勝ドロップス",
-    artist: "Idios",
-    composer: "岩見陸",
-    singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン",
-    category: "その他",
-    thumbnail: "static/img/music/seizetheday.png",
-    start: 0
-  },
-  {
+    {
     date: "2025/11/08",
-    id: "",
-    title: 'Idios 1st LIVE "Seize the day"',
+    id: "fzLDBT9Ujl0",
+    title: '【ライブ本編】Idios 1st LIVE "Seize the day" Day2 / 無料パート #Idios_1stLIVE',
     song: "Iキャラライン",
     artist: "Idios",
     composer: "原口沙輔",
     singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン",
     category: "その他",
-    thumbnail: "static/img/music/seizetheday.png",
-    start: 0
+    thumbnail: "https://img.youtube.com/vi/fzLDBT9Ujl0/hqdefault.jpg",
+    start: 1921
   },
   {
     date: "2025/11/08",
-    id: "",
-    title: 'Idios 1st LIVE "Seize the day"',
+    id: "fzLDBT9Ujl0",
+    title: '【ライブ本編】Idios 1st LIVE "Seize the day" Day2 / 無料パート #Idios_1stLIVE',
     song: "Hai",
     artist: "Idios",
     composer: "佐伯youthK",
     singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン",
     category: "その他",
-    thumbnail: "static/img/music/seizetheday.png",
-    start: 0
+    thumbnail: "https://img.youtube.com/vi/fzLDBT9Ujl0/hqdefault.jpg",
+    start: 2144
   },
   {
     date: "2025/11/08",
@@ -177,7 +57,7 @@ const videos = [
     composer: "稲葉曇",
     singer: "鏑木ろこ/石神のぞみ/小清水透",
     category: "その他",
-    thumbnail: "static/img/music/seizetheday.png",
+    thumbnail: "https://img.youtube.com/vi/fzLDBT9Ujl0/hqdefault.jpg",
     start: 0
   },
   {
@@ -189,7 +69,7 @@ const videos = [
     composer: "Giga",
     singer: "鏑木ろこ/五十嵐梨花/獅子堂あかり",
     category: "その他",
-    thumbnail: "static/img/music/seizetheday.png",
+    thumbnail: "https://img.youtube.com/vi/fzLDBT9Ujl0/hqdefault.jpg",
     start: 0
   },
   {
@@ -201,7 +81,7 @@ const videos = [
     composer: "すりぃ",
     singer: "鏑木ろこ",
     category: "その他",
-    thumbnail: "static/img/music/seizetheday.png",
+    thumbnail: "https://img.youtube.com/vi/fzLDBT9Ujl0/hqdefault.jpg",
     start: 0
   },
   {
@@ -213,7 +93,7 @@ const videos = [
     composer: "D.watt(IOSYS)",
     singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン",
     category: "その他",
-    thumbnail: "static/img/music/seizetheday.png",
+    thumbnail: "https://img.youtube.com/vi/fzLDBT9Ujl0/hqdefault.jpg",
     start: 0
   },
   {
@@ -225,7 +105,7 @@ const videos = [
     composer: "Guiano",
     singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン",
     category: "その他",
-    thumbnail: "static/img/music/seizetheday.png",
+    thumbnail: "https://img.youtube.com/vi/fzLDBT9Ujl0/hqdefault.jpg",
     start: 0
   },
   {
@@ -237,7 +117,7 @@ const videos = [
     composer: "",
     singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン",
     category: "その他",
-    thumbnail: "static/img/music/seizetheday.png",
+    thumbnail: "https://img.youtube.com/vi/fzLDBT9Ujl0/hqdefault.jpg",
     start: 0
   },
   {
@@ -249,7 +129,127 @@ const videos = [
     composer: "岩見陸",
     singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン",
     category: "その他",
-    thumbnail: "static/img/music/seizetheday.png",
+    thumbnail: "https://img.youtube.com/vi/fzLDBT9Ujl0/hqdefault.jpg",
+    start: 0
+  },
+  {
+    date: "2025/11/07",
+    id: "5KEFpTUepbo",
+    title: '【ライブ本編】Idios 1st LIVE "Seize the day" Day1 / 無料パート #Idios_1stLIVE',
+    song: "参戦決定☆メタモリディオス",
+    artist: "Idios",
+    composer: "D.watt(IOSYS)",
+    singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン",
+    category: "その他",
+    thumbnail: "https://img.youtube.com/vi/5KEFpTUepbo/hqdefault.jpg",
+    start: 524
+  },
+  {
+    date: "2025/11/07",
+    id: "5KEFpTUepbo",
+    title: '【ライブ本編】Idios 1st LIVE "Seize the day" Day1 / 無料パート #Idios_1stLIVE',
+    song: "あんぶれらシンデレラ",
+    artist: "Idios",
+    composer: "木下龍平",
+    singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン",
+    category: "その他",
+    thumbnail: "https://img.youtube.com/vi/5KEFpTUepbo/hqdefault.jpg",
+    start: 794
+  },
+  {
+    date: "2025/11/07",
+    id: "",
+    title: 'Idios 1st LIVE "Seize the day"',
+    song: "大声ダイヤモンド",
+    artist: "AKB48",
+    composer: "井上ヨシマサ",
+    singer: "鏑木ろこ/五十嵐梨花/小清水透/獅子堂あかり",
+    category: "その他",
+    thumbnail: "https://img.youtube.com/vi/5KEFpTUepbo/hqdefault.jpg",
+    start: 0
+  },
+  {
+    date: "2025/11/07",
+    id: "",
+    title: 'Idios 1st LIVE "Seize the day"',
+    song: "嗚呼、素晴らしきニャン生",
+    artist: "Nem",
+    composer: "Nem",
+    singer: "鏑木ろこ/ソフィア・ヴァレンタイン",
+    category: "その他",
+    thumbnail: "https://img.youtube.com/vi/5KEFpTUepbo/hqdefault.jpg",
+    start: 0
+  },
+  {
+    date: "2025/11/07",
+    id: "",
+    title: 'Idios 1st LIVE "Seize the day"',
+    song: "とくべチュ、して",
+    artist: "Idios",
+    composer: "浦島健太、菊池博人",
+    singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると",
+    category: "その他",
+    thumbnail: "https://img.youtube.com/vi/5KEFpTUepbo/hqdefault.jpg",
+    start: 0
+  },
+  {
+    date: "2025/11/07",
+    id: "",
+    title: 'Idios 1st LIVE "Seize the day"',
+    song: "Booo!",
+    artist: "TOKOTOKO（西沢さんP）",
+    composer: "TOKOTOKO（西沢さんP）",
+    singer: "鏑木ろこ",
+    category: "その他",
+    thumbnail: "https://img.youtube.com/vi/5KEFpTUepbo/hqdefault.jpg",
+    start: 0
+  },
+  {
+    date: "2025/11/07",
+    id: "",
+    title: 'Idios 1st LIVE "Seize the day"',
+    song: "こいのね！",
+    artist: "Idios",
+    composer: "谷のばら",
+    singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン",
+    category: "その他",
+    thumbnail: "https://img.youtube.com/vi/5KEFpTUepbo/hqdefault.jpg",
+    start: 0
+  },
+  {
+    date: "2025/11/07",
+    id: "",
+    title: 'Idios 1st LIVE "Seize the day"',
+    song: "それは僕たちの軌跡！",
+    artist: "μ's",
+    composer: "黒須克彦",
+    singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン",
+    category: "その他",
+    thumbnail: "https://img.youtube.com/vi/5KEFpTUepbo/hqdefault.jpg",
+    start: 0
+  },
+  {
+    date: "2025/11/07",
+    id: "",
+    title: 'Idios 1st LIVE "Seize the day"',
+    song: "なないろのうた",
+    artist: "Idios",
+    composer: "",
+    singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン",
+    category: "その他",
+    thumbnail: "https://img.youtube.com/vi/5KEFpTUepbo/hqdefault.jpg",
+    start: 0
+  },
+  {
+    date: "2025/11/07",
+    id: "",
+    title: 'Idios 1st LIVE "Seize the day"',
+    song: "相性×優勝ドロップス",
+    artist: "Idios",
+    composer: "岩見陸",
+    singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン",
+    category: "その他",
+    thumbnail: "https://img.youtube.com/vi/5KEFpTUepbo/hqdefault.jpg",
     start: 0
   },
   {

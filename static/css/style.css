@@ -310,3 +310,102 @@ details[open] summary {
   border-bottom: 1px solid #aaaaaa;
   margin-bottom: 0.5em;
 }
+
+/* ▼ スマホ幅（1000px以下）のときヘッダー＆リストを小さくする */
+@media (max-width: 1000px) {
+
+  /* 全体の文字サイズ縮小 */
+  #listHeader, #videoListContainer, .videoItem, .col, .headerCol {
+    font-size: 13px !important;
+    line-height: 1.2;
+  }
+
+  /* 行（videoItem）の高さ・余白を縮小 */
+  .videoItem {
+    padding: 4px 2px !important;
+    gap: 6px !important;
+  }
+
+  /* ヘッダー縮小 */
+  #listHeader {
+    padding: 6px !important;
+    gap: 6px !important;
+  }
+
+  /* サムネ縮小 */
+  .thumbWrapper {
+    flex: 0 0 110px !important;
+  }
+  .thumb {
+    width: 110px !important;
+    height: 62px !important;
+  }
+
+  /* ▼ 各列幅もスマホ用にギュッと縮める */
+  .col-song     { flex: 0 0 130px !important; }
+  .col-singer   { flex: 0 0 120px !important; }
+  .col-artist   { flex: 0 0 130px !important; }
+  .col-composer { flex: 0 0 110px !important; }
+
+  /* 引用はなるべく広く確保しつつスマホでは小さめ */
+  .col-title    { flex: 1 1 auto !important; min-width: 220px !important; }
+
+  /* ヘッダーの“サムネ”列も縮める */
+  .thumbHeader {
+    flex: 0 0 110px !important;
+  }
+
+  /* リストのスクロールを確実に許可（重要） */
+  #listHeaderWrapper,
+  #videoListContainer {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+
+}
+
+@media (max-width: 1000px) {
+
+  /* 全体は横スクロール禁止（内側スクロールを殺しにくい clip 推奨） */
+  html, body { overflow-x: clip; }
+  #main { overflow-x: hidden; }
+
+  /* flex罠解除＆リストだけ横スクロール許可 */
+  #sidebar, #listWrapper, #listHeaderWrapper, #videoListContainer {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  #listHeaderWrapper,
+  #videoListContainer {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+  }
+
+  /* ★ここが本丸：最強版の min-width:1200px を殺す */
+  #listHeader,
+  .videoItem {
+    min-width: 0 !important;
+    width: max-content;
+  }
+
+  /* ★余分スクロールの犯人を潰す：引用は “伸びる” をやめて上限付きで固定 */
+  .col-title {
+    flex: 0 0 clamp(220px, 60vw, 360px) !important;
+    min-width: 0 !important;
+  }
+
+  /* 念のため：他列は固定幅のまま */
+  .col-song     { flex: 0 0 130px !important; }
+  .col-singer   { flex: 0 0 120px !important; }
+  .col-artist   { flex: 0 0 130px !important; }
+  .col-composer { flex: 0 0 110px !important; }
+
+  .thumbHeader  { flex: 0 0 110px !important; }
+  .thumbWrapper { flex: 0 0 110px !important; }
+}
+
+

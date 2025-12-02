@@ -2,20 +2,21 @@
 * { box-sizing: border-box; }
 body {
   margin: 0;
-  padding: 16px;
+  /* padding: 16px; */
   color: #222;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 /* layout */
 #main {
   display: flex;
-  gap: 16px;
+  gap: 10px;
   align-items: flex-start;
+  padding: 10px
 }
 
 /* 画面幅が狭い時は縦並びにして重ならないようにする */
-@media (max-width: 576px) {
+@media (max-width: 1000px) {
   #main { flex-direction: column; }
 }
 
@@ -39,6 +40,20 @@ body {
   height:390px;
   display:none;
 }
+#player {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 16 / 9;
+}
+/* ▼ スマホ幅 */
+@media (max-width: 1000px) {
+  #player {
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 16 / 9;
+  }
+}
+
 
 /* sidebar */
 #sidebar {
@@ -169,7 +184,7 @@ body {
   display:flex;
   min-width:1200px;
   gap:10px;
-  padding:10px 6px;
+  padding:5px 0px;
   border-bottom:1px solid #eee;
 }
 .videoItem:hover { background:#fafafa; }
@@ -182,8 +197,8 @@ body {
   align-items:center;
 }
 .thumb {
-  width:120px;
-  height:68px;
+  width:142px;
+  height:79px;
   object-fit:cover;
   border-radius:6px;
 }
@@ -224,7 +239,7 @@ body {
 }
 
 /* ▼ スマホ幅（576px以下）だけ max-width を広げる */
-@media (max-width: 576px) {
+@media (max-width: 1000px) {
   #tooltip {
     max-width: 50vw;  /* ← スマホだと広めに */
   }
@@ -240,3 +255,36 @@ body {
   display:none;
 } */
 
+#leftColumn {
+  width: 50%;
+  height: 100%;
+}
+
+/* ▼ スマホ幅（576px以下）だけ max-width を広げる */
+@media (max-width: 1000px) {
+ #leftColumn {
+  width: 100%;
+  height: 100%;
+}
+}
+
+#header{
+    display: flex;
+    height: 56px;
+    padding: 0px;
+    background-color: #198caa;
+}
+
+.header_title {
+    padding: 10px;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 32px;
+}
+
+
+
+details[open] summary {
+  border-bottom: 1px solid #aaaaaa;
+  margin-bottom: 0.5em;
+}

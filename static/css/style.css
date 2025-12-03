@@ -391,18 +391,25 @@ details[open] summary {
     /* touch-action: pan-x; */
   }
 
-  /* ★ここが本丸：最強版の min-width:1200px を殺す */
+/* まず “余計な min-width” を殺す（これが余白スクロールの元） */
   #listHeader,
   .videoItem {
-    min-width: 100%;  
-    /* width: max-content; */
+    min-width: 0 !important;
+    width: max-content; /* 列幅の合計＝テーブル幅になる */
   }
 
-  /* ★余分スクロールの犯人を潰す：引用は “伸びる” をやめて上限付きで固定 */
-  .col-title {
-    flex: 0 0 clamp(220px, 60vw, 360px) !important;
+  /* 引用列が伸びて “余白” を作らないように固定（clampで端末幅に追従） */
+  .col-title{
+    flex: 0 0 clamp(220px, 55vw, 320px) !important;
     min-width: 0 !important;
   }
+
+    /* 念のため：長い文字列が列を押し広げないようにする */
+  .col, .col a{
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
 
   /* 念のため：他列は固定幅のまま */
   .col-song     { flex: 0 0 130px !important; }

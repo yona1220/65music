@@ -22,11 +22,11 @@ body {
   }
 
   /* 横スクロールが出るように、子の幅を固定 */
-  /* #listHeader,
+  #listHeader,
   .videoItem {
-    min-width: 1200px !important;
-  }*/
-} 
+    min-width: 920px !important;
+  }
+}
 
 
 /* layout */
@@ -384,7 +384,7 @@ details[open] summary {
   #videoListContainer {
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
-    touch-action: pan-x;
+    /* touch-action: pan-x; */
   }
 
   /* ★ここが本丸：最強版の min-width:1200px を殺す */
@@ -411,3 +411,10 @@ details[open] summary {
 }
 
 
+#yearSelect{
+  width: 120px;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-left: 8px; /* 右隣に余白 */
+}

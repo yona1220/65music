@@ -356,8 +356,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const head = document.getElementById("listHeaderWrapper");
   const list = document.getElementById("videoListContainer");
-  list.addEventListener("scroll",()=> head.scrollLeft = list.scrollLeft);
-
+  list.addEventListener("scroll", () => {
+  const max = head.scrollWidth - head.clientWidth;
+  head.scrollLeft = Math.min(list.scrollLeft, Math.max(0, max));
+});
   /* ▼ 追加：サイト表示時に先頭動画を自動再生 ▼ */
   if (filteredList.length > 0 && filteredList[0].id) {
     createOrLoadPlayer(filteredList[0].id, filteredList[0].start);

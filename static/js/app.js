@@ -58,8 +58,9 @@ function attachTruncateTooltip(el) {
 
   // スマホ：タップで表示
   if (isTouch) {
-    el.addEventListener("click", () => {
-      showTooltip(el); // 省略されてる時だけ出る（isTruncatedで弾かれる）
+    el.addEventListener("click", (e) => {
+      e.stopPropagation();
+      showTooltip(el);
     });
 
     document.addEventListener("click", () => hideTooltip());

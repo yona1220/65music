@@ -223,12 +223,15 @@ function renderList(list){
     attachTruncateTooltip(tcol);
     row.appendChild(tcol);
 
-    // click → 再生（id が無いものでもクリック可能）
-    row.addEventListener("click",()=>{
-      if(v.id){
-        createOrLoadPlayer(v.id, v.start);
-      }
-    });
+    // // click → 再生（id が無いものでもクリック可能）
+    // row.addEventListener("click",()=>{
+    //   if(v.id){
+    //     createOrLoadPlayer(v.id, v.start);
+    //   }
+    // });
+
+
+
 
     box.appendChild(row);
   });
@@ -240,12 +243,18 @@ function renderList(list){
 function filterAndRender(){
   const kw = document.getElementById("searchInput").value.toLowerCase();
   const cat = document.getElementById("filterSelect").value;
+  const year = document.getElementById("yearSelect").value;
 
   filteredList = videos.filter(v=>{
     const matchCat = !cat || v.category === cat;
     const matchKw = !kw || ["title","song","artist","singer","composer"]
       .some(k => (v[k]||"").toLowerCase().includes(kw));
-    return matchCat && matchKw;
+
+    // ★年フィルタ：v.date が "YYYY/MM/DD" 想定
+    const vYear = (v.date || "").slice(0,4);
+    const matchYear = !year || vYear === year;
+    
+    return matchCat && matchKw && matchYear;
   });
 
   sortList();
@@ -300,24 +309,6 @@ function updateHeaderIndicators(){
   });
 }
 
-document.addEventListener("DOMContentLoaded",()=>{
-  document.querySelectorAll(".headerCol").forEach(h=>{
-    const key = h.dataset.key;
-    h.addEventListener("click",()=>headerClickHandler(key));
-  });
-
-  document.getElementById("searchInput").addEventListener("input", filterAndRender);
-  document.getElementById("filterSelect").addEventListener("change", filterAndRender);
-
-  filteredList = videos.slice();
-  updateHeaderIndicators();
-  filterAndRender();
-
-  const head = document.getElementById("listHeaderWrapper");
-  const list = document.getElementById("videoListContainer");
-  list.addEventListener("scroll",()=> head.scrollLeft = list.scrollLeft);
-});
-
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".headerCol").forEach(h=>{
     const key = h.dataset.key;
@@ -326,6 +317,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("searchInput").addEventListener("input", filterAndRender);
   document.getElementById("filterSelect").addEventListener("change", filterAndRender);
+  document.getElementById("yearSelect").addEventListener("change", filterAndRender);
+
 
   filteredList = videos.slice();
   updateHeaderIndicators();

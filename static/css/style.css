@@ -21,10 +21,14 @@ body {
     -webkit-overflow-scrolling: touch; /* スマホで滑らかに */
   }
 
-  /* 横スクロールが出るように、子の幅を固定 */
   #listHeader,
   .videoItem {
-    min-width: 920px !important;
+    width: max-content;     /* ← 背景が右端まで塗られる */
+    min-width: 920px;       /* いまの設計値に合わせる */
+  }
+
+  #videoList {
+    width: max-content;     /* 行の親も中身幅に合わせると安定 */
   }
 }
 
@@ -418,3 +422,4 @@ details[open] summary {
   border: 1px solid #ccc;
   margin-left: 8px; /* 右隣に余白 */
 }
+

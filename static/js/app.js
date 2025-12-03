@@ -47,25 +47,40 @@ function isTruncated(el) {
 }
 
 function attachTruncateTooltip(el) {
-  const tooltip = document.getElementById("tooltip");
   let isTouch = window.matchMedia("(max-width: 768px)").matches;
 
-  // PC：マウス操作
+  // PC：マウス
   if (!isTouch) {
     el.addEventListener("mouseenter", () => showTooltip(el));
     el.addEventListener("mouseleave", () => hideTooltip());
+    return;
   }
 
-  // スマホ：タップで表示
-  if (isTouch) {
-    el.addEventListener("click", (e) => {
-      e.stopPropagation();
+  // スマホ：長押しでツールチップ（タップは行クリックを殺さない）
+  let pressTimer = null;
+  let openedByLongPress = false;
+
+  el.addEventListener("touchstart", () => {
+    openedByLongPress = false;
+    pressTimer = setTimeout(() => {
+      if (!isTruncated(el)) return;
+      openedByLongPress = true;
       showTooltip(el);
-    });
+    }, 350); // 好きに調整
+  }, { passive: true });
 
-    document.addEventListener("click", () => hideTooltip());
-  }
+  el.addEventListener("touchend", (e) => {
+    clearTimeout(pressTimer);
+    if (openedByLongPress) {
+      // 長押しでツールチップを出したときだけ行再生を止める
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, { passive: false });
+
+  document.addEventListener("touchstart", () => hideTooltip(), { passive: true });
 }
+
 
 function showTooltip(el) {
   const tooltip = document.getElementById("tooltip");
@@ -223,12 +238,27 @@ function renderList(list){
     attachTruncateTooltip(tcol);
     row.appendChild(tcol);
 
-    // // click → 再生（id が無いものでもクリック可能）
-    // row.addEventListener("click",()=>{
-    //   if(v.id){
-    //     createOrLoadPlayer(v.id, v.start);
-    //   }
-    // });
+    // click → 再生（id が無いものでもクリック可能）
+    row.addEventListener("click",()=>{
+      if(v.id){
+        createOrLoadPlayer(v.id, v.start);
+      }
+    });
+    // 行タップで再生（スマホでも安定）
+    const playRow = () => {
+      if (v.id) createOrLoadPlayer(v.id, v.start);
+    };
+
+    // PC
+    row.addEventListener("click", playRow);
+
+    // iOS Safari 対策：スクロール中の誤爆を避けつつタップで発火
+    let moved = false;
+    row.addEventListener("touchstart", () => { moved = false; }, { passive: true });
+    row.addEventListener("touchmove",  () => { moved = true;  }, { passive: true });
+    row.addEventListener("touchend", (e) => {
+      if (!moved) playRow();
+    }, { passive: true });
 
 
 

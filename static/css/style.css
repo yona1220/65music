@@ -51,7 +51,8 @@ body { color:#222; font-size:16px; }
   background:#f7f7f7;
 }
 .npLabel{
-  width:55px;
+  display:inline-block;
+  width:auto;
   font-size:12px;
   font-weight:700;
   color:#555;
@@ -231,7 +232,7 @@ body { color:#222; font-size:16px; }
     min-width:0 !important;
     width:100%;
     display:grid;
-    grid-template-columns: 110px 1fr;
+    grid-template-columns: 90px 1fr;
     column-gap:0px;
     row-gap:0px;
     padding:4px 8px;
@@ -242,10 +243,10 @@ body { color:#222; font-size:16px; }
   .thumbWrapper{
     grid-column:1;
     grid-row:1 / span 4;
-    width:110px;
+    width:80px;
     flex:unset;
   }
-  .thumb{ width:110px; height:62px; }
+  .thumb{ width:90px; height:50px; }
   .date{ font-size:12px; }
 
   /* 右側に情報を積む */
@@ -265,9 +266,11 @@ body { color:#222; font-size:16px; }
   .col-title{ order:4; padding-left: 4px; }
 
   /* 見せ方 */
-  .col-song{ font-weight:800; font-size:15px; line-height:1.2; }
-  .col-singer{ font-size:12px; color:#666; }
-  .col-title{ font-size:12px; color:#444; }
+  .col-song{ font-weight:800; font-size:14px; line-height:1.2; }
+  .metaItem.metaArtist{ font-size:12px; color:#333; }
+  .metaItem.metaComposer{ font-size:10px; color:#666; }
+  .col-singer{ font-size:10px; color:#666; }
+  .col-title{ font-size:10px; color:#444; }
 
   /* artist + composer 横並び */
 .metaRow{
@@ -283,8 +286,7 @@ body { color:#222; font-size:16px; }
     white-space:nowrap;
   }
 
-  .metaItem.metaArtist{ font-size:13px; color:#333; }
-  .metaItem.metaComposer{ font-size:12px; color:#666; }
+
 
   /* 「…」になる表示（2行目に行きそうなら1行で切る） */
   .tapTip{

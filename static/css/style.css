@@ -77,6 +77,7 @@ body { color:#222; font-size:16px; }
   margin-bottom:8px;
   border-radius:6px;
   border:1px solid #ccc;
+  font-size: 16px;
 }
 
 #filterSelect, #yearSelect{
@@ -312,6 +313,9 @@ body { color:#222; font-size:16px; }
     overflow-wrap:anywhere;
     word-break:break-word;
   }
+
+
+  
 }
 
 /* ===== NowPlaying: 省略時だけ“ゆっくり左右にスライド” ===== */
@@ -358,3 +362,4 @@ body { color:#222; font-size:16px; }
 @media (prefers-reduced-motion: reduce){
   #nowPlaying.is-marquee .npMarquee{ animation: none; }
 }
+

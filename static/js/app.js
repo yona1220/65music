@@ -1,54 +1,97 @@
+'use strict';
+
 let player = null;
 let ytAPILoaded = false;
 
 let currentSort = { key: "date", order: "desc" };
-let filteredList = videos.slice();
+const VIDEOS = (typeof videos !== "undefined" && Array.isArray(videos)) ? videos : [];
+let filteredList = VIDEOS.slice();
 
 let playingRowEl = null;
 let currentPlayingId = null;
 
-/* Lazy YouTube Loader */
+/* -------------------- utils -------------------- */
+function isMobileView() {
+  return window.matchMedia("(max-width: 1000px)").matches;
+}
+
+function parseDateSafe(s) {
+  if (!s) return 0;
+  const m = String(s).match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})/);
+  if (!m) return Date.parse(s) || 0;
+  const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
+  return new Date(y, mo - 1, d).getTime();
+}
+
+/* -------------------- YouTube Loader -------------------- */
 function ensureYouTubeAPI(cb) {
+  if (window.YT && YT.Player) {
+    ytAPILoaded = true;
+    cb();
+    return;
+  }
   if (ytAPILoaded) { cb(); return; }
-  const tag = document.createElement("script");
-  tag.src = "https://www.youtube.com/iframe_api";
-  document.body.appendChild(tag);
+
+  if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
+    const tag = document.createElement("script");
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.body.appendChild(tag);
+  }
+
+  const prev = window.onYouTubeIframeAPIReady;
   window.onYouTubeIframeAPIReady = () => {
     ytAPILoaded = true;
+    if (typeof prev === "function") prev();
     cb();
   };
 }
 
-function createOrLoadPlayer(id, start) {
+function showPlayerUI() {
+  const wrap = document.getElementById("playerWrap");
+  const ph = document.getElementById("playerPlaceholder");
+  if (wrap) wrap.style.display = "block";
+  if (ph) ph.style.display = "none";
+}
+
+function createOrLoadPlayer(id, start = 0) {
   if (!id) return;
+
+  const onReadyCommon = () => showPlayerUI();
 
   if (!player) {
     ensureYouTubeAPI(() => {
+      if (!window.YT || !YT.Player) return;
       player = new YT.Player("player", {
         height: "360",
         width: "640",
         videoId: id,
         playerVars: { playsinline: 1, start: start || 0 },
-        events: {
-          onReady: () => {
-            const wrap = document.getElementById("playerWrap");
-            const ph = document.getElementById("playerPlaceholder");
-            if (wrap) wrap.style.display = "block";
-            if (ph) ph.style.display = "none";
-          }
-        }
+        events: { onReady: onReadyCommon }
       });
     });
   } else {
     player.loadVideoById({ videoId: id, startSeconds: start || 0 });
-    const wrap = document.getElementById("playerWrap");
-    const ph = document.getElementById("playerPlaceholder");
-    if (wrap) wrap.style.display = "block";
-    if (ph) ph.style.display = "none";
+    onReadyCommon();
   }
 }
 
-/* 再生中行ハイライト */
+/* -------------------- Now Playing -------------------- */
+function stripKeyFromSong(song) {
+  if (!song) return "";
+  let s = String(song).trim();
+  s = s.replace(/\s*[（(]\s*[#♭b+\-]?\d+\s*[）)]\s*$/u, "").trim();
+  s = s.replace(/\s*(?:【|\[|［)\s*[#♭b+\-]?\d+\s*(?:】|\]|］)\s*$/u, "").trim();
+  s = s.replace(/\s*(?:key[:：]?\s*)?[#♭b+\-]?\d+\s*$/iu, "").trim();
+  return s;
+}
+
+function setNowPlaying(v) {
+  const songEl = document.getElementById("npSong");
+  const artistEl = document.getElementById("npArtist");
+  if (songEl) songEl.textContent = stripKeyFromSong(v?.song || "") || "---";
+  if (artistEl) artistEl.textContent = (v?.artist || "").trim() || "---";
+}
+
 function setPlayingRow(rowEl, v) {
   if (playingRowEl && playingRowEl !== rowEl) {
     playingRowEl.classList.remove("is-playing");
@@ -56,221 +99,315 @@ function setPlayingRow(rowEl, v) {
   playingRowEl = rowEl;
   if (playingRowEl) playingRowEl.classList.add("is-playing");
   currentPlayingId = v?.id || null;
+  setNowPlaying(v);
 }
 
-/* --- Tooltip（PC: hover / SP: 長押し） --- */
-function isTruncated(el) {
-  return el.scrollHeight > el.clientHeight || el.scrollWidth > el.clientWidth;
+/* -------------------- Tooltip (黒い箱) -------------------- */
+function getTooltipEl() {
+  return document.getElementById("tooltip");
 }
 
-function showTooltip(el) {
-  const tooltip = document.getElementById("tooltip");
+function hideTooltip() {
+  const tooltip = getTooltipEl();
   if (!tooltip) return;
+  tooltip.style.display = "none";
+}
+
+function isTruncated(el) {
+  if (!el) return false;
+  const sw = el.scrollWidth  - el.clientWidth;
+  const sh = el.scrollHeight - el.clientHeight;
+  return sw > 1 || sh > 1; // 横 or 縦で詰まってたら true
+}
+
+function showTooltipFor(el) {
+  const tooltip = getTooltipEl();
+  if (!tooltip || !el) return;
   if (!isTruncated(el)) return;
 
   tooltip.textContent = el.textContent;
   tooltip.style.display = "block";
 
   const rect = el.getBoundingClientRect();
-
-  // いったん表示してから幅を取る
   const ttRect = tooltip.getBoundingClientRect();
 
   let left = rect.right + 8;
   let top = rect.top;
 
-  if (left + ttRect.width > window.innerWidth) {
-    left = rect.left - ttRect.width - 8;
-  }
-  if (left < 0) {
-    left = rect.left;
-    top = rect.top - ttRect.height - 6;
-  }
-  if (top < 0) {
-    top = rect.bottom + 6;
-  }
+  if (left + ttRect.width > window.innerWidth) left = rect.left - ttRect.width - 8;
+  if (left < 0) { left = rect.left; top = rect.top - ttRect.height - 6; }
+  if (top < 0) top = rect.bottom + 6;
 
-  tooltip.style.left = left + "px";
-  tooltip.style.top = top + "px";
+  tooltip.style.left = `${Math.max(6, left)}px`;
+  tooltip.style.top = `${Math.max(6, top)}px`;
 }
 
-function hideTooltip() {
-  const tooltip = document.getElementById("tooltip");
-  if (!tooltip) return;
-  tooltip.style.display = "none";
-}
+/* PC: hover / SP: “…の時だけ” tapで黒箱 */
+function attachTip(el) {
+  if (!el) return;
 
-function attachTruncateTooltip(el) {
-  const isTouch = window.matchMedia("(max-width: 768px)").matches;
+  if (isMobileView()) {
+    el.classList.add("tapTip");
 
-  // PC：hover
-  if (!isTouch) {
-    el.addEventListener("mouseenter", () => showTooltip(el));
-    el.addEventListener("mouseleave", hideTooltip);
+    let lastTouch = 0;
+
+    el.addEventListener("touchend", (e) => {
+      lastTouch = Date.now();
+      if (!isTruncated(el)) return;          // …じゃないなら何もしない
+      e.preventDefault();
+      e.stopPropagation();
+      showTooltipFor(el);
+    }, { passive: false });
+
+    el.addEventListener("click", (e) => {
+      if (Date.now() - lastTouch < 450) return;
+      if (!isTruncated(el)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      showTooltipFor(el);
+    });
+
     return;
   }
 
-  // SP：長押しだけ
-  let pressTimer = null;
-  let openedByLongPress = false;
+  // PC hover
+  el.addEventListener("mouseenter", () => showTooltipFor(el));
+  el.addEventListener("mouseleave", hideTooltip);
 
-  el.addEventListener("touchstart", () => {
-    openedByLongPress = false;
-    pressTimer = setTimeout(() => {
-      if (!isTruncated(el)) return;
-      openedByLongPress = true;
-      showTooltip(el);
-    }, 350);
-  }, { passive: true });
+  // ✅ PC drag でも黒箱を出す（ドラッグ中にカーソルが外れても window で追う）
+  let md = false;
 
-  el.addEventListener("touchend", (e) => {
-    clearTimeout(pressTimer);
-    if (openedByLongPress) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  }, { passive: false });
-
-  document.addEventListener("touchstart", hideTooltip, { passive: true });
-}
-
-/* --- 行タップ＝再生（スクロール時は発火しない） --- */
-function bindRowPlay(row, v) {
-  const TH = 12; // 指ブレ許容(px)
-  let sx = 0, sy = 0;
-  let suppressClick = false;
-
-  const play = () => {
-    if (!v.id) return;
-    createOrLoadPlayer(v.id, v.start);
-    setPlayingRow(row, v);
+  const onWinMove = () => {
+    if (!md) return;
+    if (isTruncated(el)) showTooltipFor(el);
   };
 
-  // PC / 通常クリック
-  row.addEventListener("click", (e) => {
-    if (suppressClick) return;
-    if (e.target.closest("a")) return; // 引用リンクは別
-    play();
+  const onWinUp = () => {
+    md = false;
+    window.removeEventListener("mousemove", onWinMove, true);
+    window.removeEventListener("mouseup", onWinUp, true);
+  };
+
+  el.addEventListener("mousedown", (e) => {
+    if (e.button !== 0) return; // 左クリックのみ
+    md = true;
+
+    if (isTruncated(el)) showTooltipFor(el);
+
+    // captureで拾う（テキスト選択中でも取りこぼしにくい）
+    window.addEventListener("mousemove", onWinMove, true);
+    window.addEventListener("mouseup", onWinUp, true);
   });
 
-  // iOS Safari：touchで “タップのみ” を判定
+}
+
+/* -------------------- Row play (scroll-safe) -------------------- */
+function bindRowPlay(row, v, playRow) {
+  const TH = 12;
+  let sx = 0, sy = 0;
+  let moved = false;
+  let ignoreClickUntil = 0;
+
+  row.addEventListener("click", (e) => {
+    if (Date.now() < ignoreClickUntil) return;
+    if (e.target.closest("a")) return; // 引用リンクは再生にしない
+    playRow();
+  });
+
   row.addEventListener("touchstart", (e) => {
-    if (e.target.closest("a")) return;
+    moved = false;
     const t = e.touches[0];
-    sx = t.clientX;
-    sy = t.clientY;
+    sx = t.clientX; sy = t.clientY;
+  }, { passive: true });
+
+  row.addEventListener("touchmove", (e) => {
+    const t = e.touches[0];
+    const dx = Math.abs(t.clientX - sx);
+    const dy = Math.abs(t.clientY - sy);
+    if (dx > TH || dy > TH) moved = true;
   }, { passive: true });
 
   row.addEventListener("touchend", (e) => {
     if (e.target.closest("a")) return;
-    const t = e.changedTouches[0];
-    const dx = Math.abs(t.clientX - sx);
-    const dy = Math.abs(t.clientY - sy);
-
-    // 動いてたらスクロール扱い（＝再生＆グレーにしない）
-    if (dx >= TH || dy >= TH) return;
-
-    suppressClick = true; // touch後に click が来る二重発火を潰す
-    play();
-    setTimeout(() => { suppressClick = false; }, 400);
+    if (!moved) {
+      playRow();
+      ignoreClickUntil = Date.now() + 450;
+    }
   }, { passive: true });
 }
 
-/* Render Rows */
+/* -------------------- Render -------------------- */
 function renderList(list) {
   const box = document.getElementById("videoList");
+  if (!box) return;
   box.innerHTML = "";
 
-  list.forEach(v => {
+  const mobile = isMobileView();
+
+  list.forEach((v) => {
     const row = document.createElement("div");
     row.className = "videoItem";
 
-    // いま再生中の動画がリストに残ってる場合、再描画でもハイライト維持
     if (currentPlayingId && v.id === currentPlayingId) {
-      playingRowEl = row;
       row.classList.add("is-playing");
+      playingRowEl = row;
     }
 
-    // サムネ
+    // thumb
     const tw = document.createElement("div");
     tw.className = "thumbWrapper";
 
     const img = document.createElement("img");
     img.className = "thumb";
-    img.src = v.thumbnail;
+    img.src = v.thumbnail || "";
     tw.appendChild(img);
 
     const date = document.createElement("div");
     date.className = "date";
-    date.textContent = v.date;
+    date.textContent = v.date || "";
     tw.appendChild(date);
 
     row.appendChild(tw);
 
-    const colClassMap = {
-      song: "col-song",
-      singer: "col-singer",
-      artist: "col-artist",
-      composer: "col-composer",
-      title: "col-title"
-    };
-
-    ["song", "singer", "artist", "composer"].forEach(key => {
+    // song
+    {
       const c = document.createElement("div");
-      c.className = `col ${colClassMap[key]}`;
-      c.textContent = v[key] || "";
-      attachTruncateTooltip(c);
+      c.className = "col col-song";
+      c.textContent = v.song || "";
+      attachTip(c);
       row.appendChild(c);
-    });
-
-    // 引用（リンク or 文字）
-    const tcol = document.createElement("div");
-    tcol.className = `col ${colClassMap.title}`;
-
-    if (v.id) {
-      const a = document.createElement("a");
-      a.href = "https://www.youtube.com/watch?v=" + v.id;
-      a.target = "_blank";
-      a.textContent = v.title;
-
-      // リンク押しは行再生に波及させない
-      a.addEventListener("click", (e) => e.stopPropagation());
-      a.addEventListener("touchend", (e) => e.stopPropagation(), { passive: true });
-
-      tcol.appendChild(a);
-    } else {
-      tcol.classList.add("nolink");
-      tcol.textContent = v.title;
     }
 
-    attachTruncateTooltip(tcol);
-    row.appendChild(tcol);
+    if (mobile) {
+      // meta (artist + composer)
+      {
+        const meta = document.createElement("div");
+        meta.className = "col col-meta";
 
-    // ★行タップ再生（スクロール時は発火しない）
-    bindRowPlay(row, v);
+        const metaRow = document.createElement("div");
+        metaRow.className = "metaRow";
+
+        const artist = document.createElement("div");
+        artist.className = "metaItem metaArtist";
+        artist.textContent = v.artist || "";
+        attachTip(artist);
+
+        const composer = document.createElement("div");
+        composer.className = "metaItem metaComposer";
+        composer.textContent = v.composer || "";
+        attachTip(composer);
+
+        if ((v.artist || "").trim()) metaRow.appendChild(artist);
+        if ((v.composer || "").trim()) metaRow.appendChild(composer);
+
+        meta.appendChild(metaRow);
+        row.appendChild(meta);
+      }
+
+      // singer
+      {
+        const c = document.createElement("div");
+        c.className = "col col-singer";
+        c.textContent = v.singer || "";
+        attachTip(c);
+        row.appendChild(c);
+      }
+
+      // title (リンクで飛ぶ / …なら黒箱はnolink時のみ)
+      {
+        const tcol = document.createElement("div");
+        tcol.className = "col col-title";
+
+        if (v.id) {
+          const a = document.createElement("a");
+          a.href = "https://www.youtube.com/watch?v=" + v.id;
+          a.target = "_blank";
+          a.rel = "noopener";
+          a.textContent = v.title || "";
+          a.addEventListener("click", (e) => e.stopPropagation());
+          a.addEventListener("touchend", (e) => e.stopPropagation(), { passive: true });
+          tcol.appendChild(a);
+        } else {
+          tcol.classList.add("nolink");
+          tcol.textContent = v.title || "";
+          attachTip(tcol);
+        }
+
+        row.appendChild(tcol);
+      }
+    } else {
+      // desktop：表形式
+      {
+        const c = document.createElement("div");
+        c.className = "col col-singer";
+        c.textContent = v.singer || "";
+        attachTip(c);
+        row.appendChild(c);
+      }
+      {
+        const c = document.createElement("div");
+        c.className = "col col-artist";
+        c.textContent = v.artist || "";
+        attachTip(c);
+        row.appendChild(c);
+      }
+      {
+        const c = document.createElement("div");
+        c.className = "col col-composer";
+        c.textContent = v.composer || "";
+        attachTip(c);
+        row.appendChild(c);
+      }
+      {
+        const tcol = document.createElement("div");
+        tcol.className = "col col-title";
+
+        if (v.id) {
+          const a = document.createElement("a");
+          a.href = "https://www.youtube.com/watch?v=" + v.id;
+          a.target = "_blank";
+          a.rel = "noopener";
+          a.textContent = v.title || "";
+          a.addEventListener("click", (e) => e.stopPropagation());
+          tcol.appendChild(a);
+        } else {
+          tcol.classList.add("nolink");
+          tcol.textContent = v.title || "";
+        }
+        attachTip(tcol);
+        row.appendChild(tcol);
+      }
+    }
+
+    const playRow = () => {
+      if (!v.id) return;
+      createOrLoadPlayer(v.id, v.start || 0);
+      setPlayingRow(row, v);
+    };
+
+    bindRowPlay(row, v, playRow);
 
     box.appendChild(row);
   });
 
-  document.getElementById("countNumber").textContent = list.length;
+  const cnt = document.getElementById("countNumber");
+  if (cnt) cnt.textContent = String(list.length);
 }
 
-/* 検索・フィルタ */
+/* -------------------- Filter/Search -------------------- */
 function filterAndRender() {
-  const kw = (document.getElementById("searchInput").value || "").toLowerCase();
-  const cat = document.getElementById("filterSelect").value;
-  const yearEl = document.getElementById("yearSelect");
-  const year = yearEl ? yearEl.value : "";
+  const kw = (document.getElementById("searchInput")?.value || "").toLowerCase();
+  const cat = document.getElementById("filterSelect")?.value || "";
+  const year = document.getElementById("yearSelect")?.value || "";
 
-  filteredList = videos.filter(v => {
+  const src = (typeof videos !== "undefined" && Array.isArray(videos)) ? videos : [];
+
+  filteredList = src.filter((v) => {
     const matchCat = !cat || v.category === cat;
     const matchKw = !kw || ["title", "song", "artist", "singer", "composer"]
       .some(k => (v[k] || "").toLowerCase().includes(kw));
-
-    // 年フィルタ（v.dateが "YYYY/MM/DD" 想定）
     const vYear = (v.date || "").slice(0, 4);
     const matchYear = !year || vYear === year;
-
     return matchCat && matchKw && matchYear;
   });
 
@@ -278,13 +415,13 @@ function filterAndRender() {
   renderList(filteredList);
 }
 
-/* ソート */
+/* -------------------- Sort -------------------- */
 function sortList() {
   const key = currentSort.key;
   const order = currentSort.order;
 
   if (key === "date") {
-    filteredList.sort((a, b) => new Date(b.date) - new Date(a.date));
+    filteredList.sort((a, b) => parseDateSafe(b.date) - parseDateSafe(a.date));
     return;
   }
 
@@ -296,7 +433,6 @@ function sortList() {
   });
 }
 
-/* ヘッダークリック */
 function headerClickHandler(key) {
   if (currentSort.key === "date") {
     currentSort = { key, order: "asc" };
@@ -326,7 +462,7 @@ function updateHeaderIndicators() {
   });
 }
 
-/* ヘッダーとリストの横スクロール同期（双方向） */
+/* -------------------- Header/List scroll sync (desktop) -------------------- */
 function syncHorizontalScroll() {
   const head = document.getElementById("listHeaderWrapper");
   const list = document.getElementById("videoListContainer");
@@ -334,16 +470,10 @@ function syncHorizontalScroll() {
 
   let lock = false;
 
-  const clampHead = () => {
-    const max = head.scrollWidth - head.clientWidth;
-    head.scrollLeft = Math.min(head.scrollLeft, Math.max(0, max));
-  };
-
   list.addEventListener("scroll", () => {
     if (lock) return;
     lock = true;
     head.scrollLeft = list.scrollLeft;
-    clampHead();
     lock = false;
   }, { passive: true });
 
@@ -355,28 +485,55 @@ function syncHorizontalScroll() {
   }, { passive: true });
 }
 
+/* -------------------- Init -------------------- */
 document.addEventListener("DOMContentLoaded", () => {
+  // ✅ 黒箱を「別タップ / スクロール / 指移動」で消す（スマホ最優先）
+  const listEl = document.getElementById("videoListContainer");
+  const headEl = document.getElementById("listHeaderWrapper");
+
+  // どこタップでも消える
+  document.addEventListener("touchstart", hideTooltip, { passive: true });
+  document.addEventListener("mousedown", hideTooltip, { passive: true });
+
+  // 指が動いた瞬間に消える（スクロール開始で消える）
+  document.addEventListener("touchmove", hideTooltip, { passive: true });
+
+  // スクロールで消える（window + リスト + ヘッダ）
+  window.addEventListener("scroll", hideTooltip, { passive: true });
+  if (listEl) listEl.addEventListener("scroll", hideTooltip, { passive: true });
+  if (headEl) headEl.addEventListener("scroll", hideTooltip, { passive: true });
+
+  // headers
   document.querySelectorAll(".headerCol").forEach(h => {
     const key = h.dataset.key;
     h.addEventListener("click", () => headerClickHandler(key));
   });
 
-  document.getElementById("searchInput").addEventListener("input", filterAndRender);
-  document.getElementById("filterSelect").addEventListener("change", filterAndRender);
+  // inputs
+  document.getElementById("searchInput")?.addEventListener("input", filterAndRender);
+  document.getElementById("filterSelect")?.addEventListener("change", filterAndRender);
+  document.getElementById("yearSelect")?.addEventListener("change", filterAndRender);
 
-  const yearEl = document.getElementById("yearSelect");
-  if (yearEl) yearEl.addEventListener("change", filterAndRender);
-
-  filteredList = videos.slice();
   updateHeaderIndicators();
   filterAndRender();
   syncHorizontalScroll();
 
-  // 表示時に先頭動画を自動再生（ハイライトも付けたいなら first 行をタップする設計に変えるが、今回は再生のみ）
+  // 画面幅がPC↔スマホで切り替わったら再描画
+  let lastMobile = isMobileView();
+  window.addEventListener("resize", () => {
+    const nowMobile = isMobileView();
+    if (nowMobile !== lastMobile) {
+      lastMobile = nowMobile;
+      hideTooltip();
+      renderList(filteredList);
+    }
+  }, { passive: true });
+
+  // auto play first
   if (filteredList.length > 0 && filteredList[0].id) {
     currentPlayingId = filteredList[0].id;
-    createOrLoadPlayer(filteredList[0].id, filteredList[0].start);
-    // 再描画で is-playing が付く（currentPlayingId を見てる）
-    filterAndRender();
+    createOrLoadPlayer(filteredList[0].id, filteredList[0].start || 0);
+    setNowPlaying(filteredList[0]);
+    renderList(filteredList);
   }
 });

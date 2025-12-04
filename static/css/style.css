@@ -1,13 +1,9 @@
-/* base */
+/* ===== base ===== */
 * { box-sizing: border-box; }
-html, body { margin: 0; }
-body {
-  /* padding: 16px; */
-  color: #222;
-  font-size: 16px;
-}
+html, body { margin: 0; padding: 0; }
+body { color:#222; font-size:16px; }
 
-/* layout */
+/* ===== layout ===== */
 #main{
   display:flex;
   gap:10px;
@@ -16,21 +12,62 @@ body {
 }
 @media (max-width: 1000px){
   #main{ flex-direction:column; }
+  html, body{ overflow-x:hidden; } /* ページ横スクロール禁止 */
 }
 
-/* player area */
-#playerArea{ width:640px; max-width:100%; min-width:320px; }
-#playerPlaceholder{
-  width:100%;
-  background:#000; color:#fff;
-  height:360px;
-  display:flex; align-items:center; justify-content:center;
+/* ===== header ===== */
+#header{
+  display:flex;
+  height:56px;
+  padding:0;
+  background-color:#198caa;
 }
-#playerWrap{ width:100%; height:390px; display:none; }
+.header_title{
+  padding:10px;
+  color:#fff;
+  font-weight:700;
+  font-size:32px;
+}
+
+/* ===== left column / player ===== */
+#leftColumn{ width:50%; height:100%; }
+@media (max-width: 1000px){ #leftColumn{ width:100%; } }
 #player{ width:100%; height:100%; aspect-ratio:16/9; }
 
-/* sidebar */
+/* ===== sidebar ===== */
 #sidebar{ flex:1; min-width:360px; }
+@media (max-width: 1000px){
+  #sidebar{ min-width:0; width:100%; }
+}
+
+#nowPlaying{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  margin: 0 0 8px;
+  border:1px solid #d7d7d7;
+  border-radius:10px;
+  background:#f7f7f7;
+}
+.npLabel{
+  width:55px;
+  font-size:12px;
+  font-weight:700;
+  color:#555;
+  padding:3px 8px;
+  border-radius:999px;
+  background:#ececec;
+}
+.npText{
+  font-size:14px;
+  font-weight:600;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.npSep{ opacity:.55; }
+
 #searchInput{
   width:100%;
   padding:8px;
@@ -38,59 +75,44 @@ body {
   border-radius:6px;
   border:1px solid #ccc;
 }
-#filterSelect{
-  width:170px;
-  padding:8px;
-  border-radius:6px;
-  border:1px solid #ccc;
-}
-#yearSelect{
-  width:140px;
-  padding:8px;
-  border-radius:6px;
-  border:1px solid #ccc;
-  margin-left:8px;
-}
 
-/* count */
+#filterSelect, #yearSelect{
+  padding:8px;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
+#filterSelect{ width:170px; }
+#yearSelect{ width:140px; }
+
 #countArea{ margin:6px 0 8px; font-size:14px; }
 
-/* list wrapper */
+/* ===== list wrapper ===== */
 #listWrapper{ display:flex; flex-direction:column; gap:6px; }
 
-/* ▼ 横スクロール（リスト＆ヘッダー） */
-#listHeaderWrapper,
-#videoListContainer{
+/* ===== Desktop: table-like (横スクロールあり) ===== */
+#listHeaderWrapper, #videoListContainer{
   overflow-x:auto;
-  scrollbar-width:thin; /* Firefox */
-  -webkit-overflow-scrolling: touch;
+  scrollbar-width:thin;
 }
-#listHeaderWrapper::-webkit-scrollbar,
-#videoListContainer::-webkit-scrollbar{ height:8px; }
-
-/* ▼ listHeaderWrapper だけスクロールバー非表示 */
 #listHeaderWrapper{
-  -ms-overflow-style:none;  /* IE/Edge */
-  scrollbar-width:none;     /* Firefox */
+  -ms-overflow-style:none;
+  scrollbar-width:none;
   background:#f2f2f2;
   border-radius:6px;
 }
 #listHeaderWrapper::-webkit-scrollbar,
 #videoListContainer::-webkit-scrollbar{ display:none; }
 
-/* header */
 #listHeader{
   display:flex;
   min-width:1200px;
-  background:transparent;
   padding:8px;
   border-radius:6px;
   align-items:center;
-  gap:10px;
+  /* gap:10px; */
+  background:transparent;
 }
-
-/* columns */
-.thumbHeader{ flex:0 0 150px; }
+.thumbHeader{ flex:0 0 141px; }
 
 .col{
   flex:0 0 220px;
@@ -102,8 +124,12 @@ body {
   line-clamp:4;
 }
 
-/* ソートマーク */
-.headerCol{ cursor:pointer; position:relative; font-weight:bold; }
+/* sort mark */
+.headerCol{
+  cursor:pointer;
+  position:relative;
+  font-weight:700;
+}
 .headerCol.sort-default::after{
   content:"";
   position:absolute;
@@ -130,29 +156,18 @@ body {
   border-top:8px solid #000;
 }
 
-/* list rows */
+/* list rows (desktop) */
 #videoListContainer{ max-height:520px; overflow-y:auto; }
-#videoList{ width:100%; } /* PC */
-
 .videoItem{
   display:flex;
   min-width:1200px;
-  gap:10px;
+  /* gap:10px; */
   padding:5px 0;
   border-bottom:1px solid #eee;
+  -webkit-tap-highlight-color: rgba(0,0,0,0); /* iOSの青ハイライト消す */
 }
 .videoItem:hover{ background:#fafafa; }
 
-/* 再生中行ハイライト（これだけが “グレーになる” 条件） */
-.videoItem.is-playing{ background:#e6e6e6; }
-.videoItem.is-playing:hover{ background:#e0e0e0; }
-
-/* iOSのタップ時ハイライトを消す（スクロールでもグレーになる問題の主犯） */
-.videoItem, .videoItem *{
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* サムネ */
 .thumbWrapper{
   flex:0 0 150px;
   display:flex;
@@ -160,33 +175,26 @@ body {
   align-items:center;
 }
 .thumb{
-  width:142px;
-  height:79px;
+  width:142px; height:79px;
   object-fit:cover;
   border-radius:6px;
 }
 .date{ font-size:12px; color:#555; }
 
-/* 各列ごとに幅 */
-.col-song     { flex:0 0 150px; white-space: pre-line; }
-.col-singer   { flex:0 0 150px; }
-.col-artist   { flex:0 0 150px; }
-.col-composer { flex:0 0 150px; }
+.col-song{ flex:0 0 150px; white-space:pre-line; padding-left: 6px; }
+.col-singer{ flex:0 0 150px; padding-left: 6px; }
+.col-artist{ flex:0 0 150px; padding-left: 6px; }
+.col-composer{ flex:0 0 150px; padding-left: 6px; }
+.col-title{ flex:1 1 auto; min-width:320px; padding-left: 6px; }
 
-/* 引用 */
-.col-title    { flex:1 1 auto; min-width:320px; }
-
-/* リンク */
 .col a{ color:#0066cc; text-decoration:underline; }
 .col.nolink{ text-decoration:none; color:#222; }
 
-/* 長文が列を押し広げて“余白スクロール”を生まないように */
-.col, .col a{
-  overflow-wrap:anywhere;
-  word-break:break-word;
-}
+/* playing highlight */
+.videoItem.is-playing{ background:#e9e9e9; }
+.videoItem.is-playing:hover{ background:#e1e1e1; }
 
-/* tooltip */
+/* tooltip（黒い箱） */
 #tooltip{
   position:fixed;
   z-index:9999;
@@ -199,92 +207,105 @@ body {
   line-height:1.4;
   display:none;
   white-space:normal;
+  pointer-events:none;
 }
+@media (max-width: 1000px){ #tooltip{ max-width:70vw; } }
+
+/* ===== Mobile (<=1000px): カード型で縦スクのみ ===== */
 @media (max-width: 1000px){
-  #tooltip{ max-width:50vw; }
-}
+  /* スマホは“表ヘッダー”を消す */
+  #listHeaderWrapper{ display:none; }
 
-/* left column */
-#leftColumn{ width:50%; height:100%; }
-@media (max-width: 1000px){
-  #leftColumn{ width:100%; height:100%; }
-}
-
-/* header bar */
-#header{
-  display:flex;
-  height:56px;
-  padding:0;
-  background-color:#198caa;
-}
-.header_title{
-  padding:10px;
-  color:#fff;
-  font-weight:bold;
-  font-size:32px;
-}
-
-details[open] summary{
-  border-bottom:1px solid #aaaaaa;
-  margin-bottom:0.5em;
-}
-
-/* ▼ スマホ：見た目縮小 */
-@media (max-width: 1000px){
-  #listHeader, #videoListContainer, .videoItem, .col, .headerCol{
-    font-size:13px !important;
-    line-height:1.2;
+  /* 横スクを無効化、縦だけ */
+  #videoListContainer{
+    overflow-x:hidden !important;
+    overflow-y:auto !important;
+    max-height: 60vh; /* 55〜65vh 好みで */
+    border-radius:10px;
+    touch-action: pan-y;
   }
-  .videoItem{ padding:4px 2px !important; gap:6px !important; }
-  #listHeader{ padding:6px !important; gap:6px !important; }
+  #videoList{ width:100%; }
 
-  .thumbWrapper{ flex:0 0 110px !important; }
-  .thumb{ width:110px !important; height:62px !important; }
-
-  .col-song     { flex:0 0 130px !important; }
-  .col-singer   { flex:0 0 120px !important; }
-  .col-artist   { flex:0 0 130px !important; }
-  .col-composer { flex:0 0 110px !important; }
-
-  .col-title{
-    flex:0 0 clamp(220px, 55vw, 320px) !important;
-    min-width:0 !important;
-  }
-  .thumbHeader{ flex:0 0 110px !important; }
-}
-
-/* ▼ スマホ：余白スクロール撲滅（min-width固定を殺して「中身幅＝スクロール幅」にする） */
-@media (max-width: 1000px){
-  /* ページ全体の横スクは殺す（内側だけ許可） */
-  html, body{ overflow-x:clip; }
-  #main{ overflow-x:hidden; }
-
-  #sidebar, #listWrapper, #listHeaderWrapper, #videoListContainer{
-    min-width:0;
-    width:100%;
-    max-width:100%;
-  }
-
-  /* ヘッダ/行/親を “実寸にシュリンク” させる */
-  #listHeader{
-    min-width:0 !important;
-    display:inline-flex;
-    width:max-content;
-  }
-  #videoList{
-    display:flex;
-    flex-direction:column;
-    align-items:flex-start;
-    width:max-content;
-  }
+  /* 行をカード化 */
   .videoItem{
     min-width:0 !important;
-    display:inline-flex;
-    width:max-content;
+    width:100%;
+    display:grid;
+    grid-template-columns: 110px 1fr;
+    column-gap:0px;
+    row-gap:0px;
+    padding:4px 8px;
+    align-items:start;
   }
 
-  /* バウンスで「奥に行ける感」を減らす（効く環境だけ） */
-  #listHeaderWrapper, #videoListContainer{
-    overscroll-behavior-x: contain;
+  /* サムネと日付は左固定 */
+  .thumbWrapper{
+    grid-column:1;
+    grid-row:1 / span 4;
+    width:110px;
+    flex:unset;
+  }
+  .thumb{ width:110px; height:62px; }
+  .date{ font-size:12px; }
+
+  /* 右側に情報を積む */
+  .col{
+    grid-column:2;
+    flex:unset;
+    width:auto;
+    display:block;
+    min-width:0;       /* ← 省略表示に必須 */
+    overflow:hidden;
+  }
+
+  /* 表示順（依頼通り：曲名→アーティスト+作曲→歌唱→引用） */
+  .col-song{ order:1; padding-left: 4px; }
+  .col-meta{ order:2; padding-left: 4px; }
+  .col-singer{ order:3; padding-left: 4px; }
+  .col-title{ order:4; padding-left: 4px; }
+
+  /* 見せ方 */
+  .col-song{ font-weight:800; font-size:15px; line-height:1.2; }
+  .col-singer{ font-size:12px; color:#666; }
+  .col-title{ font-size:12px; color:#444; }
+
+  /* artist + composer 横並び */
+.metaRow{
+    display:flex;
+    gap:10px;
+    align-items:baseline;
+    flex-wrap:nowrap;      /* ← wrap を殺す */
+  }
+  .metaItem{
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  .metaItem.metaArtist{ font-size:13px; color:#333; }
+  .metaItem.metaComposer{ font-size:12px; color:#666; }
+
+  /* 「…」になる表示（2行目に行きそうなら1行で切る） */
+  .tapTip{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    min-width:0;
+  }
+
+  /* 引用（リンク）はタップで飛ぶ */
+  .col-title a{
+    display:block;
+    min-width:0;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  /* 長い文字で横に押し広げない（保険） */
+  .col, .col a{
+    overflow-wrap:anywhere;
+    word-break:break-word;
   }
 }

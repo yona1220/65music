@@ -44,7 +44,7 @@ body { color:#222; font-size:16px; }
   display:flex;
   align-items:center;
   gap:10px;
-  padding:10px 12px;
+  padding:5px 5px;
   margin: 0 0 8px;
   border:1px solid #d7d7d7;
   border-radius:10px;
@@ -59,10 +59,12 @@ body { color:#222; font-size:16px; }
   padding:3px 8px;
   border-radius:999px;
   background:#ececec;
+  white-space: nowrap;
 }
 .npText{
   font-size:14px;
   font-weight:600;
+   min-width: 0;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
@@ -310,4 +312,49 @@ body { color:#222; font-size:16px; }
     overflow-wrap:anywhere;
     word-break:break-word;
   }
+}
+
+/* ===== NowPlaying: 省略時だけ“ゆっくり左右にスライド” ===== */
+#nowPlaying{
+  overflow: hidden;         /* はみ出しを見せない */
+}
+.npLabel{
+  flex: 0 0 auto;
+  white-space: nowrap;      /* ラベルは絶対折り返さない */
+}
+.npText{
+  flex: 1 1 auto;
+  min-width: 0;             /* ← flexの中で…を効かせる最重要 */
+  overflow: hidden;
+  text-overflow: ellipsis;  /* 通常時は… */
+  white-space: nowrap;
+}
+
+/* JSが“はみ出し”を検知した時だけ付く */
+#nowPlaying.is-marquee .npText{
+  text-overflow: clip;      /* アニメ中は…を消す（中身を動かすため） */
+}
+
+/* .npText の中身をまとめるラッパー（JSが自動で作る） */
+.npMarquee{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  will-change: transform;
+}
+
+/* 0→左へスライド→0 に戻る（ゆっくり） */
+#nowPlaying.is-marquee .npMarquee{
+  animation: npMarquee var(--np-marquee-duration, 20s) ease-in-out infinite;
+}
+
+@keyframes npMarquee{
+  0%, 15%   { transform: translateX(0); }
+  45%, 55%  { transform: translateX(calc(-1 * var(--np-marquee-shift, 0px))); }
+  85%, 100% { transform: translateX(0); }
+}
+
+/* 動きが苦手な人向け */
+@media (prefers-reduced-motion: reduce){
+  #nowPlaying.is-marquee .npMarquee{ animation: none; }
 }

@@ -92,6 +92,50 @@ function setNowPlaying(v) {
   if (artistEl) artistEl.textContent = (v?.artist || "").trim() || "---";
 }
 
+function updateNowPlayingMarquee() {
+  const now = document.getElementById("nowPlaying");
+  const npText = now?.querySelector(".npText");
+  if (!now || !npText) return;
+
+  // 1000px以下だけ動かす（必要なら消してOK）
+  const isMobile = window.matchMedia("(max-width: 1000px)").matches;
+
+  // .npText の中身を .npMarquee にまとめる（HTMLいじらずJSで対応）
+  let inner = npText.querySelector(".npMarquee");
+  if (!inner) {
+    inner = document.createElement("span");
+    inner.className = "npMarquee";
+    while (npText.firstChild) inner.appendChild(npText.firstChild);
+    npText.appendChild(inner);
+  }
+
+  // いったん解除
+  now.classList.remove("is-marquee");
+  npText.style.removeProperty("--np-marquee-shift");
+  npText.style.removeProperty("--np-marquee-duration");
+
+  if (!isMobile) return;
+
+  // レイアウト確定後に計測（これ重要）
+  requestAnimationFrame(() => {
+    const overflow = inner.scrollWidth - npText.clientWidth;
+
+    // ちょいはみ出しは無視（8px以上で発動）
+    if (overflow > 8) {
+      npText.style.setProperty("--np-marquee-shift", `${overflow}px`);
+
+      // はみ出し量に応じて“数秒ごと”を自動調整（好みで式変えてOK）
+      const dur = Math.min(18, Math.max(9, overflow / 35 + 9));
+      npText.style.setProperty("--np-marquee-duration", `${dur.toFixed(2)}s`);
+
+      now.classList.add("is-marquee");
+    }
+  });
+  updateNowPlayingMarquee();
+
+}
+
+
 function setPlayingRow(rowEl, v) {
   if (playingRowEl && playingRowEl !== rowEl) {
     playingRowEl.classList.remove("is-playing");
@@ -536,4 +580,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setNowPlaying(filteredList[0]);
     renderList(filteredList);
   }
+  window.addEventListener("resize", updateNowPlayingMarquee, { passive: true });
+
 });

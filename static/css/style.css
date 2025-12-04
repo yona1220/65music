@@ -1,143 +1,85 @@
 /* base */
 * { box-sizing: border-box; }
+html, body { margin: 0; }
 body {
-  margin: 0;
   /* padding: 16px; */
   color: #222;
   font-size: 16px;
 }
-/* ▼ スマホ幅での横スクロール修正（最強版） */
-@media (max-width: 1000px) {
-
-  /* ページ全体は横スクロール禁止 */
-  body, html {
-    overflow-x: hidden;
-  }
-
-  /* リストのみ横スクロール許可 */
-  #listHeaderWrapper,
-  #videoListContainer {
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch; /* スマホで滑らかに */
-  }
-
-  #listHeader,
-  .videoItem {
-    width: max-content;     /* ← 背景が右端まで塗られる */
-    min-width: 920px;       /* いまの設計値に合わせる */
-  }
-
-  #videoList {
-    width: max-content;     /* 行の親も中身幅に合わせると安定 */
-  }
-}
-
 
 /* layout */
-#main {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  padding: 10px
+#main{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  padding:10px;
 }
-
-/* 画面幅が狭い時は縦並びにして重ならないようにする */
-@media (max-width: 1000px) {
-  #main { flex-direction: column; }
+@media (max-width: 1000px){
+  #main{ flex-direction:column; }
 }
 
 /* player area */
-#playerArea {
-  width: 640px;
-  max-width: 100%;
-  min-width: 320px;
-}
-#playerPlaceholder {
-  width: 100%;
-  background:#000;
-  color:#fff;
-  height:360px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-#playerWrap {
+#playerArea{ width:640px; max-width:100%; min-width:320px; }
+#playerPlaceholder{
   width:100%;
-  height:390px;
-  display:none;
+  background:#000; color:#fff;
+  height:360px;
+  display:flex; align-items:center; justify-content:center;
 }
-#player {
-  width: 100%;
-  height: 100%;
-  aspect-ratio: 16 / 9;
-}
-/* ▼ スマホ幅 */
-@media (max-width: 1000px) {
-  #player {
-      width: 100%;
-      height: 100%;
-      aspect-ratio: 16 / 9;
-  }
-}
-
+#playerWrap{ width:100%; height:390px; display:none; }
+#player{ width:100%; height:100%; aspect-ratio:16/9; }
 
 /* sidebar */
-#sidebar {
-  flex:1;
-  min-width: 360px;
+#sidebar{ flex:1; min-width:360px; }
+#searchInput{
+  width:100%;
+  padding:8px;
+  margin-bottom:8px;
+  border-radius:6px;
+  border:1px solid #ccc;
 }
-
-#searchInput {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+#filterSelect{
+  width:170px;
+  padding:8px;
+  border-radius:6px;
+  border:1px solid #ccc;
 }
-
-#filterSelect {
-  width: 120px;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+#yearSelect{
+  width:140px;
+  padding:8px;
+  border-radius:6px;
+  border:1px solid #ccc;
+  margin-left:8px;
 }
 
 /* count */
-#countArea {
-  margin:6px 0 8px;
-  font-size:14px;
-}
+#countArea{ margin:6px 0 8px; font-size:14px; }
 
 /* list wrapper */
-#listWrapper { display:flex; flex-direction:column; gap:6px; }
+#listWrapper{ display:flex; flex-direction:column; gap:6px; }
 
 /* ▼ 横スクロール（リスト＆ヘッダー） */
 #listHeaderWrapper,
-#videoListContainer {
-  overflow-x: auto;
-  scrollbar-width: thin;             /* Firefox */
+#videoListContainer{
+  overflow-x:auto;
+  scrollbar-width:thin; /* Firefox */
+  -webkit-overflow-scrolling: touch;
 }
 #listHeaderWrapper::-webkit-scrollbar,
-#videoListContainer::-webkit-scrollbar {
-  height: 8px;
-}
-/* ▼ listHeaderWrapper だけスクロールバーを隠して操作可能にする */
-#listHeaderWrapper {
-  overflow-x: auto;
-  -ms-overflow-style: none;  /* IE/Edge */
-  scrollbar-width: none;     /* Firefox */
+#videoListContainer::-webkit-scrollbar{ height:8px; }
+
+/* ▼ listHeaderWrapper だけスクロールバー非表示 */
+#listHeaderWrapper{
+  -ms-overflow-style:none;  /* IE/Edge */
+  scrollbar-width:none;     /* Firefox */
   background:#f2f2f2;
   border-radius:6px;
 }
 #listHeaderWrapper::-webkit-scrollbar,
-#videoListContainer::-webkit-scrollbar {
-  display:none;
-}
-
-
+#videoListContainer::-webkit-scrollbar{ display:none; }
 
 /* header */
-#listHeader {
+#listHeader{
   display:flex;
   min-width:1200px;
   background:transparent;
@@ -147,35 +89,22 @@ body {
   gap:10px;
 }
 
-/* column width を拡張（… になりにくくする） */
-.thumbHeader {
-  flex: 0 0 150px;
+/* columns */
+.thumbHeader{ flex:0 0 150px; }
+
+.col{
+  flex:0 0 220px;
+  white-space:normal;
+  overflow:hidden;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:4;
+  line-clamp:4;
 }
 
-.col {
-  flex: 0 0 220px;    /* ←広げる */
-  /* white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding: 0 8px; */
-
-  white-space: normal;      /* 横は折り返す */
-  overflow: hidden;         /* はみ出しを隠す */
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;    /* ← 表示したい行数を指定（例：3行） */
-  line-clamp: 4;
-}
-
-/* ▼ ソートマーク */
-.headerCol {
-  cursor:pointer;
-  position:relative;
-  font-weight:bold;
-}
-
-/* デフォルト（日付順）→ 白い下三角 */
-.headerCol.sort-default::after {
+/* ソートマーク */
+.headerCol{ cursor:pointer; position:relative; font-weight:bold; }
+.headerCol.sort-default::after{
   content:"";
   position:absolute;
   right:4px; top:50%; transform:translateY(-50%);
@@ -184,9 +113,7 @@ body {
   border-top:8px solid #fff;
   filter: drop-shadow(0 0 1px #333);
 }
-
-/* 昇順 → 黒い上三角 */
-.headerCol.sort-asc::after {
+.headerCol.sort-asc::after{
   content:"";
   position:absolute;
   right:4px; top:50%; transform:translateY(-60%);
@@ -194,9 +121,7 @@ body {
   border-right:6px solid transparent;
   border-bottom:8px solid #000;
 }
-
-/* 降順 → 黒い下三角 */
-.headerCol.sort-desc::after {
+.headerCol.sort-desc::after{
   content:"";
   position:absolute;
   right:4px; top:50%; transform:translateY(-40%);
@@ -206,227 +131,160 @@ body {
 }
 
 /* list rows */
-#videoListContainer { max-height:520px; overflow-y:auto; }
+#videoListContainer{ max-height:520px; overflow-y:auto; }
+#videoList{ width:100%; } /* PC */
 
-.videoItem {
+.videoItem{
   display:flex;
   min-width:1200px;
   gap:10px;
-  padding:5px 0px;
+  padding:5px 0;
   border-bottom:1px solid #eee;
 }
-.videoItem:hover { background:#fafafa; }
+.videoItem:hover{ background:#fafafa; }
+
+/* 再生中行ハイライト（これだけが “グレーになる” 条件） */
+.videoItem.is-playing{ background:#e6e6e6; }
+.videoItem.is-playing:hover{ background:#e0e0e0; }
+
+/* iOSのタップ時ハイライトを消す（スクロールでもグレーになる問題の主犯） */
+.videoItem, .videoItem *{
+  -webkit-tap-highlight-color: transparent;
+}
 
 /* サムネ */
-.thumbWrapper {
+.thumbWrapper{
   flex:0 0 150px;
   display:flex;
   flex-direction:column;
   align-items:center;
 }
-.thumb {
+.thumb{
   width:142px;
   height:79px;
   object-fit:cover;
   border-radius:6px;
 }
-.date { font-size:12px; color:#555; }
+.date{ font-size:12px; color:#555; }
 
-/* 各列ごとに幅調整 */
-.col-song     { flex: 0 0 150px; white-space: pre-line; }  /* 曲名ひろめ */
-.col-singer   { flex: 0 0 150px; }
-.col-artist   { flex: 0 0 150px; }
-.col-composer { flex: 0 0 150px; }  /* 作曲は短いことが多い */
-/* 引用だけ右側いっぱいを取る */
-.col-title    { flex: 1 1 auto; min-width: 320px; }
+/* 各列ごとに幅 */
+.col-song     { flex:0 0 150px; white-space: pre-line; }
+.col-singer   { flex:0 0 150px; }
+.col-artist   { flex:0 0 150px; }
+.col-composer { flex:0 0 150px; }
 
+/* 引用 */
+.col-title    { flex:1 1 auto; min-width:320px; }
 
-/* タイトルリンク */
-.col a {
-  color:#0066cc;
-  text-decoration:underline;
-}
-.col.nolink {
-  text-decoration:none;
-  color:#222;
-}
+/* リンク */
+.col a{ color:#0066cc; text-decoration:underline; }
+.col.nolink{ text-decoration:none; color:#222; }
 
-/* ツールチップ */
-#tooltip {
-  position: fixed;
-  z-index: 9999;
-  background: rgba(0,0,0,0.85);
-  color: #fff;
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-size: 14px;
-  max-width: 10vw;
-  line-height: 1.4;
-  display: none;
-  white-space: normal;
+/* 長文が列を押し広げて“余白スクロール”を生まないように */
+.col, .col a{
+  overflow-wrap:anywhere;
+  word-break:break-word;
 }
 
-/* ▼ スマホ幅（576px以下）だけ max-width を広げる */
-@media (max-width: 1000px) {
-  #tooltip {
-    max-width: 50vw;  /* ← スマホだと広めに */
-  }
-}
-/* #tooltip {
-  position: fixed;
-  z-index: 9999;
-  background:#111;
+/* tooltip */
+#tooltip{
+  position:fixed;
+  z-index:9999;
+  background:rgba(0,0,0,0.85);
   color:#fff;
-  padding:8px 10px;
+  padding:6px 10px;
   border-radius:6px;
-  max-width: 60vw;
+  font-size:14px;
+  max-width:10vw;
+  line-height:1.4;
   display:none;
-} */
-
-#leftColumn {
-  width: 50%;
-  height: 100%;
+  white-space:normal;
+}
+@media (max-width: 1000px){
+  #tooltip{ max-width:50vw; }
 }
 
-/* ▼ スマホ幅（576px以下）だけ max-width を広げる */
-@media (max-width: 1000px) {
- #leftColumn {
-  width: 100%;
-  height: 100%;
-}
+/* left column */
+#leftColumn{ width:50%; height:100%; }
+@media (max-width: 1000px){
+  #leftColumn{ width:100%; height:100%; }
 }
 
+/* header bar */
 #header{
-    display: flex;
-    height: 56px;
-    padding: 0px;
-    background-color: #198caa;
+  display:flex;
+  height:56px;
+  padding:0;
+  background-color:#198caa;
+}
+.header_title{
+  padding:10px;
+  color:#fff;
+  font-weight:bold;
+  font-size:32px;
 }
 
-.header_title {
-    padding: 10px;
-    color: #ffffff;
-    font-weight: bold;
-    font-size: 32px;
+details[open] summary{
+  border-bottom:1px solid #aaaaaa;
+  margin-bottom:0.5em;
 }
 
-
-
-details[open] summary {
-  border-bottom: 1px solid #aaaaaa;
-  margin-bottom: 0.5em;
-}
-
-/* ▼ スマホ幅（1000px以下）のときヘッダー＆リストを小さくする */
-@media (max-width: 1000px) {
-
-  /* 全体の文字サイズ縮小 */
-  #listHeader, #videoListContainer, .videoItem, .col, .headerCol {
-    font-size: 13px !important;
-    line-height: 1.2;
+/* ▼ スマホ：見た目縮小 */
+@media (max-width: 1000px){
+  #listHeader, #videoListContainer, .videoItem, .col, .headerCol{
+    font-size:13px !important;
+    line-height:1.2;
   }
+  .videoItem{ padding:4px 2px !important; gap:6px !important; }
+  #listHeader{ padding:6px !important; gap:6px !important; }
 
-  /* 行（videoItem）の高さ・余白を縮小 */
-  .videoItem {
-    padding: 4px 2px !important;
-    gap: 6px !important;
-  }
+  .thumbWrapper{ flex:0 0 110px !important; }
+  .thumb{ width:110px !important; height:62px !important; }
 
-  /* ヘッダー縮小 */
-  #listHeader {
-    padding: 6px !important;
-    gap: 6px !important;
-  }
+  .col-song     { flex:0 0 130px !important; }
+  .col-singer   { flex:0 0 120px !important; }
+  .col-artist   { flex:0 0 130px !important; }
+  .col-composer { flex:0 0 110px !important; }
 
-  /* サムネ縮小 */
-  .thumbWrapper {
-    flex: 0 0 110px !important;
-  }
-  .thumb {
-    width: 110px !important;
-    height: 62px !important;
-  }
-
-  /* ▼ 各列幅もスマホ用にギュッと縮める */
-  .col-song     { flex: 0 0 130px !important; }
-  .col-singer   { flex: 0 0 120px !important; }
-  .col-artist   { flex: 0 0 130px !important; }
-  .col-composer { flex: 0 0 110px !important; }
-
-  /* 引用はなるべく広く確保しつつスマホでは小さめ */
-  .col-title    { flex: 1 1 auto !important; min-width: 220px !important; }
-
-  /* ヘッダーの“サムネ”列も縮める */
-  .thumbHeader {
-    flex: 0 0 110px !important;
-  }
-
-  /* リストのスクロールを確実に許可（重要） */
-  #listHeaderWrapper,
-  #videoListContainer {
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
-  }
-
-
-}
-
-@media (max-width: 1000px) {
-
-  /* 全体は横スクロール禁止（内側スクロールを殺しにくい clip 推奨） */
-  html, body { overflow-x: clip; }
-  #main { overflow-x: hidden; }
-
-  /* flex罠解除＆リストだけ横スクロール許可 */
-  #sidebar, #listWrapper, #listHeaderWrapper, #videoListContainer {
-    min-width: 0;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  #listHeaderWrapper,
-  #videoListContainer {
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
-    /* touch-action: pan-x; */
-  }
-
-/* まず “余計な min-width” を殺す（これが余白スクロールの元） */
-  #listHeader,
-  .videoItem {
-    min-width: 0 !important;
-    width: max-content; /* 列幅の合計＝テーブル幅になる */
-  }
-
-  /* 引用列が伸びて “余白” を作らないように固定（clampで端末幅に追従） */
   .col-title{
-    flex: 0 0 clamp(220px, 55vw, 320px) !important;
-    min-width: 0 !important;
+    flex:0 0 clamp(220px, 55vw, 320px) !important;
+    min-width:0 !important;
   }
-
-    /* 念のため：長い文字列が列を押し広げないようにする */
-  .col, .col a{
-    overflow-wrap: anywhere;
-    word-break: break-word;
-  }
-
-
-  /* 念のため：他列は固定幅のまま */
-  .col-song     { flex: 0 0 130px !important; }
-  .col-singer   { flex: 0 0 120px !important; }
-  .col-artist   { flex: 0 0 130px !important; }
-  .col-composer { flex: 0 0 110px !important; }
-
-  .thumbHeader  { flex: 0 0 110px !important; }
-  .thumbWrapper { flex: 0 0 110px !important; }
+  .thumbHeader{ flex:0 0 110px !important; }
 }
 
+/* ▼ スマホ：余白スクロール撲滅（min-width固定を殺して「中身幅＝スクロール幅」にする） */
+@media (max-width: 1000px){
+  /* ページ全体の横スクは殺す（内側だけ許可） */
+  html, body{ overflow-x:clip; }
+  #main{ overflow-x:hidden; }
 
-#yearSelect{
-  width: 120px;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-left: 8px; /* 右隣に余白 */
+  #sidebar, #listWrapper, #listHeaderWrapper, #videoListContainer{
+    min-width:0;
+    width:100%;
+    max-width:100%;
+  }
+
+  /* ヘッダ/行/親を “実寸にシュリンク” させる */
+  #listHeader{
+    min-width:0 !important;
+    display:inline-flex;
+    width:max-content;
+  }
+  #videoList{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    width:max-content;
+  }
+  .videoItem{
+    min-width:0 !important;
+    display:inline-flex;
+    width:max-content;
+  }
+
+  /* バウンスで「奥に行ける感」を減らす（効く環境だけ） */
+  #listHeaderWrapper, #videoListContainer{
+    overscroll-behavior-x: contain;
+  }
 }
-

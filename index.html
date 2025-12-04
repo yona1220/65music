@@ -40,9 +40,23 @@
 
     <!-- 右：検索・フィルタ・件数・リスト -->
     <div id="sidebar">
+      <div id="nowPlaying">
+        <div class="npLabel">再生中</div>
+        <div class="npText">
+          <span id="npSong">---</span>
+          <span class="npSep">/</span>
+          <span id="npArtist">---</span>
+        </div>
+      </div>
+
+
+        <!-- <div class="npqText" id="npQuote"></div> -->
+
+
+
       <input id="searchInput" type="text" placeholder="検索（曲/歌唱/アーティスト/作曲/引用）">
       <select id="filterSelect">
-        <option value="">すべて表示</option>
+        <option value="">すべて表示(カテゴリ)</option>
         <option value="配信">配信</option>
         <option value="歌ってみた">歌ってみた</option>
         <option value="なうぷれ">なうぷれ</option>
@@ -52,7 +66,7 @@
 
       <!-- ★追加：年フィルタ -->
       <select id="yearSelect">
-        <option value="">年数絞り込み</option>
+        <option value="">すべて表示(年数)</option>
         <option value="2025">2025</option>
         <option value="2024">2024</option>
         <option value="2023">2023</option>

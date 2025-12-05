@@ -22,6 +22,14 @@ let currentPlayingId = null;
 let currentPlayingStart = 0;
 
 /* -------------------- utils -------------------- */
+function buildWatchUrl(id, start) {
+  const s = Number(start) || 0;
+  const vid = encodeURIComponent(id || "");
+  return s > 0
+    ? `https://www.youtube.com/watch?v=${vid}&t=${s}s`
+    : `https://www.youtube.com/watch?v=${vid}`;
+}
+
 function isMobileView() {
   return window.matchMedia("(max-width: 1000px)").matches;
 }
@@ -458,7 +466,8 @@ function renderList(list) {
 
         if (v.id) {
           const a = document.createElement("a");
-          a.href = "https://www.youtube.com/watch?v=" + v.id;
+          a.href = buildWatchUrl(v.id, v.start);
+
           a.target = "_blank";
           a.rel = "noopener";
           a.textContent = v.title || "";

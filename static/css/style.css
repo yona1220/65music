@@ -1,31 +1,44 @@
-/* ===== base ===== */
+/* =========================================================
+   BASE：全体の土台
+   ========================================================= */
+
+/* 全要素を border-box にして、padding/border込みで幅計算 */
 * { box-sizing: border-box; }
+
+/* ページ余白を消す（初期の謎余白対策） */
 html, body { margin: 0; padding: 0; }
+
+/* 既定の文字色・文字サイズ */
 body { color:#222; font-size:16px; }
 
-/* ===== header ===== */
+
+/* =========================================================
+   HEADER：上部ヘッダー（タイトル + スマホ用 ? ボタン）
+   ========================================================= */
+
 #header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  height:56px;
-  padding:0 8px;
-  background-color:#198caa;
+  display:flex;                /* 横並び */
+  align-items:center;          /* 縦中央揃え */
+  justify-content:space-between; /* 左右に分ける */
+  height:56px;                 /* ヘッダー高さ固定 */
+  padding:0 8px;               /* 左右余白 */
+  background-color:#198caa;    /* 背景色 */
 }
+
 .header_title{
-  padding:10px;
-  color:#fff;
-  font-weight:700;
-  font-size:32px;
+  padding:10px;                /* タイトルの内側余白 */
+  color:#fff;                  /* 文字白 */
+  font-weight:700;             /* 太字 */
+  font-size:32px;              /* 大きめ */
   display:inline-block;
 }
 
-/* スマホ用「？」ボタン（PCでは隠す） */
+/* スマホ用の「？」ボタン（PCでは隠す） */
 .infoBtn{
-  display:none;
+  display:none;                /* PCで非表示 */
   width:34px;
   height:34px;
-  border-radius:999px;
+  border-radius:999px;         /* まん丸 */
   border:2px solid rgba(255,255,255,.95);
   background:transparent;
   color:#fff;
@@ -34,31 +47,40 @@ body { color:#222; font-size:16px; }
   line-height:1;
   cursor:pointer;
 }
-@media (max-width: 1000px){
-  .infoBtn{ display:inline-flex; align-items:center; justify-content:center; }
-}
 
-/* ===== layout ===== */
+
+/* =========================================================
+   LAYOUT：画面全体の2カラム構成（左：プレイヤー / 右：リスト）
+   ========================================================= */
+
 #main{
-  display:flex;
-  gap:10px;
-  align-items:flex-start;
+  display:flex;                /* 左右2カラム */
+  gap:10px;                    /* カラム間の隙間 */
+  align-items:flex-start;      /* 上詰め */
   padding:10px;
 }
-@media (max-width: 1000px){
-  #main{ flex-direction:column; }
-  html, body{ overflow-x:hidden; } /* ページ横スクロール禁止 */
+
+
+/* =========================================================
+   LEFT COLUMN：プレイヤー領域
+   ========================================================= */
+
+#leftColumn{
+  width:50%;                   /* PCは左50% */
+  height:100%;
 }
 
-/* ===== left column / player ===== */
-#leftColumn{ width:50%; height:100%; }
-@media (max-width: 1000px){ #leftColumn{ width:100%; } }
-#player{ width:100%; height:100%; aspect-ratio:16/9; }
-
-/* PC用 details はスマホでは隠す（代わりにモーダル） */
-@media (max-width: 1000px){
-  #siteInfo{ display:none; }
+#player{
+  width:100%;
+  height:100%;
+  aspect-ratio:16/9;           /* 16:9 を保って伸縮 */
 }
+
+
+/* =========================================================
+   SITE INFO：PC用 details（スマホはモーダルに置き換え）
+   ========================================================= */
+
 #siteInfo{
   margin-top:10px;
   border:1px solid #d7d7d7;
@@ -66,21 +88,32 @@ body { color:#222; font-size:16px; }
   padding:10px;
   background:#f7f7f7;
 }
+
 #siteInfo summary{
-  cursor:pointer;
+  cursor:pointer;              /* クリックできることを示す */
   font-weight:800;
 }
+
 .infoContent{
   margin-top:8px;
   font-size:14px;
   line-height:1.5;
 }
 
-/* ===== sidebar ===== */
-#sidebar{ flex:1; min-width:360px; }
-@media (max-width: 1000px){
-  #sidebar{ min-width:0; width:100%; }
+
+/* =========================================================
+   SIDEBAR：右カラム（検索 + フィルタ + リスト）
+   ========================================================= */
+
+#sidebar{
+  flex:1;                      /* 余った幅を取る */
+  min-width:360px;             /* PCで潰れないよう最低幅 */
 }
+
+
+/* =========================================================
+   NOW PLAYING（上部の再生中表示）
+   ========================================================= */
 
 #nowPlaying{
   display:flex;
@@ -91,8 +124,9 @@ body { color:#222; font-size:16px; }
   border:1px solid #d7d7d7;
   border-radius:10px;
   background:#f7f7f7;
-  overflow:hidden; /* はみ出しを見せない */
+  overflow:hidden;             /* はみ出しを見せない */
 }
+
 .npLabel{
   display:inline-block;
   width:auto;
@@ -100,23 +134,29 @@ body { color:#222; font-size:16px; }
   font-weight:700;
   color:#555;
   padding:3px 8px;
-  border-radius:999px;
+  border-radius:999px;         /* ピル型 */
   background:#ececec;
-  white-space: nowrap;
-  flex:0 0 auto;
+  white-space: nowrap;         /* ラベルは折り返さない */
+  flex:0 0 auto;               /* サイズ固定 */
 }
+
 .npText{
   font-size:14px;
   font-weight:600;
-  min-width: 0;
+  min-width: 0;                /* これがないと ellipsis が効かないことがある */
   overflow:hidden;
-  text-overflow:ellipsis;
+  text-overflow:ellipsis;      /* 省略記号 */
   white-space:nowrap;
-  flex:1 1 auto;
+  flex:1 1 auto;               /* 残りを使う */
 }
-.npSep{ opacity:.55; }
 
-/* ===== inputs ===== */
+.npSep{ opacity:.55; }         /* 区切り表示を薄く */
+
+
+/* =========================================================
+   INPUTS：検索 / フィルタ / 年
+   ========================================================= */
+
 #searchInput{
   width:100%;
   padding:8px;
@@ -125,133 +165,189 @@ body { color:#222; font-size:16px; }
   border:1px solid #ccc;
   font-size:16px;
 }
+
 .filterRow{
   display:flex;
   gap:8px;
   align-items:center;
   margin-bottom:8px;
 }
+
 #filterSelect, #yearSelect{
   padding:8px;
   border-radius:6px;
   border:1px solid #ccc;
 }
+
 #filterSelect{ width:170px; }
 #yearSelect{ width:140px; }
 
-#countArea{ margin:6px 0 8px; font-size:14px; }
+#countArea{
+  margin:6px 0 8px;
+  font-size:14px;
+}
 
-/* ===== list wrapper ===== */
-#listWrapper{ display:flex; flex-direction:column; gap:6px; }
 
-/* ===== Desktop: table-like (横スクロールあり) ===== */
+/* =========================================================
+   LIST WRAPPER：リスト全体のラッパー
+   ========================================================= */
+
+#listWrapper{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+
+/* =========================================================
+   DESKTOP LIST：テーブル風（横スクロールあり）
+   ========================================================= */
+
+/* ヘッダーと本体は横スクロールできるようにする */
 #listHeaderWrapper, #videoListContainer{
   overflow-x:auto;
-  scrollbar-width:thin;
+  scrollbar-width:thin;        /* Firefox：スクロールバーを細く */
 }
+
+/* ヘッダー側はスクロールバー自体は見せない（見た目優先） */
 #listHeaderWrapper{
-  -ms-overflow-style:none;
-  scrollbar-width:none;
+  -ms-overflow-style:none;     /* IE/Edge旧：バー非表示 */
+  scrollbar-width:none;        /* Firefox：バー非表示 */
   background:#f2f2f2;
   border-radius:6px;
 }
+
+/* WebKit系（Chrome/Safari）：スクロールバーを隠す */
 #listHeaderWrapper::-webkit-scrollbar,
 #videoListContainer::-webkit-scrollbar{ display:none; }
 
+/* テーブルヘッダー行 */
 #listHeader{
   display:flex;
-  min-width:1200px;
+  min-width:1200px;            /* 横スク前提の最小幅 */
   padding:8px;
   border-radius:6px;
   align-items:center;
   background:transparent;
 }
+
+/* サムネ列のヘッダー幅 */
 .thumbHeader{ flex:0 0 141px; }
 
+/* 共通列：複数行クランプ（PCで長文を抑える） */
 .col{
   flex:0 0 220px;
   white-space:normal;
   overflow:hidden;
   display:-webkit-box;
   -webkit-box-orient:vertical;
-  -webkit-line-clamp:4;
-  line-clamp:4;
+  -webkit-line-clamp:4;        /* 4行で省略（WebKit系） */
+  line-clamp:4;               /* 参考：標準化途上 */
 }
 
-/* sort mark */
+/* ソートできるヘッダー列（矢印を擬似要素で描く） */
 .headerCol{
   cursor:pointer;
   position:relative;
   font-weight:700;
 }
+
+/* 未ソート（デフォ）っぽい▼ */
 .headerCol.sort-default::after{
   content:"";
   position:absolute;
-  right:4px; top:50%; transform:translateY(-50%);
+  right:4px;
+  top:50%;
+  transform:translateY(-50%);
   border-left:6px solid transparent;
   border-right:6px solid transparent;
   border-top:8px solid #fff;
   filter: drop-shadow(0 0 1px #333);
 }
+
+/* 昇順 ▲ */
 .headerCol.sort-asc::after{
   content:"";
   position:absolute;
-  right:4px; top:50%; transform:translateY(-60%);
+  right:4px;
+  top:50%;
+  transform:translateY(-60%);
   border-left:6px solid transparent;
   border-right:6px solid transparent;
   border-bottom:8px solid #000;
 }
+
+/* 降順 ▼ */
 .headerCol.sort-desc::after{
   content:"";
   position:absolute;
-  right:4px; top:50%; transform:translateY(-40%);
+  right:4px;
+  top:50%;
+  transform:translateY(-40%);
   border-left:6px solid transparent;
   border-right:6px solid transparent;
   border-top:8px solid #000;
 }
 
-/* list rows (desktop) */
+
+/* ---------------------------------------------------------
+   DESKTOP LIST ROWS：リスト本体（縦スクロール）
+   --------------------------------------------------------- */
+
 #videoListContainer{
-  max-height:520px;
+  max-height:520px;            /* PCでの表示高さ（縦スク） */
   overflow-y:auto;
-  -webkit-overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch; /* iOS慣性スクロール */
 }
+
 .videoItem{
   display:flex;
-  min-width:1200px;
+  min-width:1200px;            /* ヘッダーと揃える */
   padding:5px 0;
   border-bottom:1px solid #eee;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: rgba(0,0,0,0); /* モバイルのタップハイライト抑制 */
 }
+
 .videoItem:hover{ background:#fafafa; }
 
 .thumbWrapper{
-  flex:0 0 150px;
+  flex:0 0 150px;              /* サムネ列固定 */
   display:flex;
   flex-direction:column;
   align-items:center;
 }
+
 .thumb{
-  width:142px; height:79px;
-  object-fit:cover;
+  width:142px;
+  height:79px;
+  object-fit:cover;            /* 画像をトリムして収める */
   border-radius:6px;
 }
+
 .date{ font-size:12px; color:#555; }
 
-.col-song{ flex:0 0 150px; white-space:pre-line; padding-left:6px; }
-.col-singer{ flex:0 0 150px; padding-left:6px; }
-.col-artist{ flex:0 0 150px; padding-left:6px; }
+/* 各カラム幅（PC用） */
+.col-song{     flex:0 0 150px; white-space:pre-line; padding-left:6px; }
+.col-singer{   flex:0 0 150px; padding-left:6px; }
+.col-artist{   flex:0 0 150px; padding-left:6px; }
 .col-composer{ flex:0 0 150px; padding-left:6px; }
-.col-title{ flex:1 1 auto; min-width:320px; padding-left:6px; }
+.col-title{    flex:1 1 auto; min-width:320px; padding-left:6px; }
 
+/* リンクの見た目 */
 .col a{ color:#0066cc; text-decoration:underline; }
+
+/* リンクじゃない列用（色と下線を戻す） */
 .col.nolink{ text-decoration:none; color:#222; }
 
-/* playing highlight */
+/* 再生中の行を薄くハイライト */
 .videoItem.is-playing{ background:#e9e9e9; }
 .videoItem.is-playing:hover{ background:#e1e1e1; }
 
-/* tooltip（黒い箱） */
+
+/* =========================================================
+   TOOLTIP：黒い箱（タップ/ホバーで詳細表示）
+   ========================================================= */
+
 #tooltip{
   position:fixed;
   z-index:9999;
@@ -260,34 +356,220 @@ body { color:#222; font-size:16px; }
   padding:6px 10px;
   border-radius:6px;
   font-size:14px;
-  max-width:10vw;
+  max-width:10vw;              /* PCは小さめ */
   line-height:1.4;
-  display:none;
+  display:none;                /* JSで出し入れ */
   white-space:normal;
-  pointer-events:none;
+  pointer-events:none;         /* 触れない（クリックを邪魔しない） */
 }
-@media (max-width: 1000px){ #tooltip{ max-width:70vw; } }
 
-/* ===== Mobile (<=1000px): カード型で縦スクのみ ===== */
+
+/* =========================================================
+   MODAL：スマホの ? ボタンで出す情報モーダル
+   ========================================================= */
+
+.modal{
+  display:none;                /* 開くときだけ表示 */
+  position:fixed;
+  inset:0;                     /* top/right/bottom/left:0 */
+  z-index:9998;
+}
+.modal.is-open{ display:block; }
+
+.modalOverlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.55);  /* 背景暗幕 */
+}
+
+.modalPanel{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%, -50%);
+  width:min(92vw, 560px);
+  max-height:80vh;
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 12px 30px rgba(0,0,0,.25);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+.modalHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 12px;
+  border-bottom:1px solid #eee;
+}
+
+.modalTitle{ font-weight:900; }
+
+.modalClose{
+  cursor:pointer;
+  border:none;
+  background:transparent;
+  font-size:22px;
+  line-height:1;
+}
+
+.modalBody{
+  padding:12px;
+  overflow:auto;               /* 中身だけスクロール */
+}
+
+.modalText{
+  font-size:14px;
+  line-height:1.6;
+}
+
+
+/* =========================================================
+   MOBILE NOW PLAYING BAR：スマホ下の再生バー
+   ※ ここが重複してたのでまとめた（.spNowPlayingBar と #spNowPlayingBar）
+   ========================================================= */
+
+/* “要素が class でも id でも同じ見た目”にするため併記 */
+#spNowPlayingBar, .spNowPlayingBar{
+  position:fixed;
+  z-index:9999;                /* 画面最前面 */
+  display:none;                /* 通常は隠す（is-visibleで表示） */
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+
+  background:#f7f7f7;
+  border:1px solid #d7d7d7;
+  box-shadow:0 8px 18px rgba(0,0,0,.12);
+}
+
+/* 表示ON（JSで付け外しする想定） */
+#spNowPlayingBar.is-visible,
+.spNowPlayingBar.is-visible{ display:flex; }
+
+/* 左：曲情報（省略のため min-width:0 必須） */
+.spnp-left{ flex:1 1 auto; min-width:0; }
+
+/* 右：ボタン */
+.spnp-right{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  margin-left:auto;            /* 右寄せ */
+  margin-right:12px;           /* 右端から少し内側へ */
+}
+
+/* 小さめ丸ボタンの共通スタイル（必要なら他ボタンにも） */
+.spnp-btn{
+  width:20px;
+  height:20px;
+  border-radius:999px;
+  border:1px solid #cfcfcf;
+  background:#fff;
+  cursor:pointer;
+  font-size:15px;
+  font-weight:800;
+}
+
+/* 再生バーが出ているとき、ページ本体が隠れないよう下余白を足す */
+body.has-spbar{ padding-bottom:42px; }
+
+/* “再生/停止”のメインボタンだけ大きく */
+#spPlayPauseBtn{
+  width:36px;
+  height:36px;
+  border-radius:999px;
+  display:grid;
+  place-items:center;          /* 中央に配置 */
+  padding:0;
+  line-height:1;
+}
+
+/* アイコン位置調整（矢印だけ動かす用） */
+.spnp-icon{
+  display:inline-block;
+  line-height:1;
+  transform: translate(1px, 0px); /* X,Y を好きに調整 */
+}
+
+/* 1行表示 + はみ出しだけマルキー（JSで is-marquee を付ける想定） */
+.spnp-line{
+  font-weight:800;
+  font-size:14px;
+  line-height:1.2;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  min-width:0;
+}
+
+#spNowPlayingBar.is-marquee .spnp-line{ text-overflow:clip; }
+
+.spnpMarquee{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  will-change:transform;
+}
+
+#spNowPlayingBar.is-marquee .spnpMarquee{
+  animation: spMarquee var(--sp-marquee-duration, 12s) ease-in-out infinite;
+}
+
+@keyframes spMarquee{
+  0%, 15%   { transform: translateX(0); }
+  45%, 55%  { transform: translateX(calc(-1 * var(--sp-marquee-shift, 0px))); }
+  85%, 100% { transform: translateX(0); }
+}
+
+
+/* =========================================================
+   RESPONSIVE：スマホ（<=1000px）上書きまとめ
+   ========================================================= */
+
 @media (max-width: 1000px){
-  #listHeaderWrapper{ display:none; }
+
+  /* ---------- header ---------- */
+  .infoBtn{
+    display:inline-flex;       /* スマホだけ ? ボタン表示 */
+    align-items:center;
+    justify-content:center;
+  }
+
+  /* ---------- layout ---------- */
+  #main{ flex-direction:column; } /* 2カラム→縦積み */
+  html, body{ overflow-x:hidden; }/* ページ横スクロール禁止 */
+  #leftColumn{ width:100%; }      /* プレイヤー全幅 */
+  #sidebar{ min-width:0; width:100%; } /* 右カラムも全幅 */
+
+  /* PC用 details はスマホでは隠す（モーダルに任せる） */
+  #siteInfo{ display:none; }
+
+  /* tooltip をスマホでは大きめに */
+  #tooltip{ max-width:70vw; }
+
+  /* ---------- list (mobile card) ---------- */
+  #listHeaderWrapper{ display:none; } /* テーブルヘッダーは非表示 */
 
   #videoListContainer{
-    overflow-x:hidden !important;
-    overflow-y:auto !important;
-    max-height: 60vh;
+    overflow-x:hidden !important; /* 横スク禁止 */
+    overflow-y:auto !important;   /* 縦スクのみ */
+    max-height: 60vh;             /* 画面を埋めすぎない */
     border-radius:10px;
-    touch-action: pan-y;
-    overscroll-behavior: contain;
+    touch-action: pan-y;          /* “縦のみ”を明示（横ブレ抑制） */
+    overscroll-behavior: contain; /* 親へのスクロール伝搬抑制 */
     -webkit-overflow-scrolling: touch;
   }
-  #videoList{ width:100%; }
+
+  #videoList{ width:100%; }       /* ul/div などの想定 */
 
   .videoItem{
-    min-width:0 !important;
+    min-width:0 !important;       /* PC用 min-width を解除 */
     width:100%;
-    display:grid;
-    grid-template-columns: 90px 1fr;
+    display:grid;                 /* カード配置 */
+    grid-template-columns: 90px 1fr; /* 左：サムネ / 右：情報 */
     column-gap:6px;
     row-gap:2px;
     padding:6px 8px;
@@ -296,11 +578,12 @@ body { color:#222; font-size:16px; }
 
   .thumbWrapper{
     grid-column:1;
-    grid-row:1 / span 4;
+    grid-row:1 / span 4;          /* 左を縦に使う */
     width:90px;
     flex:unset;
   }
-  /* 👇 サムネ小さめ（好みで数値だけ変えてOK） */
+
+  /* サムネを小さめに（ここだけ数字変えればOK） */
   .thumb{ width:80px; height:45px; }
   .date{ font-size:11px; }
 
@@ -325,7 +608,7 @@ body { color:#222; font-size:16px; }
   .col-singer{ font-size:10px; color:#666; }
   .col-title{ font-size:10px; color:#444; }
 
-  /* artist + composer 横並び（はみ出しはそれぞれ…） */
+  /* artist + composer を横並び（各要素は1行で…） */
   .metaRow{
     display:flex;
     gap:8px;
@@ -341,7 +624,7 @@ body { color:#222; font-size:16px; }
     white-space:nowrap;
   }
 
-  /* 2行以上になりそうなら1行で「…」（tapで黒箱） */
+  /* 2行以上になりそうなテキストは1行に潰して「…」 */
   .tapTip{
     white-space:nowrap;
     overflow:hidden;
@@ -349,7 +632,7 @@ body { color:#222; font-size:16px; }
     min-width:0;
   }
 
-  /* 引用（リンク）はタップで飛ぶ */
+  /* 引用（リンク）はタップで飛ぶ：リンク自体も1行省略 */
   .col-title a{
     display:block;
     min-width:0;
@@ -357,126 +640,27 @@ body { color:#222; font-size:16px; }
     overflow:hidden;
     text-overflow:ellipsis;
   }
-}
 
-/* ===== モーダル ===== */
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:9998;
-}
-.modal.is-open{ display:block; }
+  /* ---------- mobile bottom bar：角丸なし・横/下に張り付き ---------- */
+  #spNowPlayingBar, .spNowPlayingBar{
+    left:0;
+    right:0;
+    bottom:0;
 
-.modalOverlay{
-  position:absolute;
-  inset:0;
-  background:rgba(0,0,0,.55);
-}
-.modalPanel{
-  position:absolute;
-  left:50%;
-  top:50%;
-  transform:translate(-50%, -50%);
-  width:min(92vw, 560px);
-  max-height:80vh;
-  background:#fff;
-  border-radius:14px;
-  box-shadow:0 12px 30px rgba(0,0,0,.25);
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-}
-.modalHeader{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:10px 12px;
-  border-bottom:1px solid #eee;
-}
-.modalTitle{ font-weight:900; }
-.modalClose{
-  cursor:pointer;
-  border:none;
-  background:transparent;
-  font-size:22px;
-  line-height:1;
-}
-.modalBody{
-  padding:12px;
-  overflow:auto;
-}
-.modalText{
-  font-size:14px;
-  line-height:1.6;
-}
+    width:100%;
+    margin:0;
 
-/* ===== スマホ下の再生バー ===== */
-.spNowPlayingBar{
-  position:fixed;
-  left:8px;
-  right:8px;
-  bottom:calc(8px + env(safe-area-inset-bottom, 0px));
-  z-index:9997;
-  display:none;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding:10px 12px;
-  border-radius:14px;
-  background:#f7f7f7;
-  border:1px solid #d7d7d7;
-  box-shadow:0 8px 18px rgba(0,0,0,.12);
-}
-.spNowPlayingBar.is-visible{ display:flex; }
+    border-radius:0;            /* 角丸なし */
+    border-left:0;
+    border-right:0;
+    border-bottom:0;
+    border-top:1px solid #d7d7d7;
 
-.spnp-left{ flex:1 1 auto; min-width:0; }
-.spnp-right{ flex:0 0 auto; }
-
-.spnp-btn{
-  width:44px;
-  height:44px;
-  border-radius:999px;
-  border:1px solid #cfcfcf;
-  background:#fff;
-  cursor:pointer;
-  font-size:18px;
-  font-weight:800;
-}
-
-/* 下バーが出てる時、下に隠れないよう余白を足す */
-body.has-spbar{
-  padding-bottom:88px;
-}
-
-/* 下バー：1行表示（通常は…） */
-@media (max-width: 1000px){
-  .spnp-line{
-    font-weight:800;
-    font-size:14px;
-    line-height:1.2;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    min-width:0;
+    /* iPhoneホームバー分も含めて下 padding を確保 */
+    padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
   }
-  #spNowPlayingBar.is-marquee .spnp-line{
-    text-overflow:clip;
-  }
-  .spnpMarquee{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    will-change:transform;
-  }
-  #spNowPlayingBar.is-marquee .spnpMarquee{
-    animation: spMarquee var(--sp-marquee-duration, 12s) ease-in-out infinite;
-  }
-  @keyframes spMarquee{
-    0%, 15%   { transform: translateX(0); }
-    45%, 55%  { transform: translateX(calc(-1 * var(--sp-marquee-shift, 0px))); }
-    85%, 100% { transform: translateX(0); }
-  }
+
+  /* 省モーション設定ならマルキー停止 */
   @media (prefers-reduced-motion: reduce){
     #spNowPlayingBar.is-marquee .spnpMarquee{ animation:none; }
   }

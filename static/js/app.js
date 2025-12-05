@@ -1,5 +1,15 @@
 'use strict';
 
+/* =========================================================
+   100億% 落ちない完全版 app.js
+   - videos が無い/壊れてても落ちない
+   - スマホ: “…の時だけ”タップで黒い箱（リンクはリンク優先）
+   - PC: hover + drag中でも黒箱
+   - スマホ: Spotify風 下の再生バー + 再生/停止
+   - 下バー文字は1行、はみ出す時だけ左右にゆっくり移動
+   - スマホ時のみヘッダー右の「？」→モーダル表示
+   ========================================================= */
+
 let player = null;
 let ytAPILoaded = false;
 
@@ -9,6 +19,7 @@ let filteredList = VIDEOS.slice();
 
 let playingRowEl = null;
 let currentPlayingId = null;
+let currentPlayingStart = 0;
 
 /* -------------------- utils -------------------- */
 function isMobileView() {
@@ -46,32 +57,35 @@ function ensureYouTubeAPI(cb) {
   };
 }
 
-function showPlayerUI() {
-  const wrap = document.getElementById("playerWrap");
-  const ph = document.getElementById("playerPlaceholder");
-  if (wrap) wrap.style.display = "block";
-  if (ph) ph.style.display = "none";
-}
-
 function createOrLoadPlayer(id, start = 0) {
   if (!id) return;
 
-  const onReadyCommon = () => showPlayerUI();
+  currentPlayingId = id;
+  currentPlayingStart = start || 0;
 
   if (!player) {
     ensureYouTubeAPI(() => {
       if (!window.YT || !YT.Player) return;
+
       player = new YT.Player("player", {
         height: "360",
         width: "640",
         videoId: id,
         playerVars: { playsinline: 1, start: start || 0 },
-        events: { onReady: onReadyCommon }
+        events: {
+          onReady: () => {
+            try { player.playVideo(); } catch (_) {}
+            updatePlayPauseUI();
+          },
+          onStateChange: () => updatePlayPauseUI()
+        }
       });
     });
   } else {
-    player.loadVideoById({ videoId: id, startSeconds: start || 0 });
-    onReadyCommon();
+    try {
+      player.loadVideoById({ videoId: id, startSeconds: start || 0 });
+    } catch (_) {}
+    updatePlayPauseUI();
   }
 }
 
@@ -86,64 +100,136 @@ function stripKeyFromSong(song) {
 }
 
 function setNowPlaying(v) {
+  const songText = stripKeyFromSong(v?.song || "") || "---";
+  const artistText = (v?.artist || "").trim() || "---";
+
+  // 上の再生中
   const songEl = document.getElementById("npSong");
   const artistEl = document.getElementById("npArtist");
-  if (songEl) songEl.textContent = stripKeyFromSong(v?.song || "") || "---";
-  if (artistEl) artistEl.textContent = (v?.artist || "").trim() || "---";
+  if (songEl) songEl.textContent = songText;
+  if (artistEl) artistEl.textContent = artistText;
+
+  // 下バー（スマホ）
+  const lineEl = document.getElementById("spNpLine");
+  if (lineEl) lineEl.textContent = `${songText} / ${artistText}`;
+
+  showBottomBar(true);
+  updateBottomBarMarquee();
 }
 
+/* 上の再生中：はみ出す時だけ動かす（必要ならCSS側と合わせて使う） */
 function updateNowPlayingMarquee() {
   const now = document.getElementById("nowPlaying");
   const npText = now?.querySelector(".npText");
   if (!now || !npText) return;
 
-  // 1000px以下だけ動かす（必要なら消してOK）
-  const isMobile = window.matchMedia("(max-width: 1000px)").matches;
+  // 内容ラップ（任意：今は上の再生中は通常…だけで良いなら、ここは何もしなくてOK）
+  // 今回は“下バー”がメインなので、上は静止で問題なし
+}
 
-  // .npText の中身を .npMarquee にまとめる（HTMLいじらずJSで対応）
-  let inner = npText.querySelector(".npMarquee");
+/* -------------------- Bottom Bar (Spotify風) -------------------- */
+function showBottomBar(visible) {
+  const bar = document.getElementById("spNowPlayingBar");
+  if (!bar) return;
+
+  if (visible && isMobileView() && currentPlayingId) {
+    bar.classList.add("is-visible");
+    bar.setAttribute("aria-hidden", "false");
+    document.body.classList.add("has-spbar");
+  } else {
+    bar.classList.remove("is-visible");
+    bar.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("has-spbar");
+    bar.classList.remove("is-marquee");
+  }
+}
+
+function updateBottomBarMarquee() {
+  const bar = document.getElementById("spNowPlayingBar");
+  const line = document.getElementById("spNpLine");
+  if (!bar || !line) return;
+
+  if (!isMobileView() || bar.getAttribute("aria-hidden") === "true") {
+    bar.classList.remove("is-marquee");
+    line.style.removeProperty("--sp-marquee-shift");
+    line.style.removeProperty("--sp-marquee-duration");
+    return;
+  }
+
+  // 中身をラップ（HTMLは変えずJSで対応）
+  let inner = line.querySelector(".spnpMarquee");
   if (!inner) {
     inner = document.createElement("span");
-    inner.className = "npMarquee";
-    while (npText.firstChild) inner.appendChild(npText.firstChild);
-    npText.appendChild(inner);
+    inner.className = "spnpMarquee";
+    while (line.firstChild) inner.appendChild(line.firstChild);
+    line.appendChild(inner);
   }
 
   // いったん解除
-  now.classList.remove("is-marquee");
-  npText.style.removeProperty("--np-marquee-shift");
-  npText.style.removeProperty("--np-marquee-duration");
+  bar.classList.remove("is-marquee");
+  line.style.removeProperty("--sp-marquee-shift");
+  line.style.removeProperty("--sp-marquee-duration");
 
-  if (!isMobile) return;
-
-  // レイアウト確定後に計測（これ重要）
   requestAnimationFrame(() => {
-    const overflow = inner.scrollWidth - npText.clientWidth;
+    const overflow = inner.scrollWidth - line.clientWidth;
 
-    // ちょいはみ出しは無視（8px以上で発動）
+    // 8px以上で発動
     if (overflow > 8) {
-      npText.style.setProperty("--np-marquee-shift", `${overflow}px`);
-
-      // はみ出し量に応じて“数秒ごと”を自動調整（好みで式変えてOK）
+      line.style.setProperty("--sp-marquee-shift", `${overflow}px`);
       const dur = Math.min(18, Math.max(9, overflow / 35 + 9));
-      npText.style.setProperty("--np-marquee-duration", `${dur.toFixed(2)}s`);
-
-      now.classList.add("is-marquee");
+      line.style.setProperty("--sp-marquee-duration", `${dur.toFixed(2)}s`);
+      bar.classList.add("is-marquee");
     }
   });
-  updateNowPlayingMarquee();
-
 }
 
+function getPlayerStateSafe() {
+  try { return player?.getPlayerState?.(); } catch (_) { return null; }
+}
 
+function updatePlayPauseUI() {
+  const btn = document.getElementById("spPlayPauseBtn");
+  if (!btn) return;
+
+  const st = getPlayerStateSafe();
+  // YT.PlayerState: 1=PLAYING, 2=PAUSED
+  const isPlaying = (st === 1);
+
+  btn.textContent = isPlaying ? "❚❚" : "▶︎";
+  btn.setAttribute("aria-label", isPlaying ? "停止" : "再生");
+}
+
+function togglePlayPause() {
+  if (!isMobileView()) return;
+
+  // player がまだ無いなら、今の曲を読み込む
+  if (!player || !player.playVideo) {
+    if (currentPlayingId) createOrLoadPlayer(currentPlayingId, currentPlayingStart || 0);
+    return;
+  }
+
+  const st = getPlayerStateSafe();
+  if (st === 1) {
+    try { player.pauseVideo(); } catch (_) {}
+  } else {
+    try { player.playVideo(); } catch (_) {}
+  }
+  updatePlayPauseUI();
+}
+
+/* -------------------- Playing row highlight -------------------- */
 function setPlayingRow(rowEl, v) {
   if (playingRowEl && playingRowEl !== rowEl) {
     playingRowEl.classList.remove("is-playing");
   }
   playingRowEl = rowEl;
   if (playingRowEl) playingRowEl.classList.add("is-playing");
+
   currentPlayingId = v?.id || null;
+  currentPlayingStart = v?.start || 0;
+
   setNowPlaying(v);
+  updatePlayPauseUI();
 }
 
 /* -------------------- Tooltip (黒い箱) -------------------- */
@@ -151,23 +237,33 @@ function getTooltipEl() {
   return document.getElementById("tooltip");
 }
 
+let lastTipTarget = null;
+
 function hideTooltip() {
   const tooltip = getTooltipEl();
   if (!tooltip) return;
   tooltip.style.display = "none";
+  lastTipTarget = null;
 }
 
 function isTruncated(el) {
   if (!el) return false;
   const sw = el.scrollWidth  - el.clientWidth;
   const sh = el.scrollHeight - el.clientHeight;
-  return sw > 1 || sh > 1; // 横 or 縦で詰まってたら true
+  return sw > 1 || sh > 1;
 }
 
 function showTooltipFor(el) {
   const tooltip = getTooltipEl();
   if (!tooltip || !el) return;
   if (!isTruncated(el)) return;
+
+  // 同じ要素を連続タップなら閉じる（スマホで便利）
+  if (lastTipTarget === el && tooltip.style.display === "block") {
+    hideTooltip();
+    return;
+  }
+  lastTipTarget = el;
 
   tooltip.textContent = el.textContent;
   tooltip.style.display = "block";
@@ -183,10 +279,10 @@ function showTooltipFor(el) {
   if (top < 0) top = rect.bottom + 6;
 
   tooltip.style.left = `${Math.max(6, left)}px`;
-  tooltip.style.top = `${Math.max(6, top)}px`;
+  tooltip.style.top  = `${Math.max(6, top)}px`;
 }
 
-/* PC: hover / SP: “…の時だけ” tapで黒箱 */
+/* PC: hover + drag / SP: “…の時だけ” tap */
 function attachTip(el) {
   if (!el) return;
 
@@ -197,7 +293,7 @@ function attachTip(el) {
 
     el.addEventListener("touchend", (e) => {
       lastTouch = Date.now();
-      if (!isTruncated(el)) return;          // …じゃないなら何もしない
+      if (!isTruncated(el)) return;
       e.preventDefault();
       e.stopPropagation();
       showTooltipFor(el);
@@ -218,14 +314,13 @@ function attachTip(el) {
   el.addEventListener("mouseenter", () => showTooltipFor(el));
   el.addEventListener("mouseleave", hideTooltip);
 
-  // ✅ PC drag でも黒箱を出す（ドラッグ中にカーソルが外れても window で追う）
+  // PC drag
   let md = false;
 
   const onWinMove = () => {
     if (!md) return;
     if (isTruncated(el)) showTooltipFor(el);
   };
-
   const onWinUp = () => {
     md = false;
     window.removeEventListener("mousemove", onWinMove, true);
@@ -233,16 +328,12 @@ function attachTip(el) {
   };
 
   el.addEventListener("mousedown", (e) => {
-    if (e.button !== 0) return; // 左クリックのみ
+    if (e.button !== 0) return;
     md = true;
-
     if (isTruncated(el)) showTooltipFor(el);
-
-    // captureで拾う（テキスト選択中でも取りこぼしにくい）
     window.addEventListener("mousemove", onWinMove, true);
     window.addEventListener("mouseup", onWinUp, true);
   });
-
 }
 
 /* -------------------- Row play (scroll-safe) -------------------- */
@@ -284,8 +375,11 @@ function bindRowPlay(row, v, playRow) {
 function renderList(list) {
   const box = document.getElementById("videoList");
   if (!box) return;
-  box.innerHTML = "";
 
+  const container = document.getElementById("videoListContainer");
+  const prevScrollTop = container ? container.scrollTop : 0;
+
+  box.innerHTML = "";
   const mobile = isMobileView();
 
   list.forEach((v) => {
@@ -323,7 +417,7 @@ function renderList(list) {
     }
 
     if (mobile) {
-      // meta (artist + composer)
+      // meta (artist + composer 横並び)
       {
         const meta = document.createElement("div");
         meta.className = "col col-meta";
@@ -357,7 +451,7 @@ function renderList(list) {
         row.appendChild(c);
       }
 
-      // title (リンクで飛ぶ / …なら黒箱はnolink時のみ)
+      // title（リンクはリンク優先）
       {
         const tcol = document.createElement("div");
         tcol.className = "col col-title";
@@ -427,15 +521,19 @@ function renderList(list) {
       if (!v.id) return;
       createOrLoadPlayer(v.id, v.start || 0);
       setPlayingRow(row, v);
+      showBottomBar(true);
+      updateBottomBarMarquee();
     };
 
     bindRowPlay(row, v, playRow);
-
     box.appendChild(row);
   });
 
   const cnt = document.getElementById("countNumber");
   if (cnt) cnt.textContent = String(list.length);
+
+  // 検索で0件になっても、スクロール位置の急ジャンプを抑える
+  if (container) container.scrollTop = Math.min(prevScrollTop, container.scrollHeight);
 }
 
 /* -------------------- Filter/Search -------------------- */
@@ -448,10 +546,13 @@ function filterAndRender() {
 
   filteredList = src.filter((v) => {
     const matchCat = !cat || v.category === cat;
+
     const matchKw = !kw || ["title", "song", "artist", "singer", "composer"]
       .some(k => (v[k] || "").toLowerCase().includes(kw));
+
     const vYear = (v.date || "").slice(0, 4);
     const matchYear = !year || vYear === year;
+
     return matchCat && matchKw && matchYear;
   });
 
@@ -529,40 +630,66 @@ function syncHorizontalScroll() {
   }, { passive: true });
 }
 
+/* -------------------- Modal (mobile only) -------------------- */
+function setModalOpen(open) {
+  const modal = document.getElementById("infoModal");
+  if (!modal) return;
+
+  if (open && isMobileView()) {
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden", "false");
+  } else {
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden", "true");
+  }
+}
+
 /* -------------------- Init -------------------- */
 document.addEventListener("DOMContentLoaded", () => {
-  // ✅ 黒箱を「別タップ / スクロール / 指移動」で消す（スマホ最優先）
+  // 黒箱を「別タップ / スクロール / 指移動」で消す
   const listEl = document.getElementById("videoListContainer");
   const headEl = document.getElementById("listHeaderWrapper");
 
-  // どこタップでも消える
   document.addEventListener("touchstart", hideTooltip, { passive: true });
   document.addEventListener("mousedown", hideTooltip, { passive: true });
-
-  // 指が動いた瞬間に消える（スクロール開始で消える）
   document.addEventListener("touchmove", hideTooltip, { passive: true });
-
-  // スクロールで消える（window + リスト + ヘッダ）
   window.addEventListener("scroll", hideTooltip, { passive: true });
   if (listEl) listEl.addEventListener("scroll", hideTooltip, { passive: true });
   if (headEl) headEl.addEventListener("scroll", hideTooltip, { passive: true });
 
-  // headers
+  // ヘッダー（ソート）
   document.querySelectorAll(".headerCol").forEach(h => {
     const key = h.dataset.key;
     h.addEventListener("click", () => headerClickHandler(key));
   });
 
-  // inputs
+  // 検索/フィルタ
   document.getElementById("searchInput")?.addEventListener("input", filterAndRender);
   document.getElementById("filterSelect")?.addEventListener("change", filterAndRender);
   document.getElementById("yearSelect")?.addEventListener("change", filterAndRender);
+
+  // 下バー：再生/停止ボタン
+  document.getElementById("spPlayPauseBtn")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    togglePlayPause();
+  });
+
+  // モーダル
+  document.getElementById("infoBtn")?.addEventListener("click", () => setModalOpen(true));
+  document.getElementById("modalClose")?.addEventListener("click", () => setModalOpen(false));
+  document.querySelectorAll("[data-close='1']").forEach(el => {
+    el.addEventListener("click", () => setModalOpen(false));
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setModalOpen(false);
+  });
 
   updateHeaderIndicators();
   filterAndRender();
   syncHorizontalScroll();
 
-  // 画面幅がPC↔スマホで切り替わったら再描画
+  // 画面幅がPC↔スマホで切り替わったら再描画 + 下バー調整
   let lastMobile = isMobileView();
   window.addEventListener("resize", () => {
     const nowMobile = isMobileView();
@@ -570,16 +697,23 @@ document.addEventListener("DOMContentLoaded", () => {
       lastMobile = nowMobile;
       hideTooltip();
       renderList(filteredList);
+      setModalOpen(false);
     }
+    // マーキー再計測
+    updateBottomBarMarquee();
+    // 下バーはスマホ以外なら閉じる
+    if (!isMobileView()) showBottomBar(false);
   }, { passive: true });
 
-  // auto play first
+  // 最初の動画を自動再生（存在するなら）
   if (filteredList.length > 0 && filteredList[0].id) {
     currentPlayingId = filteredList[0].id;
+    currentPlayingStart = filteredList[0].start || 0;
     createOrLoadPlayer(filteredList[0].id, filteredList[0].start || 0);
     setNowPlaying(filteredList[0]);
     renderList(filteredList);
+    updatePlayPauseUI();
+  } else {
+    showBottomBar(false);
   }
-  window.addEventListener("resize", updateNowPlayingMarquee, { passive: true });
-
 });

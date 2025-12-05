@@ -685,7 +685,7 @@ body.has-spbar{ padding-bottom:50px; }
   border: 1px solid #ccc;
   border-radius: 6px;
 
-  padding: 8px 34px 8px 10px;  /* 右側は矢印分の余白 */
+  padding: 8px;  
   line-height: 1.2;
 
   font-size: 12px; /* iOSの“タップで勝手に拡大”も防げる */

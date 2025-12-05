@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>ろこみゅーじっく(鏑木ろこ非公式ファンサイト)</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" href="static/css/style.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="static/css/style.css" />
 </head>
 <body>
 
   <!-- ヘッダー -->
   <div id="header">
-    <div class="width50 top-center">
+    <div class="header_left">
       <a class="header_title">ろこみゅーじっく</a>
-      <!-- ろこTunes 65みゅーじっく 65_Tunes -->
     </div>
+
+    <!-- スマホ時だけ出る「？」ボタン -->
+    <button id="infoBtn" class="infoBtn" type="button" aria-label="当サイトについて" title="当サイトについて">
+      ?
+    </button>
   </div>
 
-<div id="main">
-
-<div id="leftColumn">
-      <!-- YouTubeプレイヤー -->
+  <div id="main">
+    <!-- 左：プレイヤー＋（PC用）当サイトについて -->
+    <div id="leftColumn">
       <div id="player"></div>
 
-      <!-- ▼ 折りたたみ説明ボックス -->
+      <!-- PC/タブレットではこのdetailsを表示。スマホではCSSで隠す -->
       <details id="siteInfo" open>
         <summary>当サイトについて</summary>
         <div class="infoContent">
@@ -35,56 +38,50 @@
           曲名にキーの記載がない楽曲は変更なしか記載漏れです。
         </div>
       </details>
-</div>
-
+    </div>
 
     <!-- 右：検索・フィルタ・件数・リスト -->
     <div id="sidebar">
-      <div id="nowPlaying">
+      <!-- <div id="nowPlaying" aria-live="polite">
         <div class="npLabel">再生中</div>
         <div class="npText">
           <span id="npSong">---</span>
           <span class="npSep">/</span>
           <span id="npArtist">---</span>
         </div>
+      </div> -->
+
+      <input id="searchInput" type="text" placeholder="検索（曲/歌唱/アーティスト/作曲/引用）" />
+
+      <div class="filterRow">
+        <select id="filterSelect">
+          <option value="">すべて表示(カテゴリ)</option>
+          <option value="配信">配信</option>
+          <option value="歌ってみた">歌ってみた</option>
+          <option value="なうぷれ">なうぷれ</option>
+          <option value="Original">Original</option>
+          <option value="その他">その他</option>
+        </select>
+
+        <select id="yearSelect">
+          <option value="">すべて表示(年数)</option>
+          <option value="2025">2025</option>
+          <option value="2024">2024</option>
+          <option value="2023">2023</option>
+        </select>
       </div>
 
-
-        <!-- <div class="npqText" id="npQuote"></div> -->
-
-
-
-      <input id="searchInput" type="text" placeholder="検索（曲/歌唱/アーティスト/作曲/引用）">
-      <select id="filterSelect">
-        <option value="">すべて表示(カテゴリ)</option>
-        <option value="配信">配信</option>
-        <option value="歌ってみた">歌ってみた</option>
-        <option value="なうぷれ">なうぷれ</option>
-        <option value="Original">Original</option>
-        <option value="その他">その他</option>
-      </select>
-
-      <!-- ★追加：年フィルタ -->
-      <select id="yearSelect">
-        <option value="">すべて表示(年数)</option>
-        <option value="2025">2025</option>
-        <option value="2024">2024</option>
-        <option value="2023">2023</option>
-      </select>
-
-      <!-- 表示件数 -->
       <div id="countArea">表示件数: <span id="countNumber">0</span> 件</div>
 
-      <!-- 横スクロールのヘッダー + リスト -->
       <div id="listWrapper">
         <div id="listHeaderWrapper">
           <div id="listHeader">
-          <div class="thumbHeader"></div>
-          <div class="col col-song headerCol" data-key="song">曲名(キー)</div>
-          <div class="col col-singer headerCol" data-key="singer">歌唱</div>
-          <div class="col col-artist headerCol" data-key="artist">アーティスト</div>
-          <div class="col col-composer headerCol" data-key="composer">作曲</div>
-          <div class="col col-title headerCol" data-key="title">引用</div>
+            <div class="thumbHeader"></div>
+            <div class="col col-song headerCol" data-key="song">曲名(キー)</div>
+            <div class="col col-singer headerCol" data-key="singer">歌唱</div>
+            <div class="col col-artist headerCol" data-key="artist">アーティスト</div>
+            <div class="col col-composer headerCol" data-key="composer">作曲</div>
+            <div class="col col-title headerCol" data-key="title">引用</div>
           </div>
         </div>
 
@@ -95,8 +92,40 @@
     </div>
   </div>
 
-  <!-- tooltip element -->
+  <!-- ツールチップ（黒い箱） -->
   <div id="tooltip" aria-hidden="true"></div>
+
+  <!-- スマホ用：当サイトについて モーダル -->
+  <div id="infoModal" class="modal" aria-hidden="true">
+    <div class="modalOverlay" data-close="1"></div>
+    <div class="modalPanel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modalHeader">
+        <div id="modalTitle" class="modalTitle">当サイトについて</div>
+        <button id="modalClose" class="modalClose" type="button" aria-label="閉じる">×</button>
+      </div>
+      <div class="modalBody">
+        <div class="modalText">
+          にじさんじ所属バーチャルライバー鏑木ろこ さんが<br>
+          歌った楽曲等をまとめた非公式ファンサイトです。<br><br>
+          当サイトはANYCOLOR株式会社様及びにじさんじプロジェクト・各種関係会社とは一切関係ありません。<br>
+          ご意見、内容の抜け漏れや誤り、改善点などございましたら、下記にお問い合わせいただけると幸いです。<br>
+          XXXX<br><br>
+          歌唱曲は、鏑木の声が分かるもののみ入れています。<br>
+          曲名にキーの記載がない楽曲は変更なしか記載漏れです。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- スマホ用：Spotify風「下の再生バー」 -->
+  <div id="spNowPlayingBar" class="spNowPlayingBar" aria-hidden="true">
+    <div class="spnp-left">
+      <div class="spnp-line" id="spNpLine">---</div>
+    </div>
+    <div class="spnp-right">
+      <button id="spPlayPauseBtn" class="spnp-btn" type="button" aria-label="再生/停止">▶︎</button>
+    </div>
+  </div>
 
   <script src="static/js/videoData.js"></script>
   <script src="static/js/app.js"></script>

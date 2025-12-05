@@ -564,7 +564,7 @@ body.has-spbar{ padding-bottom:50px; }
     overflow-x:hidden !important; /* 横スク禁止 */
     overflow-y:auto !important;   /* 縦スクのみ */
     max-height: 60vh;             /* 画面を埋めすぎない */
-    border-radius:10px;
+    /* border-radius:10px; */
     touch-action: pan-y;          /* “縦のみ”を明示（横ブレ抑制） */
     overscroll-behavior: contain; /* 親へのスクロール伝搬抑制 */
     -webkit-overflow-scrolling: touch;

@@ -3,6 +3,41 @@
 html, body { margin: 0; padding: 0; }
 body { color:#222; font-size:16px; }
 
+/* ===== header ===== */
+#header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  height:56px;
+  padding:0 8px;
+  background-color:#198caa;
+}
+.header_title{
+  padding:10px;
+  color:#fff;
+  font-weight:700;
+  font-size:32px;
+  display:inline-block;
+}
+
+/* スマホ用「？」ボタン（PCでは隠す） */
+.infoBtn{
+  display:none;
+  width:34px;
+  height:34px;
+  border-radius:999px;
+  border:2px solid rgba(255,255,255,.95);
+  background:transparent;
+  color:#fff;
+  font-size:18px;
+  font-weight:800;
+  line-height:1;
+  cursor:pointer;
+}
+@media (max-width: 1000px){
+  .infoBtn{ display:inline-flex; align-items:center; justify-content:center; }
+}
+
 /* ===== layout ===== */
 #main{
   display:flex;
@@ -15,24 +50,31 @@ body { color:#222; font-size:16px; }
   html, body{ overflow-x:hidden; } /* ページ横スクロール禁止 */
 }
 
-/* ===== header ===== */
-#header{
-  display:flex;
-  height:56px;
-  padding:0;
-  background-color:#198caa;
-}
-.header_title{
-  padding:10px;
-  color:#fff;
-  font-weight:700;
-  font-size:32px;
-}
-
 /* ===== left column / player ===== */
 #leftColumn{ width:50%; height:100%; }
 @media (max-width: 1000px){ #leftColumn{ width:100%; } }
 #player{ width:100%; height:100%; aspect-ratio:16/9; }
+
+/* PC用 details はスマホでは隠す（代わりにモーダル） */
+@media (max-width: 1000px){
+  #siteInfo{ display:none; }
+}
+#siteInfo{
+  margin-top:10px;
+  border:1px solid #d7d7d7;
+  border-radius:10px;
+  padding:10px;
+  background:#f7f7f7;
+}
+#siteInfo summary{
+  cursor:pointer;
+  font-weight:800;
+}
+.infoContent{
+  margin-top:8px;
+  font-size:14px;
+  line-height:1.5;
+}
 
 /* ===== sidebar ===== */
 #sidebar{ flex:1; min-width:360px; }
@@ -49,6 +91,7 @@ body { color:#222; font-size:16px; }
   border:1px solid #d7d7d7;
   border-radius:10px;
   background:#f7f7f7;
+  overflow:hidden; /* はみ出しを見せない */
 }
 .npLabel{
   display:inline-block;
@@ -60,26 +103,34 @@ body { color:#222; font-size:16px; }
   border-radius:999px;
   background:#ececec;
   white-space: nowrap;
+  flex:0 0 auto;
 }
 .npText{
   font-size:14px;
   font-weight:600;
-   min-width: 0;
+  min-width: 0;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
+  flex:1 1 auto;
 }
 .npSep{ opacity:.55; }
 
+/* ===== inputs ===== */
 #searchInput{
   width:100%;
   padding:8px;
   margin-bottom:8px;
   border-radius:6px;
   border:1px solid #ccc;
-  font-size: 16px;
+  font-size:16px;
 }
-
+.filterRow{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  margin-bottom:8px;
+}
 #filterSelect, #yearSelect{
   padding:8px;
   border-radius:6px;
@@ -113,7 +164,6 @@ body { color:#222; font-size:16px; }
   padding:8px;
   border-radius:6px;
   align-items:center;
-  /* gap:10px; */
   background:transparent;
 }
 .thumbHeader{ flex:0 0 141px; }
@@ -161,14 +211,17 @@ body { color:#222; font-size:16px; }
 }
 
 /* list rows (desktop) */
-#videoListContainer{ max-height:520px; overflow-y:auto; }
+#videoListContainer{
+  max-height:520px;
+  overflow-y:auto;
+  -webkit-overflow-scrolling: touch;
+}
 .videoItem{
   display:flex;
   min-width:1200px;
-  /* gap:10px; */
   padding:5px 0;
   border-bottom:1px solid #eee;
-  -webkit-tap-highlight-color: rgba(0,0,0,0); /* iOSの青ハイライト消す */
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 .videoItem:hover{ background:#fafafa; }
 
@@ -185,11 +238,11 @@ body { color:#222; font-size:16px; }
 }
 .date{ font-size:12px; color:#555; }
 
-.col-song{ flex:0 0 150px; white-space:pre-line; padding-left: 6px; }
-.col-singer{ flex:0 0 150px; padding-left: 6px; }
-.col-artist{ flex:0 0 150px; padding-left: 6px; }
-.col-composer{ flex:0 0 150px; padding-left: 6px; }
-.col-title{ flex:1 1 auto; min-width:320px; padding-left: 6px; }
+.col-song{ flex:0 0 150px; white-space:pre-line; padding-left:6px; }
+.col-singer{ flex:0 0 150px; padding-left:6px; }
+.col-artist{ flex:0 0 150px; padding-left:6px; }
+.col-composer{ flex:0 0 150px; padding-left:6px; }
+.col-title{ flex:1 1 auto; min-width:320px; padding-left:6px; }
 
 .col a{ color:#0066cc; text-decoration:underline; }
 .col.nolink{ text-decoration:none; color:#222; }
@@ -217,81 +270,78 @@ body { color:#222; font-size:16px; }
 
 /* ===== Mobile (<=1000px): カード型で縦スクのみ ===== */
 @media (max-width: 1000px){
-  /* スマホは“表ヘッダー”を消す */
   #listHeaderWrapper{ display:none; }
 
-  /* 横スクを無効化、縦だけ */
   #videoListContainer{
     overflow-x:hidden !important;
     overflow-y:auto !important;
-    max-height: 60vh; /* 55〜65vh 好みで */
+    max-height: 60vh;
     border-radius:10px;
     touch-action: pan-y;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
   #videoList{ width:100%; }
 
-  /* 行をカード化 */
   .videoItem{
     min-width:0 !important;
     width:100%;
     display:grid;
     grid-template-columns: 90px 1fr;
-    column-gap:0px;
-    row-gap:0px;
-    padding:4px 8px;
+    column-gap:6px;
+    row-gap:2px;
+    padding:6px 8px;
     align-items:start;
   }
 
-  /* サムネと日付は左固定 */
   .thumbWrapper{
     grid-column:1;
     grid-row:1 / span 4;
-    width:80px;
+    width:90px;
     flex:unset;
   }
-  .thumb{ width:90px; height:50px; }
-  .date{ font-size:12px; }
+  /* 👇 サムネ小さめ（好みで数値だけ変えてOK） */
+  .thumb{ width:80px; height:45px; }
+  .date{ font-size:11px; }
 
-  /* 右側に情報を積む */
   .col{
     grid-column:2;
     flex:unset;
     width:auto;
     display:block;
-    min-width:0;       /* ← 省略表示に必須 */
+    min-width:0;
     overflow:hidden;
   }
 
-  /* 表示順（依頼通り：曲名→アーティスト+作曲→歌唱→引用） */
-  .col-song{ order:1; padding-left: 4px; }
-  .col-meta{ order:2; padding-left: 4px; }
-  .col-singer{ order:3; padding-left: 4px; }
-  .col-title{ order:4; padding-left: 4px; }
+  /* 表示順：曲名 → (アーティスト+作曲) → 歌唱 → 引用 */
+  .col-song{ order:1; padding-left:4px; }
+  .col-meta{ order:2; padding-left:4px; }
+  .col-singer{ order:3; padding-left:4px; }
+  .col-title{ order:4; padding-left:4px; }
 
-  /* 見せ方 */
   .col-song{ font-weight:800; font-size:14px; line-height:1.2; }
   .metaItem.metaArtist{ font-size:12px; color:#333; }
   .metaItem.metaComposer{ font-size:10px; color:#666; }
   .col-singer{ font-size:10px; color:#666; }
   .col-title{ font-size:10px; color:#444; }
 
-  /* artist + composer 横並び */
-.metaRow{
+  /* artist + composer 横並び（はみ出しはそれぞれ…） */
+  .metaRow{
     display:flex;
-    gap:10px;
+    gap:8px;
     align-items:baseline;
-    flex-wrap:nowrap;      /* ← wrap を殺す */
+    flex-wrap:nowrap;
+    min-width:0;
   }
   .metaItem{
+    flex:1 1 0;
     min-width:0;
     overflow:hidden;
     text-overflow:ellipsis;
     white-space:nowrap;
   }
 
-
-
-  /* 「…」になる表示（2行目に行きそうなら1行で切る） */
+  /* 2行以上になりそうなら1行で「…」（tapで黒箱） */
   .tapTip{
     white-space:nowrap;
     overflow:hidden;
@@ -307,59 +357,127 @@ body { color:#222; font-size:16px; }
     overflow:hidden;
     text-overflow:ellipsis;
   }
+}
 
-  /* 長い文字で横に押し広げない（保険） */
-  .col, .col a{
-    overflow-wrap:anywhere;
-    word-break:break-word;
+/* ===== モーダル ===== */
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:9998;
+}
+.modal.is-open{ display:block; }
+
+.modalOverlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.55);
+}
+.modalPanel{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%, -50%);
+  width:min(92vw, 560px);
+  max-height:80vh;
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 12px 30px rgba(0,0,0,.25);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.modalHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 12px;
+  border-bottom:1px solid #eee;
+}
+.modalTitle{ font-weight:900; }
+.modalClose{
+  cursor:pointer;
+  border:none;
+  background:transparent;
+  font-size:22px;
+  line-height:1;
+}
+.modalBody{
+  padding:12px;
+  overflow:auto;
+}
+.modalText{
+  font-size:14px;
+  line-height:1.6;
+}
+
+/* ===== スマホ下の再生バー ===== */
+.spNowPlayingBar{
+  position:fixed;
+  left:8px;
+  right:8px;
+  bottom:calc(8px + env(safe-area-inset-bottom, 0px));
+  z-index:9997;
+  display:none;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 12px;
+  border-radius:14px;
+  background:#f7f7f7;
+  border:1px solid #d7d7d7;
+  box-shadow:0 8px 18px rgba(0,0,0,.12);
+}
+.spNowPlayingBar.is-visible{ display:flex; }
+
+.spnp-left{ flex:1 1 auto; min-width:0; }
+.spnp-right{ flex:0 0 auto; }
+
+.spnp-btn{
+  width:44px;
+  height:44px;
+  border-radius:999px;
+  border:1px solid #cfcfcf;
+  background:#fff;
+  cursor:pointer;
+  font-size:18px;
+  font-weight:800;
+}
+
+/* 下バーが出てる時、下に隠れないよう余白を足す */
+body.has-spbar{
+  padding-bottom:88px;
+}
+
+/* 下バー：1行表示（通常は…） */
+@media (max-width: 1000px){
+  .spnp-line{
+    font-weight:800;
+    font-size:14px;
+    line-height:1.2;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    min-width:0;
   }
-
-
-  
+  #spNowPlayingBar.is-marquee .spnp-line{
+    text-overflow:clip;
+  }
+  .spnpMarquee{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    will-change:transform;
+  }
+  #spNowPlayingBar.is-marquee .spnpMarquee{
+    animation: spMarquee var(--sp-marquee-duration, 12s) ease-in-out infinite;
+  }
+  @keyframes spMarquee{
+    0%, 15%   { transform: translateX(0); }
+    45%, 55%  { transform: translateX(calc(-1 * var(--sp-marquee-shift, 0px))); }
+    85%, 100% { transform: translateX(0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    #spNowPlayingBar.is-marquee .spnpMarquee{ animation:none; }
+  }
 }
-
-/* ===== NowPlaying: 省略時だけ“ゆっくり左右にスライド” ===== */
-#nowPlaying{
-  overflow: hidden;         /* はみ出しを見せない */
-}
-.npLabel{
-  flex: 0 0 auto;
-  white-space: nowrap;      /* ラベルは絶対折り返さない */
-}
-.npText{
-  flex: 1 1 auto;
-  min-width: 0;             /* ← flexの中で…を効かせる最重要 */
-  overflow: hidden;
-  text-overflow: ellipsis;  /* 通常時は… */
-  white-space: nowrap;
-}
-
-/* JSが“はみ出し”を検知した時だけ付く */
-#nowPlaying.is-marquee .npText{
-  text-overflow: clip;      /* アニメ中は…を消す（中身を動かすため） */
-}
-
-/* .npText の中身をまとめるラッパー（JSが自動で作る） */
-.npMarquee{
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  will-change: transform;
-}
-
-/* 0→左へスライド→0 に戻る（ゆっくり） */
-#nowPlaying.is-marquee .npMarquee{
-  animation: npMarquee var(--np-marquee-duration, 20s) ease-in-out infinite;
-}
-
-@keyframes npMarquee{
-  0%, 15%   { transform: translateX(0); }
-  45%, 55%  { transform: translateX(calc(-1 * var(--np-marquee-shift, 0px))); }
-  85%, 100% { transform: translateX(0); }
-}
-
-/* 動きが苦手な人向け */
-@media (prefers-reduced-motion: reduce){
-  #nowPlaying.is-marquee .npMarquee{ animation: none; }
-}
-

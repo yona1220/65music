@@ -1,12 +1,60 @@
 const videos = [
   // 歌ってみた
   {
+    date: "2025/12/23",
+    id: "ksIONO5Cf6w",
+    title: "【MV】参戦決定☆メタモリディオス #idios",
+    song: "参戦決定☆メタモリディオス",
+    artist: "Idios",
+    composer: "D.watt(IOSYS)",
+    singer: "Idios(五十嵐梨花/石神のぞみ/鏑木ろこ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン)",
+    category: "Original",
+    thumbnail: "https://img.youtube.com/vi/ksIONO5Cf6w/hqdefault.jpg",
+    start: 0
+  },
+  {
+    date: "2025/12/19",
+    id: "YbVxG23NKfg",
+    title: "【歌ってみた】MAD HEAD LOVE / 米津玄師【鏑木ろこ×先斗寧/にじさんじ】",
+    song: "MAD HEAD LOVE",
+    artist: "米津玄師",
+    composer: "米津玄師",
+    singer: "鏑木ろこ/先斗寧",
+    category: "歌ってみた",
+    thumbnail: "https://img.youtube.com/vi/YbVxG23NKfg/hqdefault.jpg",
+    start: 0
+  },
+  {
+    date: "2025/12/12",
+    id: "J_CjRIfJc_8",
+    title: "誕生日カラオケ歌枠！ゲストさんも一緒に！最後に告知も！【四季凪アキラ/にじさんじ】",
+    song: "RPG",
+    artist: "SEKAI NO OWARI",
+    composer: "Fukase",
+    singer: "せせらぎ組(海妹四葉/セラフ・ダズルガーデン/鏑木ろこ/四季凪アキラ)",
+    category: "配信",
+    thumbnail: "https://img.youtube.com/vi/J_CjRIfJc_8/hqdefault.jpg",
+    start: 2430
+  },
+  {
+    date: "2025/12/12",
+    id: "J_CjRIfJc_8",
+    title: "誕生日カラオケ歌枠！ゲストさんも一緒に！最後に告知も！【四季凪アキラ/にじさんじ】",
+    song: "さくらんぼ",
+    artist: "大塚愛",
+    composer: "愛",
+    singer: "せせらぎ組(海妹四葉/セラフ・ダズルガーデン/鏑木ろこ/四季凪アキラ)",
+    category: "配信",
+    thumbnail: "https://img.youtube.com/vi/J_CjRIfJc_8/hqdefault.jpg",
+    start: 3019
+  },
+  {
     date: "2025/12/05",
     id: "NogCvf84Biw",
     title: "【歌ってみた】GOLDEN BUDDY / 鏑木ろこ feat. 風楽奏斗",
     song: "GOLDEN BUDDY",
     artist: "礼賛(feat.くるま)",
-    composer: "礼賛 , サーヤ",
+    composer: "礼賛,サーヤ",
     singer: "鏑木ろこ(feat. 風楽奏斗)",
     category: "歌ってみた",
     thumbnail: "https://img.youtube.com/vi/NogCvf84Biw/hqdefault.jpg",

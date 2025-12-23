@@ -490,7 +490,7 @@ body.has-spbar{ padding-bottom:50px; }
   display:grid;
   place-items:center;          /* 中央に配置 */
   padding:0;
-  line-height:1;
+  line-height:0;
 }
 
 /* アイコン位置調整（矢印だけ動かす用） */

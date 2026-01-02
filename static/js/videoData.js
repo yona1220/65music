@@ -1,6 +1,18 @@
 const videos = [
   // 歌ってみた
   {
+    date: "2026/01/01",
+    id: "I7ZE3Gm99J4",
+    title: "DONBURA KONBURA SPEAKERS / covered by 倉持めると × 鏑木ろこ × 獅子堂あかり",
+    song: "DONBURA KONBURA SPEAKERS",
+    artist: "Ranunculus",
+    composer: "広川恵一",
+    singer: "鏑木ろこ/倉持めると/獅子堂あかり",
+    category: "歌ってみた",
+    thumbnail: "https://img.youtube.com/vi/I7ZE3Gm99J4/hqdefault.jpg",
+    start: 0
+  },
+  {
     date: "2025/12/23",
     id: "ksIONO5Cf6w",
     title: "【MV】参戦決定☆メタモリディオス #idios",

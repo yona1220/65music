@@ -21,8 +21,6 @@ let playingRowEl = null;
 let currentPlayingId = null;
 let currentPlayingStart = 0;
 
-let hasUserGesture = false;
-
 /* -------------------- utils -------------------- */
 function buildWatchUrl(id, start) {
   const s = Number(start) || 0;
@@ -69,9 +67,6 @@ function ensureYouTubeAPI(cb) {
 
 function createOrLoadPlayer(id, start = 0) {
   if (!id) return;
-
-  // ★ iOS対策：ユーザー操作前は生成しない
-  if (isMobileView() && !hasUserGesture) return;
 
   currentPlayingId = id;
   currentPlayingStart = start || 0;
@@ -659,15 +654,6 @@ function setModalOpen(open) {
 }
 
 /* -------------------- Init -------------------- */
-document.addEventListener("touchend", () => {
-  hasUserGesture = true;
-}, { once: true });
-
-document.addEventListener("click", () => {
-  hasUserGesture = true;
-}, { once: true });
-
-
 document.addEventListener("DOMContentLoaded", () => {
   // 黒箱を「別タップ / スクロール / 指移動」で消す
   const listEl = document.getElementById("videoListContainer");

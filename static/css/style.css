@@ -296,7 +296,7 @@ body { color:#222; font-size:16px; }
    --------------------------------------------------------- */
 
 #videoListContainer{
-  max-height:520px;            /* PCでの表示高さ（縦スク） */
+  max-height:680px;            /* PCでの表示高さ（縦スク） */
   overflow-y:auto;
   -webkit-overflow-scrolling: touch; /* iOS慣性スクロール */
 }
@@ -563,7 +563,7 @@ body.has-spbar{ padding-bottom:50px; }
   #videoListContainer{
     overflow-x:hidden !important; /* 横スク禁止 */
     overflow-y:auto !important;   /* 縦スクのみ */
-    max-height: 60vh;             /* 画面を埋めすぎない */
+    max-height: 84vh;             /* 画面を埋めすぎない */
     /* border-radius:10px; */
     touch-action: pan-y;          /* “縦のみ”を明示（横ブレ抑制） */
     overscroll-behavior: contain; /* 親へのスクロール伝搬抑制 */

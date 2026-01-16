@@ -9,7 +9,7 @@ const videos = [
     composer: "Aira",
     singer: "Idios(鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン)",
     category: "Original",
-    thumbnail: "https://img.youtube.com/vi/6oM_jOy5yZY/XYytEqGvfX0.jpg",
+    thumbnail: "https://img.youtube.com/vi/XYytEqGvfX0/hqdefault.jpg",
     start: 0
   },
   {

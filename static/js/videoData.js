@@ -1,6 +1,42 @@
 const videos = [
   // 歌ってみた
   {
+    date: "2026/01/16",
+    id: "XYytEqGvfX0",
+    title: "【MV】なないろのうた / Idios",
+    song: "なないろのうた",
+    artist: "Idios",
+    composer: "Aira",
+    singer: "Idios(鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン)",
+    category: "Original",
+    thumbnail: "https://img.youtube.com/vi/6oM_jOy5yZY/XYytEqGvfX0.jpg",
+    start: 0
+  },
+  {
+    date: "2026/01/16",
+    id: "6oM_jOy5yZY",
+    title: "【 歌ってみた 】バラードじゃ物足りないわ【 鏑木ろこ 】",
+    song: "バラードじゃ物足りないわ",
+    artist: "Noz",
+    composer: "Noz.",
+    singer: "鏑木ろこ",
+    category: "歌ってみた",
+    thumbnail: "https://img.youtube.com/vi/6oM_jOy5yZY/hqdefault.jpg",
+    start: 0
+  },
+  {
+    date: "2026/01/16",
+    id: "",
+    title: 'なないろのうた',
+    song: "なないろのうた",
+    artist: "Idios",
+    composer: "Aira",
+    singer: "Idios(鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン)",
+    category: "Original",
+    thumbnail: "static/img/music/なないろのうた.jpg",
+    start: 0
+  },
+  {
     date: "2026/01/01",
     id: "I7ZE3Gm99J4",
     title: "DONBURA KONBURA SPEAKERS / covered by 倉持めると × 鏑木ろこ × 獅子堂あかり",
@@ -186,7 +222,7 @@ const videos = [
     title: 'Idios 1st LIVE "Seize the day"',
     song: "なないろのうた",
     artist: "Idios",
-    composer: "",
+    composer: "Aira",
     singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン",
     category: "その他",
     thumbnail: "https://img.youtube.com/vi/fzLDBT9Ujl0/hqdefault.jpg",
@@ -306,7 +342,7 @@ const videos = [
     title: 'Idios 1st LIVE "Seize the day"',
     song: "なないろのうた",
     artist: "Idios",
-    composer: "",
+    composer: "Aira",
     singer: "鏑木ろこ/五十嵐梨花/石神のぞみ/倉持めると/小清水透/獅子堂あかり/ソフィア・ヴァレンタイン",
     category: "その他",
     thumbnail: "https://img.youtube.com/vi/5KEFpTUepbo/hqdefault.jpg",

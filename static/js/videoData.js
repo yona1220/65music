@@ -17,7 +17,7 @@ const videos = [
     id: "6oM_jOy5yZY",
     title: "【 歌ってみた 】バラードじゃ物足りないわ【 鏑木ろこ 】",
     song: "バラードじゃ物足りないわ",
-    artist: "Noz",
+    artist: "Noz.",
     composer: "Noz.",
     singer: "鏑木ろこ",
     category: "歌ってみた",

@@ -20,7 +20,7 @@ body { color:#222; font-size:16px; }
   display:flex;                /* 横並び */
   align-items:center;          /* 縦中央揃え */
   justify-content:space-between; /* 左右に分ける */
-  height:56px;                 /* ヘッダー高さ固定 */
+  height:42px;                 /* ヘッダー高さ固定 */
   padding:0 8px;               /* 左右余白 */
   background-color:#198caa;    /* 背景色 */
 }
@@ -305,7 +305,7 @@ body { color:#222; font-size:16px; }
   display:flex;
   min-width:1200px;            /* ヘッダーと揃える */
   padding:5px 0;
-  border-bottom:1px solid #eee;
+  border-bottom:1px solid #888;
   -webkit-tap-highlight-color: rgba(0,0,0,0); /* モバイルのタップハイライト抑制 */
 }
 
@@ -329,7 +329,7 @@ body { color:#222; font-size:16px; }
   position: relative;
   top: 1px;   
   font-size:12px;
-  color:#555;
+  color:#fff;
 }
 
 /* 各カラム幅（PC用） */
@@ -778,7 +778,7 @@ a{
 .header_title{
   padding:2px;
   color:#fff;
-  font-size:38px;
+  font-size:32px;
   display:inline-block;
   font-family:"CraftMincho", serif;
 }

@@ -343,7 +343,7 @@ body { color:#222; font-size:16px; }
 .col a{ color:#0066cc; text-decoration:underline; }
 
 /* リンクじゃない列用（色と下線を戻す） */
-.col.nolink{ text-decoration:none; color:#fff; }
+.col.nolink{ text-decoration:none; color:#888; }
 
 /* 再生中の行を薄くハイライト */
 .videoItem.is-playing{ background:#2a2a2a; }

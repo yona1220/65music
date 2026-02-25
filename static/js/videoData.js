@@ -1,5 +1,29 @@
 const videos = [
   // 歌ってみた
+   {
+    date: "2026/02/20",
+    id: "jYy00EAsT74",
+    title: "【 #司賀りこが3Dだよ 】君を笑顔へご案内✨しがりこが動くよ。【司賀りこ/にじさんじ】",
+    song: "ガヴリールドロップキック",
+    artist: "ガヴリール（CV：富田美憂）、ヴィーネ（CV：大西沙織）、サターニャ（CV：大空直美）、ラフィエル（CV：花澤香菜）",
+    composer: "前山田健一",
+    singer: "きゅーぺっと(竜胆尊/鏑木ろこ/栞葉るり/司賀りこ)",
+    category: "配信",
+    thumbnail: "https://img.youtube.com/vi/jYy00EAsT74/hqdefault.jpg",
+    start: 1021
+  },
+  {
+    date: "2026/02/14",
+    id: "G_pquwUpf14",
+    title: "【 歌ってみた 】 プロポーズ / なとり 【 鏑木ろこ 】",
+    song: "プロポーズ(+4)",
+    artist: "なとり",
+    composer: "なとり",
+    singer: "鏑木ろこ",
+    category: "歌ってみた",
+    thumbnail: "https://img.youtube.com/vi/G_pquwUpf14/hqdefault.jpg",
+    start: 0
+  },
   {
     date: "2026/01/16",
     id: "XYytEqGvfX0",

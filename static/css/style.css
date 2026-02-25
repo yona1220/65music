@@ -214,7 +214,7 @@ body { color:#222; font-size:16px; }
 #listHeaderWrapper{
   -ms-overflow-style:none;     /* IE/Edge旧：バー非表示 */
   scrollbar-width:none;        /* Firefox：バー非表示 */
-  background:#f2f2f2;
+  background:#2a2a2a;
   border-radius:6px;
 }
 
@@ -309,7 +309,7 @@ body { color:#222; font-size:16px; }
   -webkit-tap-highlight-color: rgba(0,0,0,0); /* モバイルのタップハイライト抑制 */
 }
 
-.videoItem:hover{ background:#fafafa; }
+.videoItem:hover{ background:#1a1a1a; }
 
 .thumbWrapper{
   flex:0 0 150px;              /* サムネ列固定 */
@@ -343,11 +343,11 @@ body { color:#222; font-size:16px; }
 .col a{ color:#0066cc; text-decoration:underline; }
 
 /* リンクじゃない列用（色と下線を戻す） */
-.col.nolink{ text-decoration:none; color:#222; }
+.col.nolink{ text-decoration:none; color:#fff; }
 
 /* 再生中の行を薄くハイライト */
-.videoItem.is-playing{ background:#e9e9e9; }
-.videoItem.is-playing:hover{ background:#e1e1e1; }
+.videoItem.is-playing{ background:#2a2a2a; }
+.videoItem.is-playing:hover{ background:#1a1a1a; }
 
 
 /* =========================================================
@@ -395,7 +395,7 @@ body { color:#222; font-size:16px; }
   transform:translate(-50%, -50%);
   width:min(92vw, 560px);
   max-height:80vh;
-  background:#fff;
+  background:#333;
   border-radius:14px;
   box-shadow:0 12px 30px rgba(0,0,0,.25);
   overflow:hidden;
@@ -419,6 +419,7 @@ body { color:#222; font-size:16px; }
   background:transparent;
   font-size:22px;
   line-height:1;
+  color: #fff
 }
 
 .modalBody{
@@ -614,10 +615,10 @@ body.has-spbar{ padding-bottom:50px; }
   .col-title{ order:4; padding-left:4px; }
 
   .col-song{ font-weight:800; font-size:14px; line-height:1.2; }
-  .metaItem.metaArtist{ font-size:12px; color:#333; }
-  .metaItem.metaComposer{ font-size:10px; color:#666; }
-  .col-singer{ font-size:10px; color:#666; }
-  .col-title{ font-size:10px; color:#444; }
+  .metaItem.metaArtist{ font-size:12px; color:#888; }
+  .metaItem.metaComposer{ font-size:10px; color:#888; }
+  .col-singer{ font-size:10px; color:#888; }
+  .col-title{ font-size:10px; color:#888; }
 
   /* artist + composer を横並び（各要素は1行で…） */
   .metaRow{
@@ -724,5 +725,61 @@ html, body,
   /* ついでにiOSの勝手な文字拡大を抑えたいなら */
   body{ -webkit-text-size-adjust: 100%; }
 
+}
+
+/* =========================================================
+   DARK THEME 追加
+   ========================================================= */
+
+body{
+  background:#000;     /* 背景黒 */
+  color:#fff;          /* 文字白 */
+}
+
+/* リンク色も少し明るめに */
+a{
+  color:#4da3ff;
+}
+
+/* 検索ボックス */
+#searchInput{
+  background:#2a2a2a;  /* グレー */
+  color:#fff;
+  border:1px solid #555;
+}
+
+/* select も暗くするなら */
+#filterSelect,
+#yearSelect{
+  background:#2a2a2a;
+  color:#fff;
+  border:1px solid #555;
+}
+
+/* パネル系を暗くする（統一感） */
+#siteInfo,
+#nowPlaying,
+#spNowPlayingBar{
+  background:#1a1a1a;
+  border:1px solid #333;
+}
+
+/* =========================================================
+   Custom Font
+   ========================================================= */
+
+@font-face{
+  font-family:"CraftMincho";
+  src:url("/static/font/craftmincho.otf") format("opentype");
+  font-weight:normal;
+  font-style:normal;
+}
+
+.header_title{
+  padding:2px;
+  color:#fff;
+  font-size:38px;
+  display:inline-block;
+  font-family:"CraftMincho", serif;
 }
 

@@ -1339,3 +1339,11 @@ button {
   opacity: 0;
   pointer-events: none;
 }
+
+.categoryButtons button.active{
+  background: linear-gradient(#198caa, #146d85);
+  color:#fff;
+
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #0f5f73;
+}

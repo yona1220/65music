@@ -1305,3 +1305,13 @@ body.light .categoryButtons.square button:active{
 .toggle-button-1:has(:checked)::after {
   left: 53px;
 }
+
+body {
+  transition: 
+    background-color 0.1s ease,
+    color 0.1s ease;
+}
+
+button {
+  touch-action: manipulation;
+}

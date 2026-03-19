@@ -66,7 +66,7 @@ body { color:#222; font-size:16px; }
    ========================================================= */
 
 #leftColumn{
-  width:50%;                   /* PCは左50% */
+  width:40%;                   /* PCは左50% */
   height:100%;
 }
 
@@ -160,10 +160,11 @@ body { color:#222; font-size:16px; }
 
 #searchInput{
   width:100%;
+  height: 36px;
   padding:8px;
   margin-bottom:8px;
   border-radius:6px;
-  border:1px solid #ccc;
+  border:1px solid #bbb;
   font-size:16px;
 }
 
@@ -174,14 +175,15 @@ body { color:#222; font-size:16px; }
   margin-bottom:2px;
 }
 
-#filterSelect, #yearSelect{
+#filterSelect, #yearSelect, #sortDateSelect{
   padding:8px;
   border-radius:6px;
-  border:1px solid #ccc;
+  border:1px solid #bbb;
 }
 
 #filterSelect{ width:170px; }
 #yearSelect{ width:140px; }
+#sortDateSelect{ width: 120px;}
 
 #countArea{
   margin-bottom: 2px;
@@ -233,7 +235,7 @@ body { color:#222; font-size:16px; }
 }
 
 /* サムネ列のヘッダー幅 */
-.thumbHeader{ flex:0 0 141px; }
+.thumbHeader{ flex:0 0 94px; }
 
 /* 共通列：複数行クランプ（PCで長文を抑える） */
 .col{
@@ -242,8 +244,8 @@ body { color:#222; font-size:16px; }
   overflow:hidden;
   display:-webkit-box;
   -webkit-box-orient:vertical;
-  -webkit-line-clamp:4;        /* 4行で省略（WebKit系） */
-  line-clamp:4;               /* 参考：標準化途上 */
+  -webkit-line-clamp:1;        /* 4行で省略（WebKit系） */
+  line-clamp:1;               /* 参考：標準化途上 */
 }
 
 /* ソートできるヘッダー列（矢印を擬似要素で描く） */
@@ -304,23 +306,23 @@ body { color:#222; font-size:16px; }
 .videoItem{
   display:flex;
   min-width:1200px;            /* ヘッダーと揃える */
-  padding:5px 0;
-  border-bottom:1px solid #888;
+  padding:1px 0;
+  border-bottom:1px solid #bbb;
   -webkit-tap-highlight-color: rgba(0,0,0,0); /* モバイルのタップハイライト抑制 */
 }
 
 .videoItem:hover{ background:#1a1a1a; }
 
 .thumbWrapper{
-  flex:0 0 150px;              /* サムネ列固定 */
+  flex:0 0 105px;              /* サムネ列固定 */
   display:flex;
   flex-direction:column;
   align-items:center;
 }
 
 .thumb{
-  width:142px;
-  height:79px;
+  width:100px;
+  height:56px;
   object-fit:cover;            /* 画像をトリムして収める */
   border-radius:6px;
 }
@@ -333,17 +335,17 @@ body { color:#222; font-size:16px; }
 }
 
 /* 各カラム幅（PC用） */
-.col-song{     flex:0 0 150px; white-space:pre-line; padding-left:6px; }
-.col-singer{   flex:0 0 150px; padding-left:6px; }
-.col-artist{   flex:0 0 150px; padding-left:6px; }
-.col-composer{ flex:0 0 150px; padding-left:6px; }
+.col-song{     flex:0 0 260px; white-space:pre-line; padding-left:6px; }
+.col-singer{   flex:0 0 200px; padding-left:6px; }
+.col-artist{   flex:0 0 180px; padding-left:6px; }
+.col-composer{ flex:0 0 160px; padding-left:6px; }
 .col-title{    flex:1 1 auto; min-width:320px; padding-left:6px; }
 
 /* リンクの見た目 */
 .col a{ color:#0066cc; text-decoration:underline; }
 
 /* リンクじゃない列用（色と下線を戻す） */
-.col.nolink{ text-decoration:none; color:#888; }
+.col.nolink{ text-decoration:none; color:#bbb; }
 
 /* 再生中の行を薄くハイライト */
 .videoItem.is-playing{ background:#2a2a2a; }
@@ -615,10 +617,10 @@ body.has-spbar{ padding-bottom:50px; }
   .col-title{ order:4; padding-left:4px; }
 
   .col-song{ font-weight:800; font-size:14px; line-height:1.2; }
-  .metaItem.metaArtist{ font-size:12px; color:#888; }
-  .metaItem.metaComposer{ font-size:10px; color:#888; }
-  .col-singer{ font-size:10px; color:#888; }
-  .col-title{ font-size:10px; color:#888; }
+  .metaItem.metaArtist{ font-size:12px; color:#bbb; }
+  .metaItem.metaComposer{ font-size:10px; color:#bbb; }
+  .col-singer{ font-size:10px; color:#bbb; }
+  .col-title{ font-size:10px; color:#bbb; }
 
   /* artist + composer を横並び（各要素は1行で…） */
   .metaRow{
@@ -676,14 +678,14 @@ body.has-spbar{ padding-bottom:50px; }
     #spNowPlayingBar.is-marquee .spnpMarquee{ animation:none; }
   }
   /* iOS Safariでも<select>をできるだけ統一する */
-#filterSelect, #yearSelect{
+#filterSelect, #yearSelect, #sortDateSelect{
   -webkit-appearance: none;
   appearance: none;
 
   background-color: #fff;
   color: #222;
 
-  border: 1px solid #ccc;
+  border: 1px solid #bbb;
   border-radius: 6px;
 
   padding: 8px;  
@@ -702,12 +704,13 @@ body.has-spbar{ padding-bottom:50px; }
   background-repeat: no-repeat;
 }
 
-#filterSelect:focus, #yearSelect:focus{
+#filterSelect:focus, #yearSelect:focus, #sortDateSelect:focus{
   outline: none;
   box-shadow: 0 0 0 2px rgba(25,140,170,.25);
 }
-#filterSelect{ width:200px; }
-#yearSelect{ width:170px; }
+#filterSelect{ width:140px; }
+#yearSelect{ width:120px; }
+#sortDateSelect{ width: 100px;}
 
 
 html, body,
@@ -750,10 +753,11 @@ a{
 
 /* select も暗くするなら */
 #filterSelect,
-#yearSelect{
+#yearSelect, #sortDateSelect{
   background:#2a2a2a;
   color:#fff;
   border:1px solid #555;
+  flex: 0 0 auto; 
 }
 
 /* パネル系を暗くする（統一感） */
@@ -781,5 +785,62 @@ a{
   font-size:32px;
   display:inline-block;
   font-family:"CraftMincho", serif;
+
+  text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.6);
 }
 
+#rocoFilterBtn {
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+#rocoFilterBtn.active {
+  background-color: #198caa !important;
+  color: #fff !important;
+  border: 1px solid #198caa;
+}
+
+#rocoFilterBtn {
+  padding: 6px 12px;
+  cursor: pointer;
+
+  border: none;
+  border-radius: 999px; /* 丸み */
+  
+  background: #2a2a2a;
+  color: #fff;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  /* 影（浮いてる感じ） */
+  box-shadow: 0 3px 0 #111, 0 4px 8px rgba(0,0,0,0.4);
+
+  transition: all 0.15s ease;
+}
+
+/* ホバー（PC） */
+#rocoFilterBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 #111, 0 6px 12px rgba(0,0,0,0.5);
+}
+
+/* 押した瞬間 */
+#rocoFilterBtn:active {
+  transform: translateY(2px); /* 下に沈む */
+  box-shadow: 0 1px 0 #111, 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* ON状態（鏑木のみ） */
+#rocoFilterBtn.active {
+  background: #198caa;
+  color: #fff;
+
+  /* 押されてる状態を維持（影なし気味） */
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #0f5f73;
+}
+
+#rocoFilterBtn.active {
+  background: linear-gradient(#198caa, #146d85);
+}

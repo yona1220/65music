@@ -1,6 +1,102 @@
 const videos = [
   // 歌ってみた
-   {
+  {
+    date: "2026/03/14",
+    id: "9DsQFAbuUrs",
+    title: "【3Dカラオケ】 ホワイトデーに恋愛曲カラオケ3Dコラボ！✨ supported by DAM【海妹四葉/にじさんじ】",
+    song: "ラブソングに襲われる",
+    artist: "=LOVE",
+    composer: "Yu-ki Kokubo , YUU for YOU",
+    singer: "鏑木ろこ/壱百満天原サロメ/獅子堂あかり/栞葉るり/海妹四葉",
+    category: "配信",
+    thumbnail: "https://img.youtube.com/vi/9DsQFAbuUrs/hqdefault.jpg",
+    start: 5029
+  },
+  {
+    date: "2026/03/14",
+    id: "9DsQFAbuUrs",
+    title: "【3Dカラオケ】 ホワイトデーに恋愛曲カラオケ3Dコラボ！✨ supported by DAM【海妹四葉/にじさんじ】",
+    song: "君じゃなきゃダメみたい",
+    artist: "オーイシマサヨシ",
+    composer: "大石昌良",
+    singer: "鏑木ろこ/獅子堂あかり/海妹四葉",
+    category: "配信",
+    thumbnail: "https://img.youtube.com/vi/9DsQFAbuUrs/hqdefault.jpg",
+    start: 4414
+  },
+  {
+    date: "2026/03/14",
+    id: "9DsQFAbuUrs",
+    title: "【3Dカラオケ】 ホワイトデーに恋愛曲カラオケ3Dコラボ！✨ supported by DAM【海妹四葉/にじさんじ】",
+    song: "輝夜の城で踊りたい",
+    artist: "μ's",
+    composer: "佐々倉有吾",
+    singer: "鏑木ろこ/壱百満天原サロメ/栞葉るり",
+    category: "配信",
+    thumbnail: "https://img.youtube.com/vi/9DsQFAbuUrs/hqdefault.jpg",
+    start: 3530
+  },
+  {
+    date: "2026/03/14",
+    id: "9DsQFAbuUrs",
+    title: "【3Dカラオケ】 ホワイトデーに恋愛曲カラオケ3Dコラボ！✨ supported by DAM【海妹四葉/にじさんじ】",
+    song: "Pretender",
+    artist: "Official髭男dism",
+    composer: "藤原聡",
+    singer: "鏑木ろこ/海妹四葉",
+    category: "配信",
+    thumbnail: "https://img.youtube.com/vi/9DsQFAbuUrs/hqdefault.jpg",
+    start: 3106
+  },
+  {
+    date: "2026/03/14",
+    id: "9DsQFAbuUrs",
+    title: "【3Dカラオケ】 ホワイトデーに恋愛曲カラオケ3Dコラボ！✨ supported by DAM【海妹四葉/にじさんじ】",
+    song: "ジャージ",
+    artist: "サバシスター",
+    composer: "なち",
+    singer: "鏑木ろこ/壱百満天原サロメ",
+    category: "配信",
+    thumbnail: "https://img.youtube.com/vi/9DsQFAbuUrs/hqdefault.jpg",
+    start: 2613
+  },
+  {
+    date: "2026/03/14",
+    id: "9DsQFAbuUrs",
+    title: "【3Dカラオケ】 ホワイトデーに恋愛曲カラオケ3Dコラボ！✨ supported by DAM【海妹四葉/にじさんじ】",
+    song: "好きだから。",
+    artist: "『ユイカ』",
+    composer: "『ユイカ』",
+    singer: "鏑木ろこ/獅子堂あかり",
+    category: "配信",
+    thumbnail: "https://img.youtube.com/vi/9DsQFAbuUrs/hqdefault.jpg",
+    start: 1927
+  },
+  {
+    date: "2026/03/14",
+    id: "9DsQFAbuUrs",
+    title: "【3Dカラオケ】 ホワイトデーに恋愛曲カラオケ3Dコラボ！✨ supported by DAM【海妹四葉/にじさんじ】",
+    song: "恋",
+    artist: "星野源",
+    composer: "星野源",
+    singer: "鏑木ろこ/栞葉るり",
+    category: "配信",
+    thumbnail: "https://img.youtube.com/vi/9DsQFAbuUrs/hqdefault.jpg",
+    start: 942
+  },
+  {
+    date: "2026/03/14",
+    id: "9DsQFAbuUrs",
+    title: "【3Dカラオケ】 ホワイトデーに恋愛曲カラオケ3Dコラボ！✨ supported by DAM【海妹四葉/にじさんじ】",
+    song: "ヘビーローテーション",
+    artist: "AKB48",
+    composer: "山崎燿",
+    singer: "鏑木ろこ/壱百満天原サロメ/獅子堂あかり/栞葉るり/海妹四葉",
+    category: "配信",
+    thumbnail: "https://img.youtube.com/vi/9DsQFAbuUrs/hqdefault.jpg",
+    start: 122
+  },
+  {
     date: "2026/02/20",
     id: "jYy00EAsT74",
     title: "【 #司賀りこが3Dだよ 】君を笑顔へご案内✨しがりこが動くよ。【司賀りこ/にじさんじ】",

@@ -14,6 +14,11 @@
       <a class="header_title">65Tunes</a>
     </div>
 
+    <label class="toggle-button-1" id="themeToggle">
+      <input type="checkbox" id="themeCheckbox"/>
+      <span class="toggle-text"></span>
+    </label>
+
     <!-- スマホ時だけ出る「？」ボタン -->
     <button id="infoBtn" class="infoBtn" type="button" aria-label="当サイトについて" title="当サイトについて">
       ?
@@ -24,6 +29,21 @@
     <!-- 左：プレイヤー＋（PC用）当サイトについて -->
     <div id="leftColumn">
       <div id="player"></div>
+      
+    <details id="randomPlayerBox" open>
+      <summary>シャッフル選択</summary>
+
+      <div class="randomTopRow">
+        <div id="randomSongLine">---</div>
+
+        <!-- 再生ボタン（NEW） -->
+        <button id="randomPlayBtn">再生</button>
+
+        <button id="randomBtn">シャッフル</button>
+      </div>
+
+      <div id="randomSingerLine">歌唱：---</div>
+    </details>
 
       <!-- PC/タブレットではこのdetailsを表示。スマホではCSSで隠す -->
       <details id="siteInfo" open>
@@ -58,14 +78,14 @@
       <input id="searchInput" type="text" placeholder="検索（曲/歌唱/アーティスト/作曲/引用）" />
 
       <div class="filterRow">
-        <select id="filterSelect">
+        <!-- <select id="filterSelect">
           <option value="">すべて表示(カテゴリ)</option>
           <option value="配信">配信</option>
-          <option value="歌ってみた">歌ってみた</option>
+          <option value="歌ってみた">歌ってみた</option> -->
           <!-- <option value="なうぷれ">なうぷれ</option> -->
-          <option value="Original">Original</option>
+          <!-- <option value="Original">Original</option>
           <option value="その他">その他</option>
-        </select>
+        </select> -->
 
         <select id="yearSelect">
           <option value="">すべて表示(年数)</option>
@@ -80,9 +100,17 @@
           <option value="asc">昇順</option>
         </select>
         <button id="rocoFilterBtn" type="button">
-          鏑木のみ
+            鏑木のみ
         </button>
       </div>
+      <div class="filterRow">
+        <div class="categoryButtons square">
+            <button data-cat="配信">配信</button>
+            <button data-cat="歌ってみた">歌ってみた</button>
+            <button data-cat="Original">Original</button>
+            <button data-cat="その他">その他</button>
+          </div>
+        </div>
 
       <div id="countArea">表示件数: <span id="countNumber">0</span> 件</div>
 
@@ -123,12 +151,12 @@
 
           当サイトはANYCOLOR株式会社様及びにじさんじプロジェクト・各種関係会社とは一切関係ありません。<br>
           当サイトではYouTubeから提供されている埋め込みプレイヤーで動画を再生しています。<br>
-          ※端末やブラウザの仕様により再生が正常に開始されないことがあります。
+          ※端末やブラウザの仕様により再生が正常に開始されないことがあります。<br><br>
 
           歌唱曲は、基本鏑木の声が分かるもののみ入れています。<br>
           曲名にキーの記載がない楽曲は変更なしか記載漏れです。<br>
           内容の抜け漏れや誤り等ございましたら、下記にお問い合わせいただけると幸いです。<br>
-          <a href="https://x.com/yonaaaan71">https://x.com/yonaaaan71</a><br><br>
+          <a href="https://x.com/yonaaaan71">https://x.com/yonaaaan71</a>
         </div>
       </div>
     </div>

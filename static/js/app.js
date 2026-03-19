@@ -23,6 +23,10 @@ let currentPlayingStart = 0;
 
 let rocoOnly = false;
 
+let currentCategories = new Set(); // ←配列じゃなくSet
+
+let currentRandomVideo = null;
+
 /* -------------------- utils -------------------- */
 function buildWatchUrl(id, start) {
   const s = Number(start) || 0;
@@ -304,6 +308,7 @@ function attachTip(el) {
     el.addEventListener("touchend", (e) => {
       lastTouch = Date.now();
       if (!isTruncated(el)) return;
+      
       e.preventDefault();
       e.stopPropagation();
       showTooltipFor(el);
@@ -560,7 +565,7 @@ function filterAndRender() {
   const src = (typeof videos !== "undefined" && Array.isArray(videos)) ? videos : [];
 
   filteredList = src.filter((v) => {
-    const matchCat = !cat || v.category === cat;
+  const matchCat = currentCategories.size === 0 || currentCategories.has(v.category);
 
     const matchKw = !kw || ["title", "song", "artist", "singer", "composer"]
       .some(k => (v[k] || "").toLowerCase().includes(kw));
@@ -764,3 +769,106 @@ rocoBtn?.addEventListener("click", () => {
   filterAndRender();
 });
 
+let currentCategory = "";
+
+document.querySelectorAll(".categoryButtons button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const cat = btn.dataset.cat;
+
+    if (currentCategories.has(cat)) {
+      currentCategories.delete(cat);
+      btn.classList.remove("active");
+    } else {
+      currentCategories.add(cat);
+      btn.classList.add("active");
+    }
+
+    filterAndRender();
+  });
+});
+
+function setRandomDisplay(v){
+  document.getElementById("randomSong").textContent = v.song || "---";
+  document.getElementById("randomArtist").textContent = v.artist || "---";
+  document.getElementById("randomSinger").textContent = v.singer || "---";
+}
+
+function playVideoData(v){
+  if(!v?.id) return;
+
+  createOrLoadPlayer(v.id, v.start || 0);
+  setNowPlaying(v);
+  setRandomDisplay(v);
+}
+
+function getRandomVideo(){
+  if(filteredList.length === 0) return null;
+  return filteredList[Math.floor(Math.random() * filteredList.length)];
+}
+
+document.getElementById("randomBtn")?.addEventListener("click", () => {
+  const btn = document.getElementById("randomBtn");
+
+  btn.classList.add("active");
+  setTimeout(() => btn.classList.remove("active"), 150);
+
+  const v = getRandomVideo();
+  if(v) setRandomDisplay(v); // ← 再生しない（これが正解）
+});
+
+if(filteredList.length > 0){
+  const latest = filteredList[0];
+  setRandomDisplay(latest); // ← 表示だけ
+}
+
+function setRandomDisplay(v){
+  currentRandomVideo = v;
+
+  const song = v.song || "---";
+  const artist = v.artist || "---";
+  const singer = v.singer || "---";
+
+  const songLine = document.getElementById("randomSongLine");
+
+  // ▼動画ありならリンク化
+  if(v.id){
+    songLine.innerHTML =
+      `<a href="${buildWatchUrl(v.id, v.start)}" target="_blank">${song} / ${artist}</a>`;
+  }else{
+    songLine.textContent = `${song} / ${artist}`;
+  }
+
+  document.getElementById("randomSingerLine").textContent =
+    `歌唱：${singer}`;
+}
+
+document.getElementById("randomPlayBtn")?.addEventListener("click", () => {
+  if(!currentRandomVideo || !currentRandomVideo.id) return;
+
+  createOrLoadPlayer(
+    currentRandomVideo.id,
+    currentRandomVideo.start || 0
+  );
+
+  setNowPlaying(currentRandomVideo);
+});
+const checkbox = document.getElementById("themeCheckbox");
+
+function applyTheme(isDark){
+  document.body.classList.toggle("dark", isDark);
+  document.body.classList.toggle("light", !isDark);
+
+  const label = document.querySelector(".toggle-text");
+
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+}
+
+// 初期化
+const saved = localStorage.getItem("theme");
+const isDark = saved !== "light"; // デフォルトダーク
+checkbox.checked = isDark;
+applyTheme(isDark);
+
+checkbox.addEventListener("change", () => {
+  applyTheme(checkbox.checked);
+});

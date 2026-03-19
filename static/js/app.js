@@ -872,3 +872,17 @@ applyTheme(isDark);
 checkbox.addEventListener("change", () => {
   applyTheme(checkbox.checked);
 });
+
+window.addEventListener("load", () => {
+  const loader = document.getElementById("loadingOverlay");
+
+  // ちょい待ってから消す（自然に見える）
+  setTimeout(() => {
+    loader.classList.add("fade-out");
+
+    // 完全に消す
+    setTimeout(() => {
+      loader.style.display = "none";
+    }, 400);
+  }, 300);
+});

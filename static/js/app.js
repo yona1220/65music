@@ -21,6 +21,8 @@ let playingRowEl = null;
 let currentPlayingId = null;
 let currentPlayingStart = 0;
 
+let rocoOnly = false;
+
 /* -------------------- utils -------------------- */
 function buildWatchUrl(id, start) {
   const s = Number(start) || 0;
@@ -394,7 +396,11 @@ function renderList(list) {
     const row = document.createElement("div");
     row.className = "videoItem";
 
-    if (currentPlayingId && v.id === currentPlayingId) {
+    if (
+      currentPlayingId &&
+      v.id === currentPlayingId &&
+      (v.start || 0) === currentPlayingStart
+    ) {
       row.classList.add("is-playing");
       playingRowEl = row;
     }
@@ -562,7 +568,10 @@ function filterAndRender() {
     const vYear = (v.date || "").slice(0, 4);
     const matchYear = !year || vYear === year;
 
-    return matchCat && matchKw && matchYear;
+    // ★追加
+    const matchRoco = !rocoOnly || (v.singer || "").trim() === "鏑木ろこ";
+
+    return matchCat && matchKw && matchYear && matchRoco;
   });
 
   sortList();
@@ -575,7 +584,10 @@ function sortList() {
   const order = currentSort.order;
 
   if (key === "date") {
-    filteredList.sort((a, b) => parseDateSafe(b.date) - parseDateSafe(a.date));
+    filteredList.sort((a, b) => {
+      const diff = parseDateSafe(a.date) - parseDateSafe(b.date);
+      return order === "asc" ? diff : -diff;
+    });
     return;
   }
 
@@ -726,3 +738,29 @@ document.addEventListener("DOMContentLoaded", () => {
     showBottomBar(false);
   }
 });
+
+document.getElementById("sortDateSelect")?.addEventListener("change", (e) => {
+const val = e.target.value;
+  if (!val) return;
+
+  currentSort = {
+    key: "date",
+    order: val
+  };
+  filterAndRender();
+});
+
+const rocoBtn = document.getElementById("rocoFilterBtn");
+
+rocoBtn?.addEventListener("click", () => {
+  rocoOnly = !rocoOnly;
+
+  if (rocoOnly) {
+    rocoBtn.classList.toggle("active", rocoOnly);
+  } else {
+    rocoBtn.classList.remove("active");
+  }
+
+  filterAndRender();
+});
+

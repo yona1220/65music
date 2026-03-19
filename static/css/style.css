@@ -1283,7 +1283,7 @@ body.light .categoryButtons.square button:active{
 
 @media (max-width: 1000px){
   #videoListContainer{
-    max-height: 60vh;  
+    max-height: 70vh;  
     overflow-y: auto;
   }
 }
@@ -1306,12 +1306,36 @@ body.light .categoryButtons.square button:active{
   left: 53px;
 }
 
-body {
+/* body {
   transition: 
     background-color 0.1s ease,
     color 0.1s ease;
-}
+} */
 
 button {
   touch-action: manipulation;
+}
+
+.header_title{
+  font-family:"CraftMincho", serif !important;
+}
+
+#loadingOverlay{
+  position: fixed;
+  inset: 0;
+  background: #198caa;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 99999;
+
+  transition: opacity 0.4s ease;
+}
+
+/* フェードアウト用 */
+#loadingOverlay.fade-out{
+  opacity: 0;
+  pointer-events: none;
 }

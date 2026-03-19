@@ -1218,6 +1218,10 @@ body.light #rocoFilterBtn{
   box-shadow: 0 3px 0 #ccc;
 }
 
+body.light #rocoFilterBtn.active{
+  box-shadow: unset;
+}
+
 /* トグル背景（light時） */
 body.light .toggle-button-1{
   background:#ccc;
@@ -1346,4 +1350,20 @@ button {
 
   transform: translateY(2px);
   box-shadow: 0 1px 0 #0f5f73;
+}
+
+body.light .categoryButtons.square button.active{
+  background: linear-gradient(#198caa, #146d85);
+  color:#fff;
+
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #0f5f73;
+}
+
+/* 押下(active)時 - transform を削除してズレ防止 */
+.categoryButtons button.active {
+  background: linear-gradient(#198caa, #146d85);
+  color: #fff;
+  /* transform: translateY(2px); ←削除 */
+  box-shadow: 0 2px 0 #0f5f73; /* light/dark 両方統一 */
 }

@@ -581,6 +581,8 @@ function filterAndRender() {
 
   sortList();
   renderList(filteredList);
+
+  updateCategoryButtonsUI();
 }
 
 /* -------------------- Sort -------------------- */
@@ -829,7 +831,9 @@ function setRandomDisplay(v){
   const singer = v.singer || "---";
 
   const songLine = document.getElementById("randomSongLine");
+  const playBtn = document.getElementById("randomPlayBtn");
 
+  playBtn.hidden = !v.id;
   // ▼動画ありならリンク化
   if(v.id){
     songLine.innerHTML =
@@ -886,3 +890,15 @@ window.addEventListener("load", () => {
     }, 400);
   }, 300);
 });
+
+function updateCategoryButtonsUI(){
+  document.querySelectorAll(".categoryButtons button").forEach(btn => {
+    const cat = btn.dataset.cat;
+
+    if(currentCategories.has(cat)){
+      btn.classList.add("active");
+    }else{
+      btn.classList.remove("active");
+    }
+  });
+}

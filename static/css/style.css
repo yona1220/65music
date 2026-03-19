@@ -73,6 +73,7 @@ body { color:#222; font-size:16px; }
 #player{
   width:100%;
   height:100%;
+  margin-bottom: 6px;
   aspect-ratio:16/9;           /* 16:9 を保って伸縮 */
 }
 
@@ -173,6 +174,8 @@ body { color:#222; font-size:16px; }
   gap:8px;
   align-items:center;
   margin-bottom:2px;
+
+  flex-wrap: wrap; /* ← これが本命 */
 }
 
 #filterSelect, #yearSelect, #sortDateSelect{
@@ -548,7 +551,7 @@ body.has-spbar{ padding-bottom:50px; }
   }
 
   /* ---------- layout ---------- */
-  #main{ flex-direction:column;   gap:4px;} /* 2カラム→縦積み */
+  #main{ flex-direction:column;   gap:4px; padding-bottom: 70px;} /* 2カラム→縦積み */
   
   html, body{ overflow-x:hidden; }/* ページ横スクロール禁止 */
   #leftColumn{ width:100%; }      /* プレイヤー全幅 */
@@ -566,7 +569,8 @@ body.has-spbar{ padding-bottom:50px; }
   #videoListContainer{
     overflow-x:hidden !important; /* 横スク禁止 */
     overflow-y:auto !important;   /* 縦スクのみ */
-    max-height: 84vh;             /* 画面を埋めすぎない */
+    max-height: none;             /* 画面を埋めすぎない */
+    height: auto;
     /* border-radius:10px; */
     touch-action: pan-y;          /* “縦のみ”を明示（横ブレ抑制） */
     overscroll-behavior: contain; /* 親へのスクロール伝搬抑制 */
@@ -843,4 +847,461 @@ a{
 
 #rocoFilterBtn.active {
   background: linear-gradient(#198caa, #146d85);
+}
+
+.categoryButtons{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin:6px 0;
+}
+
+.categoryButtons button{
+  padding:6px 10px;
+  border-radius:999px;
+  border:none;
+  background:#2a2a2a;
+  color:#fff;
+  font-size:12px;
+  cursor:pointer;
+}
+
+.categoryButtons button.active{
+  background:#198caa;
+}
+
+#randomPlayerBox{
+  margin-left: 10px;
+  margin-top:10px;
+  padding:10px;
+  border-radius:10px;
+  background:#1a1a1a;
+  border:1px solid #333;
+}
+
+#randomPlayerBox div{
+  font-size:13px;
+  margin-bottom:2px;
+}
+
+#randomBtn{
+  font-size: 12px;
+  padding:4px 8px;
+  border:none;
+  border-radius:6px;
+  background:#198caa;
+  color:#fff;
+  cursor:pointer;
+}
+
+@media (max-width: 1000px){
+
+  #randomPlayerBox{
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-bottom: 6px;
+    order: 1;
+  }
+
+  #sidebar{
+    order: 2;
+  }
+
+}
+
+.categoryButtons.square{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin:6px 0;
+}
+
+.categoryButtons.square button{
+  padding:6px 10px;
+  border-radius:6px; /* ←丸じゃなく四角 */
+  border:1px solid #555;
+  background:#2a2a2a;
+  color:#fff;
+  font-size:12px;
+  cursor:pointer;
+}
+
+.categoryButtons.square button.active{
+  background:#198caa;
+  border-color:#198caa;
+}
+
+#randomSongLine{
+  font-weight:700;
+}
+
+#randomSingerLine{
+  font-size:12px;
+  color:#bbb;
+}
+
+#randomBtn.active{
+  transform: scale(0.95);
+  background:#146d85;
+}
+
+.categoryButtons.square button{
+  padding:6px 12px;
+  border-radius:8px;
+  border:none;
+
+  background:#2a2a2a;
+  color:#fff;
+
+  font-size:12px;
+  font-weight:700;
+
+  cursor:pointer;
+
+  /* 👇 立体感（鏑木ボタンと同系統） */
+  box-shadow: 0 3px 0 #111, 0 4px 8px rgba(0,0,0,0.4);
+
+  transition: all 0.15s ease;
+}
+
+/* ホバー（浮く） */
+.categoryButtons.square button:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 #111, 0 6px 12px rgba(0,0,0,0.5);
+}
+
+/* 押した瞬間（沈む） */
+.categoryButtons.square button:active{
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #111, 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* ON状態（選択中） */
+.categoryButtons.square button.active{
+  background: linear-gradient(#198caa, #146d85);
+  color:#fff;
+
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #0f5f73;
+}
+
+#randomSongLine{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+
+  white-space:nowrap;
+  overflow:hidden;
+}
+
+#randomSongLine a,
+#randomSongLine span{
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* 曲テキスト部分 */
+.randomText{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.randomTopRow{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+/* 曲名エリア */
+#randomSongLine{
+  flex:1;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+
+  display:block; /* ← flexやめるのがポイント */
+}
+
+/* リンクも同じ挙動に */
+#randomSongLine a{
+  display:inline-block;  /* ←これが核心 */
+  max-width:100%;
+
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+/* ボタン右端固定 */
+#randomBtn{
+  flex:0 0 auto;
+}
+
+.randomTopRow{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+#randomPlayBtn{
+  font-size:12px;
+  padding:4px 8px;
+  border:none;
+  border-radius:6px;
+  background:#444;
+  color:#fff;
+  cursor:pointer;
+}
+
+#randomPlayBtn{
+  font-size:12px;
+  padding:4px 10px;
+  border:none;
+  border-radius:6px;
+  background:#198caa;
+  color:#fff;
+  cursor:pointer;
+}
+
+.randomTopRow{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+#randomSongLine{
+  flex:1;
+  min-width:0; /* ←これ超重要 */
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.toggle-button-1 {
+  display: inline-block;
+  position: relative;
+  width: 120px;
+  height: 36px;
+  border-radius: 999px;
+  background-color: #ccc;
+  cursor: pointer;
+  transition: background-color .3s;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* ON時（青系） */
+.toggle-button-1:has(:checked) {
+  background-color: #198caa;
+}
+
+/* スライド部分（白丸→横長） */
+.toggle-button-1::after {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 58px;   /* ←横長に */
+  height: 30px;
+  border-radius: 999px;
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  content: "Light"; /* 初期 */
+  color: #333;
+
+  transition: all .3s;
+}
+
+/* ON時：右へ移動 + 表示変更 */
+.toggle-button-1:has(:checked)::after {
+  left: 59px;
+  content: "Dark";
+  color: #198caa;
+}
+
+.toggle-button-1 input {
+  display: none;
+}
+
+.toggle-button-1::before { 
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-size: 11px;
+  color: rgba(0,0,0,0.4);
+}
+
+.toggle-button-1:has(:checked) {
+  background-color: #000; /* 少し暗め */
+}
+
+/* =========================================================
+   LIGHT THEME（未実装だった部分）
+   ========================================================= */
+
+body.light{
+  background:#ffffff;
+  color:#222;
+}
+
+/* ヘッダーはそのままにする（←指定しない） */
+
+/* パネル系 */
+body.light #siteInfo,
+body.light #nowPlaying,
+body.light #spNowPlayingBar,
+body.light #randomPlayerBox{
+  background:#f7f7f7;
+  border:1px solid #d7d7d7;
+  color:#222;
+}
+
+/* 検索・select */
+body.light #searchInput,
+body.light #filterSelect,
+body.light #yearSelect,
+body.light #sortDateSelect{
+  background:#fff;
+  color:#222;
+  border:1px solid #bbb;
+}
+
+/* リスト行 */
+body.light .videoItem{
+  border-bottom:1px solid #ddd;
+}
+
+body.light .videoItem:hover{
+  background:#f0f0f0;
+}
+
+body.light .videoItem.is-playing{
+  background:#e6f4f8;
+}
+
+/* テキスト薄い系 */
+body.light .metaItem.metaArtist,
+body.light .metaItem.metaComposer,
+body.light .col-singer,
+body.light .col-title,
+body.light #randomSingerLine{
+  color:#555;
+}
+
+/* リンク */
+body.light a{
+  color:#0066cc;
+}
+
+/* ボタン（カテゴリとか） */
+body.light .categoryButtons button{
+  background:#eee;
+  color:#222;
+}
+
+body.light .categoryButtons button.active{
+  background:#198caa;
+  color:#fff;
+}
+
+/* 鏑木ボタン */
+body.light #rocoFilterBtn{
+  background:#eee;
+  color:#222;
+  box-shadow: 0 3px 0 #ccc;
+}
+
+/* トグル背景（light時） */
+body.light .toggle-button-1{
+  background:#ccc;
+}
+
+body.light .date{
+  color:#666;
+}
+
+body.light #listHeaderWrapper{
+  background:#f7f7f7;
+  border:1px solid #d7d7d7;
+}
+
+/* 文字も調整 */
+body.light #listHeader{
+  color:#222;
+}
+
+body.light .categoryButtons.square button{
+  background:#eee;
+  color:#222;
+
+  /* 👇これだけにする（完全統一） */
+  box-shadow: 0 3px 0 #ccc;
+
+  transition: all 0.15s ease;
+}
+
+/* 押したとき */
+body.light .categoryButtons.square button:active{
+  background: linear-gradient(#198caa, #146d85);
+  color:#fff;
+
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #0f5f73;
+}
+
+#header{
+  display:flex;
+  align-items:center;
+}
+
+/* タイトルを左固定 */
+.header_left{
+  flex:0 0 auto;
+}
+
+/* トグルを右へ押し出す */
+.toggle-button-1{
+  margin-left:auto;
+  margin-right:8px;
+}
+
+/* ?ボタンは一番右 */
+.infoBtn{
+  flex:0 0 auto;
+}
+
+#header .header_title{
+  color:#fff;
+}
+
+@media (max-width: 1000px){
+  #videoListContainer{
+    max-height: 60vh;  
+    overflow-y: auto;
+  }
+}
+
+.toggle-button-1 {
+  width: 105px;
+  height: 34px;
+}
+
+.toggle-button-1::after {
+  top: 2px;
+  left: 2px;
+  width: 50px;
+  height: 30px;
+  font-size: 11px;
+}
+
+/* ON時 */
+.toggle-button-1:has(:checked)::after {
+  left: 53px;
 }

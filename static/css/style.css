@@ -309,7 +309,7 @@ body { color:#222; font-size:16px; }
 .videoItem{
   display:flex;
   min-width:1200px;            /* ヘッダーと揃える */
-  padding:1px 0;
+  padding:4px 0;
   border-bottom:1px solid #bbb;
   -webkit-tap-highlight-color: rgba(0,0,0,0); /* モバイルのタップハイライト抑制 */
 }
@@ -1233,7 +1233,7 @@ body.light .date{
 
 body.light #listHeaderWrapper{
   background:#f7f7f7;
-  border:1px solid #d7d7d7;
+  /* border:1px solid #d7d7d7; */
 }
 
 /* 文字も調整 */
@@ -1366,4 +1366,11 @@ body.light .categoryButtons.square button.active{
   color: #fff;
   /* transform: translateY(2px); ←削除 */
   box-shadow: 0 2px 0 #0f5f73; /* light/dark 両方統一 */
+}
+
+@media (min-width: 1001px){
+  body.light .col-singer,
+  body.light .date{
+    color:#222; /* 曲名と同じ */
+  }
 }

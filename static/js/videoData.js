@@ -5,7 +5,7 @@ const videos = [
     id: "axauRDTHp1U",
     title: "【 歌ってみた 】 メビウス 【 鏑木ろこ 】",
     song: "メビウス(+1)",
-    artist: "=めいちゃん",
+    artist: "めいちゃん",
     composer: "柊キライ",
     singer: "鏑木ろこ",
     category: "歌ってみた",

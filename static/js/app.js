@@ -869,7 +869,7 @@ function applyTheme(isDark){
 
 // 初期化
 const saved = localStorage.getItem("theme");
-const isDark = saved !== "light"; // デフォルトダーク
+const isDark = saved !== "dark";
 checkbox.checked = isDark;
 applyTheme(isDark);
 

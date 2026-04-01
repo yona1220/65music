@@ -1,6 +1,30 @@
 const videos = [
   // 歌ってみた
   {
+    date: "2026/04/01",
+    id: "axauRDTHp1U",
+    title: "【 歌ってみた 】 メビウス 【 鏑木ろこ 】",
+    song: "メビウス(+1)",
+    artist: "=めいちゃん",
+    composer: "柊キライ",
+    singer: "鏑木ろこ",
+    category: "歌ってみた",
+    thumbnail: "https://img.youtube.com/vi/axauRDTHp1U/hqdefault.jpg",
+    start: 0
+  },
+  {
+    date: "2026/03/27",
+    id: "iUafllbK3uQ",
+    title: "〖誕生日〗好きなことを好きなだけ / 尊敬する方々と💐〖猫屋敷美紅 / にじさんじ〗",
+    song: "アイデンティティ",
+    artist: "Kanaria",
+    composer: "Kanaria",
+    singer: "鏑木ろこ/猫屋敷美紅",
+    category: "配信",
+    thumbnail: "https://img.youtube.com/vi/iUafllbK3uQ/hqdefault.jpg",
+    start: 3711
+  },
+  {
     date: "2026/03/14",
     id: "9DsQFAbuUrs",
     title: "【3Dカラオケ】 ホワイトデーに恋愛曲カラオケ3Dコラボ！✨ supported by DAM【海妹四葉/にじさんじ】",

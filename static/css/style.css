@@ -8,8 +8,37 @@
 /* ページ余白を消す（初期の謎余白対策） */
 html, body { margin: 0; padding: 0; }
 
-/* 既定の文字色・文字サイズ */
-body { color:#222; font-size:16px; }
+/* 既定の文字色・文字サイズ(ダークモード) */
+body { color:#fff; background:#000; font-size:16px; }
+
+/* ライトモード */
+body.light{
+  background:#ffffff;
+  color:#222;
+}
+
+/* =========================================================
+   ローディングスピナー
+   ========================================================= */
+#loadingOverlay{
+  position: fixed;
+  inset: 0;
+  background: #198caa;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 99999;
+
+  transition: opacity 0.4s ease;
+}
+
+/* フェードアウト用 */
+#loadingOverlay.fade-out{
+  opacity: 0;
+  pointer-events: none;
+}
 
 
 /* =========================================================
@@ -25,12 +54,20 @@ body { color:#222; font-size:16px; }
   background-color:#198caa;    /* 背景色 */
 }
 
-.header_title{
-  padding:10px;                /* タイトルの内側余白 */
-  color:#fff;                  /* 文字白 */
+#header .header_title{
+  padding:2px;
+  color:#fff;
   font-weight:700;             /* 太字 */
-  font-size:32px;              /* 大きめ */
+  font-size:32px;
   display:inline-block;
+  font-family:"CraftMincho", serif !important;
+
+  text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.6);
+}
+
+/* タイトルを左固定 */
+.header_left{
+  flex:0 0 auto;
 }
 
 /* スマホ用の「？」ボタン（PCでは隠す） */
@@ -38,7 +75,7 @@ body { color:#222; font-size:16px; }
   display:none;                /* PCで非表示 */
   width:34px;
   height:34px;
-  border-radius:999px;         /* まん丸 */
+  border-radius:999px;        
   border:2px solid rgba(255,255,255,.95);
   background:transparent;
   color:#fff;
@@ -46,6 +83,7 @@ body { color:#222; font-size:16px; }
   font-weight:800;
   line-height:1;
   cursor:pointer;
+  flex:0 0 auto;
 }
 
 
@@ -59,7 +97,6 @@ body { color:#222; font-size:16px; }
   align-items:flex-start;      /* 上詰め */
   padding:10px;
 }
-
 
 /* =========================================================
    LEFT COLUMN：プレイヤー領域
@@ -84,7 +121,6 @@ body { color:#222; font-size:16px; }
 
 #siteInfo{
   margin-top:10px;
-  margin-left: 10px;
   border:1px solid #d7d7d7;
   border-radius:10px;
   padding:10px;
@@ -356,7 +392,7 @@ body { color:#222; font-size:16px; }
 
 
 /* =========================================================
-   TOOLTIP：黒い箱（タップ/ホバーで詳細表示）
+   TOOLTIP：（タップ/ホバーで詳細表示）
    ========================================================= */
 
 #tooltip{
@@ -435,6 +471,35 @@ body { color:#222; font-size:16px; }
 .modalText{
   font-size:14px;
   line-height:1.6;
+}
+
+/* lightモード */
+body.light .modalPanel{
+  background:#ffffff;
+  color:#222;
+}
+
+body.light .modalHeader{
+  border-bottom:1px solid #ddd;
+}
+
+body.light .modalClose{
+  color:#222;
+}
+
+/* 背景の暗幕を少し弱める（好みで） */
+body.light .modalOverlay{
+  background:rgba(0,0,0,.3);
+}
+
+/* 本文テキスト */
+body.light .modalText{
+  color:#333;
+}
+
+/* リンクも見やすく */
+body.light .modalText a{
+  color:#0066cc;
 }
 
 
@@ -542,6 +607,15 @@ body.has-spbar{ padding-bottom:50px; }
    ========================================================= */
 
 @media (max-width: 1000px){
+  #main{ flex-direction:column;   gap:4px; padding-bottom: 70px;} /* 2カラム→縦積み */
+  
+  html, body{ overflow-x:hidden; }/* ページ横スクロール禁止 */
+  #leftColumn{ width:100%; }      /* プレイヤー全幅 */
+  #sidebar{
+    min-width:0;
+    width:100%;
+    order: 2;
+  }
 
   /* ---------- header ---------- */
   .infoBtn{
@@ -549,13 +623,6 @@ body.has-spbar{ padding-bottom:50px; }
     align-items:center;
     justify-content:center;
   }
-
-  /* ---------- layout ---------- */
-  #main{ flex-direction:column;   gap:4px; padding-bottom: 70px;} /* 2カラム→縦積み */
-  
-  html, body{ overflow-x:hidden; }/* ページ横スクロール禁止 */
-  #leftColumn{ width:100%; }      /* プレイヤー全幅 */
-  #sidebar{ min-width:0; width:100%; } /* 右カラムも全幅 */
 
   /* PC用 details はスマホでは隠す（モーダルに任せる） */
   #siteInfo{ display:none; }
@@ -682,7 +749,7 @@ body.has-spbar{ padding-bottom:50px; }
     #spNowPlayingBar.is-marquee .spnpMarquee{ animation:none; }
   }
   /* iOS Safariでも<select>をできるだけ統一する */
-#filterSelect, #yearSelect, #sortDateSelect{
+  #filterSelect, #yearSelect, #sortDateSelect{
   -webkit-appearance: none;
   appearance: none;
 
@@ -707,7 +774,6 @@ body.has-spbar{ padding-bottom:50px; }
   background-size: 6px 6px, 6px 6px;
   background-repeat: no-repeat;
 }
-
 #filterSelect:focus, #yearSelect:focus, #sortDateSelect:focus{
   outline: none;
   box-shadow: 0 0 0 2px rgba(25,140,170,.25);
@@ -715,6 +781,7 @@ body.has-spbar{ padding-bottom:50px; }
 #filterSelect{ width:140px; }
 #yearSelect{ width:120px; }
 #sortDateSelect{ width: 100px;}
+
 
 
 html, body,
@@ -732,15 +799,21 @@ html, body,
   /* ついでにiOSの勝手な文字拡大を抑えたいなら */
   body{ -webkit-text-size-adjust: 100%; }
 
-}
+  #randomPlayerBox{
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-bottom: 6px;
+    order: 1;
+  }
 
-/* =========================================================
-   DARK THEME 追加
-   ========================================================= */
-
-body{
-  background:#000;     /* 背景黒 */
-  color:#fff;          /* 文字白 */
+  body.light .col-singer,
+  body.light .date{
+    color:#222; /* 曲名と同じ */
+  }
+  #videoListContainer{
+    max-height: 70vh;  
+    overflow-y: auto;
+  }
 }
 
 /* リンク色も少し明るめに */
@@ -783,27 +856,6 @@ a{
   font-style:normal;
 }
 
-.header_title{
-  padding:2px;
-  color:#fff;
-  font-size:32px;
-  display:inline-block;
-  font-family:"CraftMincho", serif;
-
-  text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.6);
-}
-
-#rocoFilterBtn {
-  padding: 4px 8px;
-  cursor: pointer;
-}
-
-#rocoFilterBtn.active {
-  background-color: #198caa !important;
-  color: #fff !important;
-  border: 1px solid #198caa;
-}
-
 #rocoFilterBtn {
   padding: 6px 12px;
   cursor: pointer;
@@ -829,24 +881,26 @@ a{
   box-shadow: 0 4px 0 #111, 0 6px 12px rgba(0,0,0,0.5);
 }
 
-/* 押した瞬間 */
-#rocoFilterBtn:active {
-  transform: translateY(2px); /* 下に沈む */
-  box-shadow: 0 1px 0 #111, 0 2px 4px rgba(0,0,0,0.3);
-}
-
 /* ON状態（鏑木のみ） */
 #rocoFilterBtn.active {
-  background: #198caa;
-  color: #fff;
-
+  background: linear-gradient(#198caa, #146d85);
+  background-color: #198caa !important;
+  color: #fff !important;
+  border: 1px solid #198caa;
   /* 押されてる状態を維持（影なし気味） */
   transform: translateY(2px);
   box-shadow: 0 1px 0 #0f5f73;
 }
 
-#rocoFilterBtn.active {
-  background: linear-gradient(#198caa, #146d85);
+/* 鏑木ボタン */
+body.light #rocoFilterBtn{
+  background:#eee;
+  color:#222;
+  box-shadow: 0 3px 0 #ccc;
+}
+
+body.light #rocoFilterBtn.active{
+  box-shadow: unset;
 }
 
 .categoryButtons{
@@ -871,8 +925,6 @@ a{
 }
 
 #randomPlayerBox{
-  margin-left: 10px;
-  margin-top:10px;
   padding:10px;
   border-radius:10px;
   background:#1a1a1a;
@@ -892,21 +944,12 @@ a{
   background:#198caa;
   color:#fff;
   cursor:pointer;
+  flex:0 0 auto;
 }
 
-@media (max-width: 1000px){
-
-  #randomPlayerBox{
-    margin-left: 0px;
-    margin-top: 0px;
-    margin-bottom: 6px;
-    order: 1;
-  }
-
-  #sidebar{
-    order: 2;
-  }
-
+#randomBtn.active{
+  transform: scale(0.95);
+  background:#146d85;
 }
 
 .categoryButtons.square{
@@ -931,18 +974,9 @@ a{
   border-color:#198caa;
 }
 
-#randomSongLine{
-  font-weight:700;
-}
-
 #randomSingerLine{
   font-size:12px;
   color:#bbb;
-}
-
-#randomBtn.active{
-  transform: scale(0.95);
-  background:#146d85;
 }
 
 .categoryButtons.square button{
@@ -986,19 +1020,31 @@ a{
 }
 
 #randomSongLine{
-  display:flex;
+  font-weight:700;
   justify-content:space-between;
   align-items:center;
   gap:8px;
-
+  flex:1;
+  min-width:0;
   white-space:nowrap;
   overflow:hidden;
+  text-overflow:ellipsis;
+  display:block; 
 }
 
 #randomSongLine a,
 #randomSongLine span{
   overflow:hidden;
   text-overflow:ellipsis;
+}
+
+/* リンクも同じ挙動に */
+#randomSongLine a{
+  max-width:100%;
+
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
 /* 曲テキスト部分 */
@@ -1014,48 +1060,6 @@ a{
   gap:8px;
 }
 
-/* 曲名エリア */
-#randomSongLine{
-  flex:1;
-
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-
-  display:block; 
-}
-
-/* リンクも同じ挙動に */
-#randomSongLine a{
-  /* display:inline-block;   */
-  max-width:100%;
-
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-/* ボタン右端固定 */
-#randomBtn{
-  flex:0 0 auto;
-}
-
-.randomTopRow{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-#randomPlayBtn{
-  font-size:12px;
-  padding:4px 8px;
-  border:none;
-  border-radius:6px;
-  background:#444;
-  color:#fff;
-  cursor:pointer;
-}
-
 #randomPlayBtn{
   font-size:12px;
   padding:4px 10px;
@@ -1064,20 +1068,6 @@ a{
   background:#198caa;
   color:#fff;
   cursor:pointer;
-}
-
-.randomTopRow{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-#randomSongLine{
-  flex:1;
-  min-width:0; /* ←これ超重要 */
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
 }
 
 .toggle-button-1 {
@@ -1142,17 +1132,6 @@ a{
   background-color: #000; /* 少し暗め */
 }
 
-/* =========================================================
-   LIGHT THEME（未実装だった部分）
-   ========================================================= */
-
-body.light{
-  background:#ffffff;
-  color:#222;
-}
-
-/* ヘッダーはそのままにする（←指定しない） */
-
 /* パネル系 */
 body.light #siteInfo,
 body.light #nowPlaying,
@@ -1211,24 +1190,13 @@ body.light .categoryButtons button.active{
   color:#fff;
 }
 
-/* 鏑木ボタン */
-body.light #rocoFilterBtn{
-  background:#eee;
-  color:#222;
-  box-shadow: 0 3px 0 #ccc;
-}
-
-body.light #rocoFilterBtn.active{
-  box-shadow: unset;
-}
-
 /* トグル背景（light時） */
 body.light .toggle-button-1{
   background:#ccc;
 }
 
 body.light .date{
-  color:#666;
+  color:#222;
 }
 
 body.light #listHeaderWrapper{
@@ -1245,7 +1213,6 @@ body.light .categoryButtons.square button{
   background:#eee;
   color:#222;
 
-  /* 👇これだけにする（完全統一） */
   box-shadow: 0 3px 0 #ccc;
 
   transition: all 0.15s ease;
@@ -1259,37 +1226,18 @@ body.light .categoryButtons.square button:active{
   transform: translateY(2px);
   box-shadow: 0 1px 0 #0f5f73;
 }
+body.light .categoryButtons.square button.active{
+  background: linear-gradient(#198caa, #146d85);
+  color:#fff;
 
-#header{
-  display:flex;
-  align-items:center;
-}
-
-/* タイトルを左固定 */
-.header_left{
-  flex:0 0 auto;
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #0f5f73;
 }
 
 /* トグルを右へ押し出す */
 .toggle-button-1{
   margin-left:auto;
   margin-right:8px;
-}
-
-/* ?ボタンは一番右 */
-.infoBtn{
-  flex:0 0 auto;
-}
-
-#header .header_title{
-  color:#fff;
-}
-
-@media (max-width: 1000px){
-  #videoListContainer{
-    max-height: 70vh;  
-    overflow-y: auto;
-  }
 }
 
 .toggle-button-1 {
@@ -1310,54 +1258,9 @@ body.light .categoryButtons.square button:active{
   left: 53px;
 }
 
-/* body {
-  transition: 
-    background-color 0.1s ease,
-    color 0.1s ease;
-} */
 
 button {
   touch-action: manipulation;
-}
-
-.header_title{
-  font-family:"CraftMincho", serif !important;
-}
-
-#loadingOverlay{
-  position: fixed;
-  inset: 0;
-  background: #198caa;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  z-index: 99999;
-
-  transition: opacity 0.4s ease;
-}
-
-/* フェードアウト用 */
-#loadingOverlay.fade-out{
-  opacity: 0;
-  pointer-events: none;
-}
-
-.categoryButtons button.active{
-  background: linear-gradient(#198caa, #146d85);
-  color:#fff;
-
-  transform: translateY(2px);
-  box-shadow: 0 1px 0 #0f5f73;
-}
-
-body.light .categoryButtons.square button.active{
-  background: linear-gradient(#198caa, #146d85);
-  color:#fff;
-
-  transform: translateY(2px);
-  box-shadow: 0 1px 0 #0f5f73;
 }
 
 /* 押下(active)時 - transform を削除してズレ防止 */
@@ -1368,9 +1271,3 @@ body.light .categoryButtons.square button.active{
   box-shadow: 0 2px 0 #0f5f73; /* light/dark 両方統一 */
 }
 
-@media (min-width: 1001px){
-  body.light .col-singer,
-  body.light .date{
-    color:#222; /* 曲名と同じ */
-  }
-}
